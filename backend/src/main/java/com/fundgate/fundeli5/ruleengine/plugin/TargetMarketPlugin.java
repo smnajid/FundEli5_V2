@@ -50,10 +50,10 @@ public final class TargetMarketPlugin implements RuleKindPlugin<Condition.Target
     /** No rule of the kind on the card: the Target Market has no source. */
     @Override
     public Optional<Finding> whenNoRule(Facts facts, Lookups lookups) {
-        return Optional.of("LUX".equals(facts.profile().legalEntity())
-                ? Finding.review("There is no Target Market source for this class, and the Target Market binds in "
-                        + "Luxembourg.")
-                : Finding.pass("There is no Target Market source for this class: a warning only in Switzerland."));
+        return Optional.of("LOC".equals(facts.profile().legalEntity())
+                ? Finding.pass("There is no Target Market source for this class: a warning only in Switzerland.")
+                : Finding.review("There is no Target Market source for this class, and the Target Market binds "
+                        + "outside Switzerland."));
     }
 
     private static Finding clientType(String value) {
