@@ -286,5 +286,18 @@ describe('DealerScreen', () => {
       clientInitiated: false,
     });
     expect(el.textContent).toContain('cannot buy');
+    expect(el.querySelector('input[aria-label="Portfolio Reference"]')).not.toBeNull();
+  });
+
+  it('lets the dealer answer another email after folding', async () => {
+    const api = {
+      answer: vi.fn(() => of(answered)),
+      checkRecords: vi.fn(() => of([])),
+    };
+    const fixture = setup(api, {});
+    const el = await paste(fixture, 'Please buy');
+    button(el, 'Answer another email').click();
+    fixture.detectChanges();
+    expect(button(el, 'Answer it')).toBeTruthy();
   });
 });

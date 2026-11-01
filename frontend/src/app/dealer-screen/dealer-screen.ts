@@ -101,6 +101,7 @@ interface FormRow {
         </summary>
         <pre class="email">{{ email() }}</pre>
         <ng-container *ngTemplateOutlet="form" />
+        <button type="button" class="another" (click)="another()">Answer another email</button>
       </details>
     } @else {
       <section>
@@ -128,12 +129,14 @@ interface FormRow {
             <p>Found: {{ refusal.namesFound?.join(', ') }}</p>
           }
         </section>
+      } @else if (!folded()) {
+        <p class="privacy-note">{{ r.screenNote }}</p>
+      }
+      @if (!folded() && rows().length) {
         <section class="manual">
           <h2>Enter the Subscription Request by hand</h2>
           <ng-container *ngTemplateOutlet="form" />
         </section>
-      } @else if (!folded()) {
-        <p class="privacy-note">{{ r.screenNote }}</p>
       }
 
       @for (check of r.checks ?? []; track $index) {
@@ -172,7 +175,7 @@ interface FormRow {
           <textarea
             aria-label="Reply"
             [ngModel]="reply()"
-            (ngModelChange)="reply.set($event)"
+            (ngModelChange)="editReply($event)"
           ></textarea>
           <button type="button" class="copy" (click)="copyReply()">Copy reply</button>
           @if (copied()) {
@@ -350,6 +353,21 @@ export class DealerScreen {
     this.rows.update((rows) => rows.map((r, i) => (i === index ? { ...r, [field]: value } : r)));
   }
 
+  protected another(): void {
+    this.folded.set(false);
+    this.email.set('');
+    this.result.set(null);
+    this.rows.set([]);
+    this.records.set([]);
+    this.drawer.set(false);
+    this.error.set(null);
+  }
+
+  protected editReply(text: string): void {
+    this.reply.set(text);
+    this.copied.set(false);
+  }
+
   protected async copyReply(): Promise<void> {
     try {
       await navigator.clipboard.writeText(this.reply());
@@ -388,9 +406,7 @@ export class DealerScreen {
       .subscribe({
         next: ({ view, records }) => {
           this.show(view);
-          this.rows.set(
-            view.refusal ? [blankRow()] : (view.checks ?? []).map((c) => rowOf(c, true)),
-          );
+          this.rows.set(view.refusal ? [blankRow()] : (view.checks ?? []).map((c) => rowOf(c)));
           this.folded.set(!view.refusal && (view.checks?.length ?? 0) > 0);
           if (records === null)
             this.error.set('The answer is shown, but its Check Record id could not be loaded.');
@@ -407,40 +423,51 @@ export class DealerScreen {
   /** Runs the (edited) form rows again through the by-hand route and records what the dealer changed. */
   protected recheck(): void {
     const rows = this.rows();
-    const bodies = rows.map(toBody);
-    if (!rows.length || bodies.some((b) => b === null)) {
+    const bodies = rows.map(toBody).filter((x): x is HandRequestBody => x !== null);
+    if (!rows.length || bodies.length !== rows.length) {
       this.error.set('Fill in portfolio, Share Class, a positive amount and currency first.');
+      return;
+    }
+    const corrections = this.corrections(rows);
+    if (corrections === null) {
+      this.error.set(
+        'The Check Record of this answer is not loaded, so your corrections cannot be recorded. Answer the email again.',
+      );
       return;
     }
     this.busy.set(true);
     this.error.set(null);
-    const corrections = this.corrections(rows);
-    forkJoin([
-      ...bodies.map((b) => this.api.answerByHand(b as HandRequestBody)),
-      ...corrections.map((c) => c.send),
-    ])
+    const sends = corrections.length
+      ? forkJoin(corrections.map((c) => c.send))
+      : of([] as boolean[]);
+    forkJoin([forkJoin(bodies.map((b) => this.api.answerByHand(b))), sends])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (all) => {
-          const views = all.slice(0, bodies.length) as AnswerView[];
-          this.show({
+        next: ([views, ok]) => {
+          const untouched = this.reply() === (this.result()?.reply ?? '');
+          const view: AnswerView = {
             aiUsed: false,
             screenNote: 'no AI was used for this email',
             checks: views.flatMap((v) => v.checks ?? []),
             unclear: views.flatMap((v) => v.unclear ?? []),
             reply: views.map((v) => v.reply ?? '').join('\n\n'),
-          });
+          };
+          const keep = this.reply();
+          this.show(view);
+          if (!untouched && keep) this.reply.set(keep);
           this.rows.update((rs) =>
             rs.map((r, i) => ({
               ...r,
               sent: {
                 ...r.sent,
                 ...Object.fromEntries(
-                  corrections.filter((c) => c.row === i).map((c) => [c.field, c.value]),
+                  corrections.filter((c, k) => c.row === i && ok[k]).map((c) => [c.field, c.value]),
                 ),
               },
             })),
           );
+          if (ok.some((x) => !x))
+            this.error.set('Some corrections could not be recorded. Re-check again to retry them.');
           this.busy.set(false);
         },
         error: () => {
@@ -450,35 +477,46 @@ export class DealerScreen {
       });
   }
 
+  /** Null when a correction is due but its Check Record is not loaded. */
   private corrections(rows: FormRow[]) {
-    return rows.flatMap((row, i) => {
+    let missing = false;
+    const list = rows.flatMap((row, i) => {
       const parsed = row.parsed;
       const record = this.records().find(
         (r) =>
           r.portfolioReference === row.portfolioReference &&
           r.shareClassIsin === parsed?.shareClassIsin,
       );
-      if (!parsed || !record?.id) return [];
+      if (!parsed) return [];
       return EDITABLE.flatMap((field) => {
         const value = String(row[field] ?? '');
         if (value === parsed[field] || row.sent[field] === value) return [];
+        const id = record?.id;
+        if (!id) {
+          missing = true;
+          return [];
+        }
         return [
           {
             row: i,
             field,
             value,
             send: this.recordApi
-              .correct(record.id as string, {
+              .correct(id, {
                 field,
                 parsedValue: parsed[field],
                 dealerValue: value,
                 by: 'dealer',
               })
-              .pipe(catchError(() => of(null))),
+              .pipe(
+                map(() => true),
+                catchError(() => of(false)),
+              ),
           },
         ];
       });
     });
+    return missing ? null : list;
   }
 
   private show(view: AnswerView): void {
@@ -501,7 +539,7 @@ function blankRow(): FormRow {
   };
 }
 
-function rowOf(check: CheckView, fromAi: boolean): FormRow {
+function rowOf(check: CheckView): FormRow {
   const row: FormRow = {
     portfolioReference: check.portfolioReference ?? '',
     shareClassIsin: check.shareClassIsin ?? '',
@@ -512,14 +550,12 @@ function rowOf(check: CheckView, fromAi: boolean): FormRow {
     parsed: null,
     sent: {},
   };
-  if (fromAi) {
-    row.parsed = {
-      shareClassIsin: row.shareClassIsin,
-      amount: String(row.amount ?? ''),
-      currency: row.currency,
-      clientInitiated: String(row.clientInitiated),
-    };
-  }
+  row.parsed = {
+    shareClassIsin: row.shareClassIsin,
+    amount: String(row.amount ?? ''),
+    currency: row.currency,
+    clientInitiated: String(row.clientInitiated),
+  };
   return row;
 }
 
