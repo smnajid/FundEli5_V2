@@ -55,8 +55,12 @@ public final class InvestorCategoryPlugin implements RuleKindPlugin<Condition.In
         if (excluded.isPresent()) {
             return excluded;
         }
+        if (condition.allowed().isEmpty()) {
+            return Optional.of(Finding.review("The rule names no investor category the class admits."));
+        }
         List<InvestorType> unknown = new ArrayList<>();
-        for (InvestorType type : condition.allowed()) {
+        // In enum order, so the same inputs always give the same sentence.
+        for (InvestorType type : condition.allowed().stream().sorted().toList()) {
             switch (admits(type, profile, category, facts, lookups)) {
                 case YES -> {
                     return Optional.of(Finding.pass("The client counts as " + describe(type) + ", which the class admits."));

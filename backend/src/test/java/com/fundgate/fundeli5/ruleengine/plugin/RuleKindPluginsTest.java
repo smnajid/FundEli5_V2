@@ -204,6 +204,35 @@ class RuleKindPluginsTest {
         assertThat(mandateOnly(null, "LOC90001001")).isEqualTo(Result.PASS);
     }
 
+    @Test
+    void aBlankManagerOnTheCardMeansAnyManager() {
+        assertThat(mandateOnly(" ", "LOC90001001")).isEqualTo(Result.PASS);
+    }
+
+    @Test
+    void anUnknownGreenCardFlagGivesReviewNeverPass() {
+        var base = facts("LOC90000101", "1000", "CHF");
+        var client = base.profile().client();
+        var unknownFlag = new com.fundgate.fundeli5.clientprofiles.ClientProfile(base.profile().portfolioRef(),
+                base.profile().portfolioId(), "LOC", base.profile().retrievedAt(),
+                new com.fundgate.fundeli5.clientprofiles.ClientProfile.Client(client.residenceCountry(),
+                        client.nationalities(), client.taxResidences(), client.birthCountry(),
+                        new com.fundgate.fundeli5.clientprofiles.ClientProfile.UsPerson(
+                                com.fundgate.fundeli5.clientprofiles.ClientProfile.FatcaStatus.NON_US_PERSON, null),
+                        client.knowledgeAndExperience()),
+                base.profile().classification(), base.profile().portfolio());
+        var result = new UsPersonExclusionPlugin().evaluate(
+                new Condition.UsPersonExclusion(UsPersonDefinition.REG_S, false),
+                new Facts(base.request(), unknownFlag, null), LOOKUPS).orElseThrow();
+        assertThat(result.result()).isEqualTo(Result.REVIEW);
+    }
+
+    @Test
+    void aRuleThatAdmitsNoCategoryGivesReview() {
+        assertThat(investor(new Condition.InvestorCategory(Set.of(), List.of()), "LOC90000101", "1", "EUR"))
+                .isEqualTo(Result.REVIEW);
+    }
+
     // ---- Each plug-in's contract with the catalog
 
     @Test

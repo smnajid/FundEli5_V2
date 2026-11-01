@@ -35,7 +35,7 @@ public final class MandateOnlyClassPlugin implements RuleKindPlugin<Condition.Ma
             return Optional.of(Finding.fail("The class is reserved to mandates, and the portfolio has an "
                     + mandate.type().name().toLowerCase().replace('_', '-') + " relationship."));
         }
-        if (condition.manager() == null) {
+        if (condition.manager() == null || condition.manager().isBlank()) {
             return Optional.of(Finding.pass("The portfolio has a discretionary mandate."));
         }
         var manager = mandate.manager();

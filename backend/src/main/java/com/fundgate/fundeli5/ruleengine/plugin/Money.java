@@ -18,7 +18,7 @@ final class Money {
         if (rates == null) {
             return Optional.empty();
         }
-        var direct = rates.rate(from, to);
+        var direct = rates.rate(from, to).filter(r -> r.rate().signum() > 0);
         if (direct.isPresent()) {
             return Optional.of(amount.multiply(direct.get().rate()));
         }

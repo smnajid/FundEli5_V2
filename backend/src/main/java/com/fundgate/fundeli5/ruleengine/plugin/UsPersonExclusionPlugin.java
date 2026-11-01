@@ -55,7 +55,8 @@ public final class UsPersonExclusionPlugin implements RuleKindPlugin<Condition.U
                 && client.usPerson().fatcaStatus() == ClientProfile.FatcaStatus.US_PERSON) {
             return Optional.of(Finding.fail("The bank records the client as a FATCA US Person."));
         }
-        if (client.usPerson() == null || client.usPerson().fatcaStatus() == null) {
+        if (client.usPerson() == null || client.usPerson().fatcaStatus() == null
+                || client.usPerson().usPermanentResident() == null) {
             return Optional.of(Finding.review("The client's US Person status is missing."));
         }
         if (client.residenceCountry() == null || (citizenCounts && client.nationalities() == null)) {
