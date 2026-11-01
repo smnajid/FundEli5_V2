@@ -15,7 +15,8 @@ FundEli5_V2 rebuilds every component from scratch, but it keeps the technical de
 | Frontend | Angular standalone components with signals, Vitest + jsdom, Prettier | Angular 21.2, TypeScript 5.9, Vitest 4.1 |
 | Generated client | `@openapitools/openapi-generator-cli`, generator `typescript-angular` | 2.41.0 |
 | Page selection | TypeSafe Jev over HTTPS (no SDK) | `jev-latest` |
-| No Python | ADR 0006: no module needed it | — |
+| Personal-data detection | Presidio analyzer (Python service, Docker image `mcr.microsoft.com/presidio-analyzer`) behind the `PersonalDataDetector` port; `fixture` adapter for tests ([ADR 0009](../adr/0009-presidio-detects-personal-data-in-emails.md)) | — |
+| Python | only for real added value (ADR 0006): the Presidio service | — |
 
 Group id `com.fundgate`, artifact `fundeli5`. Choose your own names in V2 if you like; the docs say `com.fundgate`.
 

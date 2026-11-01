@@ -12,7 +12,12 @@ import com.fundgate.fundeli5.llm.LlmEgress;
 import com.fundgate.fundeli5.llm.replay.ReplayLlmEgress;
 import com.fundgate.fundeli5.shareclasses.ShareClasses;
 import com.fundgate.fundeli5.shareclasses.fixture.FixtureShareClasses;
+import com.fundgate.fundeli5.privacygate.PersonalDataDetector;
+import com.fundgate.fundeli5.privacygate.fixture.FixturePersonalDataDetector;
+import com.fundgate.fundeli5.privacygate.presidio.PresidioPersonalDataDetector;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.util.List;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -45,6 +50,22 @@ public class PortsConfiguration {
         @ConditionalOnProperty(name = "fundeli5.clientprofiles.adapter", havingValue = "fixture", matchIfMissing = true)
         ClientProfiles clientProfiles(@Value("${fundeli5.fixtures.dir}") String fixturesDir) {
             return new FixtureClientProfiles(Path.of(fixturesDir));
+        }
+
+        /** ADR 0009: {@code presidio} calls the analyzer service; {@code fixture} (tests) needs no Docker and knows three names only, so Presidio is the default. */
+        @Bean
+        @ConditionalOnProperty(name = "fundeli5.privacygate.detector", havingValue = "fixture")
+        PersonalDataDetector fixturePersonalDataDetector() {
+            return new FixturePersonalDataDetector();
+        }
+
+        @Bean
+        @ConditionalOnProperty(name = "fundeli5.privacygate.detector", havingValue = "presidio", matchIfMissing = true)
+        PersonalDataDetector presidioPersonalDataDetector(
+                @Value("${fundeli5.privacygate.presidio.url:http://localhost:5002}") String url,
+                @Value("${fundeli5.privacygate.presidio.languages:en}") List<String> languages,
+                @Value("${fundeli5.privacygate.presidio.timeout:5s}") Duration timeout) {
+            return new PresidioPersonalDataDetector(url, languages, timeout);
         }
 
         @Bean
