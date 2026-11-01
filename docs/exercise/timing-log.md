@@ -1,20 +1,12 @@
 # Timing log
 
-How long the rebuild takes, ticket by ticket. Each build ticket appends its row when it merges. Wall time is from claiming the ticket to merging it; review is the minutes Mohamed spent reading diffs and answering stop conditions.
+Unattended run on the VM (Standard_E4s_v3), Sonnet 5.5, at most 3 tickets at once. Started 2026-11-01T20:17:16+00:00, map charted 2026-11-01T20:21:20+00:00, ended 2026-11-01T20:58:38+00:00.
+Wall time runs from the agent claiming the ticket to the merge. Attempts counts headless sessions, including resumes after a usage limit.
 
-Reference from fund-gate (one builder, same agents): spine S1–S4 planned Wed 28 – Thu 29 Oct; waves Fri 30 Oct – Mon 2 Nov; Anna's flow end to end on fixtures by Mon 2 Nov ([build-workflow.md](../playbook/build-workflow.md)).
-
-| Ticket | Mode | Started | Merged | Wall time | Review min | Rework loops | What slowed it down |
-|---|---|---|---|---|---|---|---|
-| Kit setup (§1–4 of hackathon-kit.md) | HITL | | | | | | |
-| Map charted (`/wayfinder`) | HITL | | | | | | |
-| | | | | | | | |
-
-## Totals
-
-| Phase | Wall time | Review min |
-|---|---|---|
-| Setup and map | | |
-| Spine S1–S4 | | |
-| Waves | | |
-| Integration to `@must` green | | |
+| Ticket | Phase | Mode | Status | Started | Ended | Wall time | Attempts | PR | Note |
+|---|---|---|---|---|---|---|---|---|---|
+| #2 S1a Skeleton: Spring Boot 4 backend, Cucumber runner, ArchUnit rules, RuntimeProfilesTest | Spine | HITL | built | 2026-11-01T20:22 | 2026-11-01T20:37 | 14 min | 1 | #28 |  |
+| #3 S1b Skeleton: Angular shell and generated API client (one npm script) | Spine | HITL | built | 2026-11-01T20:30 | 2026-11-01T20:35 | 5 min | 1 | #29 |  |
+| #4 S2a Schemas and ports with fixture adapters | Spine | HITL | built | 2026-11-01T20:36 | 2026-11-01T20:45 | 10 min | 1 | #30 |  |
+| #5 S2b LLM egress interface with replay mode | Spine | HITL | built | 2026-11-01T20:45 | 2026-11-01T20:50 | 4 min | 1 | #31 |  |
+| #6 S3a Walking skeleton: Anna's flow over HTTP with stubs | Spine | HITL | needs_you | 2026-11-01T20:50 |  | 8 min | 3 |  | agent stuck after 3 attempts |
