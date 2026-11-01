@@ -74,6 +74,7 @@ public class AnsweringConfiguration {
     }
 
     @Bean
+    @Lazy
     RuleEngine ruleEngine(RuleCards ruleCards, ClientProfiles clientProfiles, ShareClasses shareClasses,
             FundRegistrations fundRegistrations, RuleCatalog catalog, EditionLookup editions) {
         return new RuleCatalogEngine(ruleCards, clientProfiles, shareClasses, new Lookups(fundRegistrations), catalog,
