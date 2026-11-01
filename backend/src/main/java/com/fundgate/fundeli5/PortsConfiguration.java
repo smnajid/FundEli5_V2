@@ -52,15 +52,15 @@ public class PortsConfiguration {
             return new FixtureClientProfiles(Path.of(fixturesDir));
         }
 
-        /** ADR 0009: {@code presidio} calls the analyzer service; {@code fixture} needs no Docker. */
+        /** ADR 0009: {@code presidio} calls the analyzer service; {@code fixture} (tests) needs no Docker and knows three names only, so Presidio is the default. */
         @Bean
-        @ConditionalOnProperty(name = "fundeli5.privacygate.detector", havingValue = "fixture", matchIfMissing = true)
+        @ConditionalOnProperty(name = "fundeli5.privacygate.detector", havingValue = "fixture")
         PersonalDataDetector fixturePersonalDataDetector() {
             return new FixturePersonalDataDetector();
         }
 
         @Bean
-        @ConditionalOnProperty(name = "fundeli5.privacygate.detector", havingValue = "presidio")
+        @ConditionalOnProperty(name = "fundeli5.privacygate.detector", havingValue = "presidio", matchIfMissing = true)
         PersonalDataDetector presidioPersonalDataDetector(
                 @Value("${fundeli5.privacygate.presidio.url:http://localhost:5002}") String url,
                 @Value("${fundeli5.privacygate.presidio.languages:en}") List<String> languages,

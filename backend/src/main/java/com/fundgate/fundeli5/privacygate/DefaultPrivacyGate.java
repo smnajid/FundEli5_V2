@@ -20,6 +20,13 @@ public class DefaultPrivacyGate implements PrivacyGate {
 
     private static final Pattern REFERENCE = Pattern.compile("\\b[A-Z]{3}\\d{8}\\b");
 
+    /** Anything shaped like a reference that the exact pattern missed: other case, a separator, more digits. */
+    private static final Pattern LOOKS_LIKE_REFERENCE = Pattern.compile("(?i)[a-z]{3}[\\s_-]?\\d{8}");
+    private static final Pattern PORTFOLIO_ID = Pattern.compile(
+            "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}");
+
+    private static final System.Logger LOG = System.getLogger(DefaultPrivacyGate.class.getName());
+
     private final ClientProfiles clientProfiles;
     private final PersonalDataDetector detector;
 
@@ -47,10 +54,14 @@ public class DefaultPrivacyGate implements PrivacyGate {
             return new GateOutcome.Refused("The email names no Portfolio Reference.", List.of());
         }
         String pseudonymised = text.toString();
+        if (LOOKS_LIKE_REFERENCE.matcher(PORTFOLIO_ID.matcher(pseudonymised).replaceAll("")).find()) {
+            return new GateOutcome.Refused("The email holds something that looks like a Portfolio Reference the Gate cannot swap.", List.of());
+        }
         List<DetectedSpan> spans;
         try {
             spans = detector.detect(pseudonymised);
         } catch (RuntimeException e) {
+            LOG.log(System.Logger.Level.WARNING, "The personal-data detector failed: " + e.getClass().getSimpleName());
             return new GateOutcome.Refused(
                     "The personal-data check could not run, so the email is treated as naming a client.", List.of());
         }

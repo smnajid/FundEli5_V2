@@ -74,6 +74,12 @@ class PresidioPersonalDataDetectorTest {
     }
 
     @Test
+    void anItemOfUnknownShapeFailsClosed() {
+        reply = "[{\"type\":\"PERSON\"}]";
+        assertThatThrownBy(() -> detector("en").detect("x")).isInstanceOf(PersonalDataDetectorUnavailable.class);
+    }
+
+    @Test
     void garbageFailsClosed() {
         reply = "not json";
         assertThatThrownBy(() -> detector("en").detect("x")).isInstanceOf(PersonalDataDetectorUnavailable.class);

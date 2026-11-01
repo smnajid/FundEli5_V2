@@ -43,6 +43,14 @@ class PrivacyGateTest {
     }
 
     @Test
+    void refusesAReferenceShapedTextItCannotSwap() {
+        for (String odd : List.of("loc90000199", "LOC 90000199", "LOC-90000199", "LOC900001999", "x_LOC90000199")) {
+            assertThat(gate.gate("LOC90000101 and " + odd + " want EUR 5,000"))
+                    .as(odd).isInstanceOf(GateOutcome.Refused.class);
+        }
+    }
+
+    @Test
     void failsClosedWhenTheDetectorIsDown() {
         PersonalDataDetector down = text -> {
             throw new PersonalDataDetectorUnavailable("down");

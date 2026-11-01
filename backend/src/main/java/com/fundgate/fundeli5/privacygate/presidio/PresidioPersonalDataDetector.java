@@ -31,10 +31,14 @@ public class PresidioPersonalDataDetector implements PersonalDataDetector {
         if (languages.isEmpty()) {
             throw new IllegalArgumentException("At least one language");
         }
+        URI base = URI.create(baseUrl);
+        if (!"http".equals(base.getScheme()) && !"https".equals(base.getScheme())) {
+            throw new IllegalArgumentException("The Presidio URL must be http or https");
+        }
         this.analyze = URI.create(baseUrl.replaceAll("/+$", "") + "/analyze");
         this.languages = List.copyOf(languages);
         this.timeout = timeout;
-        this.http = HttpClient.newBuilder().connectTimeout(timeout).build();
+        this.http = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NEVER).connectTimeout(timeout).build();
     }
 
     @Override
@@ -64,18 +68,22 @@ public class PresidioPersonalDataDetector implements PersonalDataDetector {
             }
             List<DetectedSpan> spans = new ArrayList<>();
             for (JsonNode item : array) {
+                if (!item.path("entity_type").isString() || !item.path("start").isInt()
+                        || !item.path("end").isInt() || !item.path("score").isNumber()) {
+                    throw new PersonalDataDetectorUnavailable("Presidio answered an item of an unknown shape");
+                }
                 spans.add(new DetectedSpan(item.path("entity_type").asString(), item.path("start").asInt(),
                         item.path("end").asInt(), item.path("score").asDouble()));
             }
             return spans;
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new PersonalDataDetectorUnavailable("Interrupted while calling Presidio", e);
+            throw new PersonalDataDetectorUnavailable("Interrupted while calling Presidio");
         } catch (IOException | RuntimeException e) {
             if (e instanceof PersonalDataDetectorUnavailable unavailable) {
                 throw unavailable;
             }
-            throw new PersonalDataDetectorUnavailable("Presidio cannot be used: " + e.getClass().getSimpleName(), e);
+            throw new PersonalDataDetectorUnavailable("Presidio cannot be used: " + e.getClass().getSimpleName());
         }
     }
 }

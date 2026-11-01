@@ -8,8 +8,8 @@ Presidio is probabilistic, so the guard is asymmetric: the Gate never downgrades
 
 Chosen by `fundeli5.privacygate.detector`, as for every port ([ADR 0008](0008-bank-data-enters-through-canonical-contracts.md)):
 
-- `fixture` (default): deterministic detection of the named demo clients (full name or surname) from demo-dataset.md. Used by tests and the specification; no Docker.
-- `presidio`: `POST <fundeli5.privacygate.presidio.url>/analyze` with `{text, language, entities: ["PERSON"]}`, once per language in `fundeli5.privacygate.presidio.languages`, results united. The analyzer image is `mcr.microsoft.com/presidio-analyzer` (container port 3000; the default URL is `http://localhost:5002`, i.e. `docker run -p 5002:3000 mcr.microsoft.com/presidio-analyzer`). Tested against a stubbed HTTP server.
+- `fixture` (tests only, set in the test config): deterministic detection of the named demo clients (full name or surname) from demo-dataset.md. Used by tests and the specification; no Docker.
+- `presidio` (default, so a forgotten property fails closed when the service is down): `POST <fundeli5.privacygate.presidio.url>/analyze` with `{text, language, entities: ["PERSON"]}`, once per language in `fundeli5.privacygate.presidio.languages`, results united. The analyzer image is `mcr.microsoft.com/presidio-analyzer` (container port 3000; the default URL is `http://localhost:5002`, i.e. `docker run -p 5002:3000 mcr.microsoft.com/presidio-analyzer`). Tested against a stubbed HTTP server.
 
 ## Languages
 
@@ -27,3 +27,9 @@ Names stay out of the Client Profile (client-profile.md, "Not in the contract").
 - **A list of known client names from the CRM**: needs a new port returning client names, which the contract deliberately leaves out, and misses every name not in the list.
 - **Client name in `ClientProfiles`**: changes a port and the contract.
 - **Regex heuristics for capitalised words**: no Python service, but far noisier than a trained recogniser.
+
+## Boundaries of this decision
+
+- The Gate looks for **names** (PERSON). Other free-text personal data (email address, phone, street address, birth date) is not detected; Requesters send references only, and widening the entities is a later decision.
+- The Presidio service receives pseudonymised text that may still hold a name, so it must run inside the bank's boundary (local container or in-bank host), never a public endpoint. The adapter accepts http(s) URLs only and follows no redirects.
+- After the swap the Gate also refuses anything shaped like a reference that it could not swap (other case, a separator, extra digits).
