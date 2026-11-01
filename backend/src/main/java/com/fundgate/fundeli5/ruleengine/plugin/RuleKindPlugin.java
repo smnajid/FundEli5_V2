@@ -26,6 +26,14 @@ public interface RuleKindPlugin<C extends Condition> {
     Optional<Finding> evaluate(C condition, Facts facts, Lookups lookups);
 
     /**
+     * What the kind says when the card has no rule of it for this class. A Pass is shown as a warning,
+     * any other result as an outcome without Citation. Most kinds say nothing.
+     */
+    default Optional<Finding> whenNoRule(Facts facts, Lookups lookups) {
+        return Optional.empty();
+    }
+
+    /**
      * True: every rule of the kind is shown, and class-level rules add to fund-level ones.
      * False: the worst finding decides, and a class-level rule overrides the fund-level one.
      */

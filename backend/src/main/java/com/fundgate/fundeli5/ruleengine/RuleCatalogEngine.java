@@ -72,8 +72,20 @@ public class RuleCatalogEngine implements RuleEngine {
 
         List<RuleOutcome> outcomes = new ArrayList<>();
         List<String> warnings = new ArrayList<>();
-        for (List<Rule> sameKind : applicableRulesByKind(card, request).values()) {
+        Map<Class<?>, List<Rule>> byKind = applicableRulesByKind(card, request);
+        for (List<Rule> sameKind : byKind.values()) {
             evaluateKind(sameKind, facts, outcomes, warnings);
+        }
+        for (RuleKindPlugin<?> plugin : catalog.plugins()) {
+            if (!byKind.containsKey(plugin.conditionType())) {
+                plugin.whenNoRule(facts, lookups).ifPresent(f -> {
+                    if (f.result() == RuleOutcome.Result.PASS) {
+                        warnings.add(f.explanation());
+                    } else {
+                        outcomes.add(new RuleOutcome(plugin.kind(), f.result(), f.explanation(), List.of()));
+                    }
+                });
+            }
         }
         if (outcomes.isEmpty()) {
             outcomes.add(FrameOutcomes.noRuleApplies());

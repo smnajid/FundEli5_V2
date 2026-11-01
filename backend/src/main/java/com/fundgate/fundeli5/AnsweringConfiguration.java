@@ -23,6 +23,8 @@ import com.fundgate.fundeli5.ruleengine.RuleCatalogEngine;
 import com.fundgate.fundeli5.ruleengine.plugin.InvestorCategoryPlugin;
 import com.fundgate.fundeli5.ruleengine.plugin.MandateOnlyClassPlugin;
 import com.fundgate.fundeli5.ruleengine.plugin.MinimumInitialSubscriptionPlugin;
+import com.fundgate.fundeli5.ruleengine.plugin.TargetMarketPlugin;
+import com.fundgate.fundeli5.ruleengine.plugin.UnmodelledRestrictionPlugin;
 import com.fundgate.fundeli5.ruleengine.plugin.UsPersonExclusionPlugin;
 import com.fundgate.fundeli5.ruleengine.plugin.KidRequiredForRetailPlugin;
 import com.fundgate.fundeli5.ruleengine.plugin.Lookups;
@@ -71,7 +73,8 @@ public class AnsweringConfiguration {
     @Bean
     RuleCatalog ruleCatalog() {
         return new RuleCatalog(List.of(new InvestorCategoryPlugin(), new UsPersonExclusionPlugin(),
-                new MinimumInitialSubscriptionPlugin(), new MandateOnlyClassPlugin(), new KidRequiredForRetailPlugin()));
+                new MinimumInitialSubscriptionPlugin(), new MandateOnlyClassPlugin(), new KidRequiredForRetailPlugin(),
+                new UnmodelledRestrictionPlugin(), new TargetMarketPlugin()));
     }
 
     /** No edition check until the bank's fund master data is read online: the contract's "absent means none". */
