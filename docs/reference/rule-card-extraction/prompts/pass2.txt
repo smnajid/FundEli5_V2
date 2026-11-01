@@ -1,0 +1,7 @@
+Convert these cited extraction notes into Rule Card JSON.
+{outputRules}
+citation_ids must reference the [cN] markers that support the rule; never invent ids.
+
+<notes>
+{notes}
+</notes>

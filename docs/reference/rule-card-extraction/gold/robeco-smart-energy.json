@@ -1,0 +1,218 @@
+{
+  "_comment": "PROTOTYPE answer key (#39), drafted by Claude from the PDFBox page text, checked against an independent blind answer key (Claude subagent, prospectus text only): every scored rule agrees; not yet checked by a human. Robeco Capital Growth Funds, German prospectus May 2022, sub-fund RobecoSAM Smart Energy Equities. Prospectus only (no KIDs downloaded). Pages are PDF pages of the 545-page document.",
+  "fund": "Robeco Capital Growth Funds – RobecoSAM Smart Energy Equities",
+  "share_classes": {
+    "D-EUR": "Klasse D (thesaurierend, EUR)",
+    "I-EUR": "Klasse I (thesaurierend, EUR)"
+  },
+  "rules": [
+    {
+      "id": "us-person",
+      "share_class": "*",
+      "scope": "fund",
+      "kind": "us_person_exclusion",
+      "params": {
+        "us_person_definition": "reg_s",
+        "excludes_us_citizens": false
+      },
+      "accept": {
+        "us_person_definition": [
+          "reg_s",
+          "mixed"
+        ]
+      },
+      "citations": [
+        {
+          "doc": "x-robeco-cgf-de",
+          "page": 2,
+          "quote": "US-PERONEN IST ES NICHT GESTATTET, IN ANTEILEN DER GESELLSCHAFT ANZULEGEN"
+        },
+        {
+          "doc": "x-robeco-cgf-de",
+          "page": 15,
+          "quote": "hat die gleiche Bedeutung wie in Bestimmung S"
+        }
+      ],
+      "note": "Regulation S definition starts from 'eine natürliche Person, die in den USA domiziliert ist': residence, not citizenship."
+    },
+    {
+      "id": "category-D",
+      "share_class": "D-EUR",
+      "scope": "share_class",
+      "kind": "investor_category",
+      "params": {
+        "allowed_categories": [
+          "all"
+        ]
+      },
+      "citations": [
+        {
+          "doc": "x-robeco-cgf-de",
+          "page": 21,
+          "quote": "Anteile der Klassen D und DH stehen allen Anlegern zur Verfügung"
+        }
+      ]
+    },
+    {
+      "id": "category-I",
+      "share_class": "I-EUR",
+      "scope": "share_class",
+      "kind": "investor_category",
+      "params": {
+        "allowed_categories": [
+          "institutional"
+        ]
+      },
+      "citations": [
+        {
+          "doc": "x-robeco-cgf-de",
+          "page": 22,
+          "quote": "Anteilen der Klassen für institutionelle Anleger ist auf institutionelle Anleger"
+        }
+      ]
+    },
+    {
+      "id": "minimum-D",
+      "share_class": "D-EUR",
+      "scope": "share_class",
+      "kind": "minimum_initial_subscription",
+      "params": {
+        "amount": 0,
+        "currency": "EUR"
+      },
+      "accept": {
+        "amount": [
+          0,
+          1,
+          null
+        ],
+        "currency": [
+          "EUR",
+          null
+        ]
+      },
+      "citations": [
+        {
+          "doc": "x-robeco-cgf-de",
+          "page": 23,
+          "quote": "Für andere Anteilsklassen (außer für Anteile der Klasse J) gilt ein Mindestanlagebetrag von einem Anteil"
+        }
+      ],
+      "note": "Minimum is one share, i.e. no monetary minimum."
+    },
+    {
+      "id": "minimum-I",
+      "share_class": "I-EUR",
+      "scope": "share_class",
+      "kind": "minimum_initial_subscription",
+      "params": {
+        "amount": 500000,
+        "currency": "EUR"
+      },
+      "citations": [
+        {
+          "doc": "x-robeco-cgf-de",
+          "page": 22,
+          "quote": "Für Anteile der Klassen für institutionelle Anleger, mit Ausnahme von J, Z, ZH, Z2, Z2H, ZB, ZEH und ZBH, gilt ein"
+        },
+        {
+          "doc": "x-robeco-cgf-de",
+          "page": 23,
+          "quote": "Mindestanlagebetrag von EUR 500.000 (oder Gegenwert)"
+        }
+      ],
+      "note": "The sentence runs across pages 22-23. The company may waive or reduce it."
+    },
+    {
+      "id": "mandate-I",
+      "share_class": "I-EUR",
+      "scope": "share_class",
+      "kind": "mandate_only_class",
+      "params": {
+        "mandate_only": true
+      },
+      "negative": true,
+      "citations": [
+        {
+          "doc": "x-robeco-cgf-de",
+          "page": 22,
+          "quote": "auf Basis eines Verwaltungsverhältnisses mit Entscheidungsbefugnis anlegen"
+        }
+      ],
+      "note": "Trap: discretionary managers count as institutional investors, but class I is not reserved to mandate clients."
+    },
+    {
+      "id": "tm-horizon",
+      "share_class": "*",
+      "scope": "fund",
+      "kind": "target_market",
+      "params": {
+        "dimension": "horizon_years",
+        "value": "5"
+      },
+      "accept": {
+        "value": [
+          "5",
+          "5-7",
+          "7"
+        ]
+      },
+      "citations": [
+        {
+          "doc": "x-robeco-cgf-de",
+          "page": 243,
+          "quote": "ihr Anlagekapital für mindestens fünf bis sieben Jahre nicht"
+        }
+      ]
+    },
+    {
+      "id": "tm-knowledge",
+      "share_class": "*",
+      "scope": "fund",
+      "kind": "target_market",
+      "optional": true,
+      "params": {
+        "dimension": "knowledge_experience",
+        "value": "informed"
+      },
+      "accept": {
+        "value": [
+          "informed",
+          "advanced"
+        ]
+      },
+      "citations": [
+        {
+          "doc": "x-robeco-cgf-de",
+          "page": 243,
+          "quote": "Er ist ebenfalls für erfahrene Anleger geeignet"
+        }
+      ]
+    },
+    {
+      "id": "tm-loss",
+      "share_class": "*",
+      "scope": "fund",
+      "kind": "target_market",
+      "optional": true,
+      "params": {
+        "dimension": "loss_bearing",
+        "value": "full_loss"
+      },
+      "accept": {
+        "value": [
+          "full_loss",
+          "limited_loss"
+        ]
+      },
+      "citations": [
+        {
+          "doc": "x-robeco-cgf-de",
+          "page": 243,
+          "quote": "Der Teilfonds bietet keine Kapitalgarantie"
+        }
+      ],
+      "note": "No capital guarantee; investor must accept volatility. Added after the blind check."
+    }
+  ]
+}

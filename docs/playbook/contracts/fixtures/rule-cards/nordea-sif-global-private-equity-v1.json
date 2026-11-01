@@ -1,0 +1,204 @@
+{
+  "fundId": null,
+  "fundName": "Nordea Specialised Investment Fund, SICAV-FIS – Global Private Equity Fund",
+  "shareClasses": [
+    "LU2607415275"
+  ],
+  "version": 1,
+  "status": "validated",
+  "rules": [
+    {
+      "scope": "fund",
+      "shareClass": null,
+      "condition": {
+        "kind": "us_person_exclusion",
+        "definition": "reg_s",
+        "excludesUsCitizens": false
+      },
+      "citations": [
+        {
+          "document": "nordea-sif-prospectus-2026-09",
+          "page": 3,
+          "quote": "Unless otherwise decided by the board or the AIFM US persons may not subscribe for shares.",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "US persons may not subscribe; the definition is Reg S",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (demo-dataset.md, sample-funds research)",
+          "at": "2026-10-28T09:00:00Z",
+          "condition": {
+            "kind": "us_person_exclusion",
+            "definition": "reg_s",
+            "excludesUsCitizens": false
+          }
+        }
+      ]
+    },
+    {
+      "scope": "fund",
+      "shareClass": null,
+      "condition": {
+        "kind": "kid_required_for_retail",
+        "kidAvailable": true
+      },
+      "citations": [
+        {
+          "document": "nordea-sif-kid-bw-sek",
+          "page": 1,
+          "quote": "Key Information Document",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "A PRIIPs KID is published for the class",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (demo-dataset.md, sample-funds research)",
+          "at": "2026-10-28T09:00:00Z",
+          "condition": {
+            "kind": "kid_required_for_retail",
+            "kidAvailable": true
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU2607415275",
+      "condition": {
+        "kind": "investor_category",
+        "allowed": [
+          "well_informed"
+        ],
+        "excluded": []
+      },
+      "citations": [
+        {
+          "document": "nordea-sif-prospectus-2026-09",
+          "page": 22,
+          "quote": "W Well-informed investors at the discretion of the AIFM",
+          "quoteFoundOnPage": true
+        },
+        {
+          "document": "nordea-sif-prospectus-2026-09",
+          "page": 5,
+          "quote": "well-informed investor Well informed investor, as defined in article 2 of the Luxembourg law of 13 February 2007",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "W classes: well-informed investors as defined in art. 2 of the SIF Law",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (demo-dataset.md, sample-funds research)",
+          "at": "2026-10-28T09:00:00Z",
+          "condition": {
+            "kind": "investor_category",
+            "allowed": [
+              "well_informed"
+            ],
+            "excluded": []
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU2607415275",
+      "condition": {
+        "kind": "minimum_initial_subscription",
+        "amount": 100000,
+        "currency": "EUR"
+      },
+      "citations": [
+        {
+          "document": "nordea-sif-prospectus-2026-09",
+          "page": 22,
+          "quote": "EUR 100,000 or the equivalent amount in other currencies",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "W classes: EUR 100,000 minimum initial investment",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (demo-dataset.md, sample-funds research)",
+          "at": "2026-10-28T09:00:00Z",
+          "condition": {
+            "kind": "minimum_initial_subscription",
+            "amount": 100000,
+            "currency": "EUR"
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU2607415275",
+      "condition": {
+        "kind": "unmodelled_restriction",
+        "status": "noted",
+        "notedReason": "The AIFM accepts each subscription at its discretion: no condition on the client"
+      },
+      "citations": [
+        {
+          "document": "nordea-sif-prospectus-2026-09",
+          "page": 22,
+          "quote": "W Well-informed investors at the discretion of the AIFM",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "W classes are offered at the discretion of the AIFM",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (demo-dataset.md, sample-funds research)",
+          "at": "2026-10-28T09:00:00Z",
+          "condition": {
+            "kind": "unmodelled_restriction",
+            "status": "noted",
+            "notedReason": "The AIFM accepts each subscription at its discretion: no condition on the client"
+          }
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "documentId": "nordea-sif-prospectus-2026-09",
+      "contentSha256": "cbf5196ce92b7e854c81b56b2b172f6235ec1ef2be50aacbeb7b6400b632c367",
+      "fmdEditionDate": null,
+      "pdfEditionDate": "2026-09",
+      "confidentiality": "public"
+    },
+    {
+      "documentId": "nordea-sif-kid-bw-sek",
+      "contentSha256": "1242f0eda802a77d439a89285eea6e602320f971a99600b60ffc2905ba54e324",
+      "fmdEditionDate": null,
+      "pdfEditionDate": null,
+      "confidentiality": "public"
+    }
+  ],
+  "drafting": {
+    "model": "none: hand-written fixture",
+    "endpoint": "none",
+    "draftedAt": "2026-10-28T09:00:00Z"
+  },
+  "validation": {
+    "validator": "fixture (demo-dataset.md, sample-funds research)",
+    "validatedAt": "2026-10-28T09:00:00Z"
+  }
+}

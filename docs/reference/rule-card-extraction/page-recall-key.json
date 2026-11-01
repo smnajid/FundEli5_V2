@@ -1,0 +1,225 @@
+[
+ {
+  "doc": "prospectus",
+  "subFund": "Global Climate and Environment Fund",
+  "rules": [
+   {
+    "kind": "gold card citation (#31)",
+    "page": 3
+   },
+   {
+    "kind": "gold card citation (#31)",
+    "page": 5
+   },
+   {
+    "kind": "gold card citation (#31)",
+    "page": 123
+   },
+   {
+    "kind": "gold card citation (#31)",
+    "page": 124
+   },
+   {
+    "kind": "gold card citation (#31)",
+    "page": 138
+   }
+  ]
+ },
+ {
+  "doc": "kid-BI-EUR",
+  "subFund": "Global Climate and Environment Fund",
+  "rules": [
+   {
+    "kind": "gold card citation (#31)",
+    "page": 1
+   }
+  ]
+ },
+ {
+  "doc": "sif-prospectus",
+  "subFund": "Global Private Equity Fund",
+  "rules": [
+   {
+    "kind": "investor-classification",
+    "page": 3,
+    "quote": "exclusively offered to well- informed as defined in article 2 of the SIF Law"
+   },
+   {
+    "kind": "distribution",
+    "page": 3,
+    "quote": "registered for public sale or where sale is not prohibited"
+   },
+   {
+    "kind": "us-person",
+    "page": 3,
+    "quote": "US persons may not subscribe for shares"
+   },
+   {
+    "kind": "us-person definition",
+    "page": 5,
+    "quote": "a US resident, a trust of which a US resident is a trustee"
+   },
+   {
+    "kind": "share-class + minimum",
+    "page": 22,
+    "quote": "Core share class characteristics"
+   },
+   {
+    "kind": "discretion / reject",
+    "page": 30,
+    "quote": "Reject or cancel any application to open an account"
+   }
+  ]
+ },
+ {
+  "doc": "sif-kid-BW-SEK",
+  "subFund": "Global Private Equity Fund",
+  "rules": [
+   {
+    "kind": "target-market",
+    "page": 1,
+    "quote": "The fund is intended for well-informed investors"
+   }
+  ]
+ },
+ {
+  "doc": "bnp-prospectus",
+  "subFund": "Bonds CHF",
+  "rules": [
+   {
+    "kind": "investor-class (I)",
+    "page": 5,
+    "quote": "units may only be held by qualified investors within the meaning of Art. 10 para 3 and 3ter CISA"
+   },
+   {
+    "kind": "minimum",
+    "page": 5,
+    "quote": "A minimum investment amount of CHF 1 million applies to unit classes"
+   },
+   {
+    "kind": "us-person",
+    "page": 16,
+    "quote": "in particular investors with U.S. citizenship"
+   },
+   {
+    "kind": "distribution",
+    "page": 16,
+    "quote": "No issue or redemption of units of the subfunds shall take place abroad"
+   },
+   {
+    "kind": "target-market",
+    "page": 16,
+    "quote": "PROFILE OF THE TYPICAL INVESTOR"
+   },
+   {
+    "kind": "investor-class (contract)",
+    "page": 19,
+    "quote": "may only be held by qualified investors within the meaning of Art. 10 para 3 and para 3ter CISA"
+   }
+  ]
+ },
+ {
+  "doc": "bnp-prospectus-fr",
+  "subFund": "Bonds CHF",
+  "rules": [
+   {
+    "kind": "investor-class (I)",
+    "page": 5,
+    "quote": "peuvent être souscrites exclusivement par des investisseurs qualifiés"
+   },
+   {
+    "kind": "minimum",
+    "page": 5,
+    "quote": "ce montant est de CHF 1 000 000 pour les souscriptions initiales"
+   },
+   {
+    "kind": "distribution",
+    "page": 16,
+    "quote": "Il n’y a pas d’émission ni de rachat de parts de compartiments à l’étranger"
+   },
+   {
+    "kind": "us-person",
+    "page": 17,
+    "quote": "notamment aux investisseurs ayant la nationalité américaine"
+   },
+   {
+    "kind": "target-market",
+    "page": 17,
+    "quote": "PROFIL DE L’INVESTISSEUR CLASSIQUE"
+   },
+   {
+    "kind": "investor-class (contract)",
+    "page": 20,
+    "quote": "peuvent être souscrites exclusivement par des investisseurs qualifiés"
+   }
+  ]
+ },
+ {
+  "doc": "bnp-kid-A",
+  "subFund": "Bonds CHF",
+  "rules": [
+   {
+    "kind": "target-market",
+    "page": 1,
+    "quote": "Kleinanleger-Zielgruppe"
+   }
+  ]
+ },
+ {
+  "doc": "bnp-kid-I",
+  "subFund": "Bonds CHF",
+  "rules": [
+   {
+    "kind": "minimum",
+    "page": 1,
+    "quote": "Mindestzeichnungsbetrag bei Erstzeichnung: CHF 1'000'000"
+   },
+   {
+    "kind": "target-market",
+    "page": 1,
+    "quote": "Kleinanleger-Zielgruppe"
+   }
+  ]
+ },
+ {
+  "doc": "sl-contract",
+  "subFund": "Equity Switzerland (CHF)",
+  "rules": [
+   {
+    "kind": "no-TM-source (FINMA)",
+    "page": 2,
+    "quote": "FINMA has exempted this investment fund"
+   },
+   {
+    "kind": "investor-classification",
+    "page": 5,
+    "quote": "The group of investors of all sub-funds is limited to qualified investors"
+   },
+   {
+    "kind": "share-class (I, AM)",
+    "page": 7,
+    "quote": "high net worth individuals pursuant to Art. 5, cl. 1 FinSA are excluded"
+   },
+   {
+    "kind": "share-class (M, I-A 1)",
+    "page": 8,
+    "quote": "I-A 1 and I-A 1 Cap: The units of these unit classes are only available to qualified investors"
+   },
+   {
+    "kind": "enforced conversion",
+    "page": 9,
+    "quote": "make an enforced conversion into another unit class"
+   },
+   {
+    "kind": "distribution",
+    "page": 45,
+    "quote": "Distribution activities have been approved in the following countries"
+   },
+   {
+    "kind": "us-person",
+    "page": 45,
+    "quote": "a US citizen (including dual or multiple citizenship)"
+   }
+  ]
+ }
+]

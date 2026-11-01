@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "rules": {"type": "array", "items": {
+      "type": "object",
+      "properties": {
+        "share_class": {"type": "string", "enum": []},
+        "scope": {"type": "string", "enum": ["fund", "share_class"]},
+        "kind": {"type": "string", "enum": ["investor_category", "us_person_exclusion", "minimum_initial_subscription", "mandate_only_class", "kid_required_for_retail", "target_market", "unmodelled_restriction"]},
+        "allowed_categories": {"anyOf": [{"type": "array", "items": {"type": "string", "enum": ["all", "retail", "professional", "institutional", "qualified", "well_informed"]}}, {"type": "null"}]},
+        "us_person_definition": {"anyOf": [{"type": "string", "enum": ["reg_s", "fatca", "irc_citizenship", "mixed"]}, {"type": "null"}]},
+        "excludes_us_citizens": {"anyOf": [{"type": "boolean"}, {"type": "null"}]},
+        "amount": {"anyOf": [{"type": "number"}, {"type": "null"}]},
+        "currency": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+        "mandate_only": {"anyOf": [{"type": "boolean"}, {"type": "null"}]},
+        "kid_available": {"anyOf": [{"type": "boolean"}, {"type": "null"}]},
+        "dimension": {"anyOf": [{"type": "string", "enum": ["client_type", "knowledge_experience", "loss_bearing", "risk_sri", "horizon_years"]}, {"type": "null"}]},
+        "value": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+        "contradiction": {"type": "boolean"},
+        "confidence": {"type": "number"},
+        "summary": {"type": "string"},
+        "citation_ids": {"type": "array", "items": {"type": "string"}}
+      },
+      "required": ["share_class", "scope", "kind", "allowed_categories", "us_person_definition", "excludes_us_citizens", "amount", "currency", "mandate_only", "kid_available", "dimension", "value", "contradiction", "confidence", "summary", "citation_ids"],
+      "additionalProperties": false
+    }}
+  },
+  "required": ["rules"],
+  "additionalProperties": false
+}

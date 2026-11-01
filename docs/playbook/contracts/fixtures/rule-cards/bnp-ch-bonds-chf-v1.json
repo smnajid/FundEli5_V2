@@ -1,0 +1,254 @@
+{
+  "fundId": null,
+  "fundName": "BNP PARIBAS (CH) Fund – Bonds CHF",
+  "shareClasses": [
+    "CH0112537516",
+    "CH0112537557"
+  ],
+  "version": 1,
+  "status": "validated",
+  "rules": [
+    {
+      "scope": "fund",
+      "shareClass": null,
+      "condition": {
+        "kind": "us_person_exclusion",
+        "definition": "reg_s",
+        "excludesUsCitizens": true
+      },
+      "citations": [
+        {
+          "document": "bnp-ch-bonds-chf-prospectus-2026-06-29",
+          "page": 16,
+          "quote": "Units of the subfunds may not be offered, sold or delivered to investors who are U.S. Persons within the meaning of Regulation S of the U.S. Securities Act of 1933, in particular investors with U.S. citizenship or investors who are resident or domiciled in the United States.",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "US Persons under Reg S, in particular US citizens, may not invest",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (demo-dataset.md, sample-funds research)",
+          "at": "2026-10-28T09:00:00Z",
+          "condition": {
+            "kind": "us_person_exclusion",
+            "definition": "reg_s",
+            "excludesUsCitizens": true
+          }
+        }
+      ]
+    },
+    {
+      "scope": "fund",
+      "shareClass": null,
+      "condition": {
+        "kind": "kid_required_for_retail",
+        "kidAvailable": true
+      },
+      "citations": [
+        {
+          "document": "bnp-ch-bonds-chf-kid-a",
+          "page": 1,
+          "quote": "Basisinformationsblatt",
+          "quoteFoundOnPage": true
+        },
+        {
+          "document": "bnp-ch-bonds-chf-kid-i",
+          "page": 1,
+          "quote": "Basisinformationsblatt",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "A Swiss KID is published for each class",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (demo-dataset.md, sample-funds research)",
+          "at": "2026-10-28T09:00:00Z",
+          "condition": {
+            "kind": "kid_required_for_retail",
+            "kidAvailable": true
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "CH0112537516",
+      "condition": {
+        "kind": "investor_category",
+        "allowed": [
+          "all"
+        ],
+        "excluded": []
+      },
+      "citations": [
+        {
+          "document": "bnp-ch-bonds-chf-prospectus-2026-06-29",
+          "page": 5,
+          "quote": "Class “A” and class “A AC” units may be held by all investors",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "Class A: all investors",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (demo-dataset.md, sample-funds research)",
+          "at": "2026-10-28T09:00:00Z",
+          "condition": {
+            "kind": "investor_category",
+            "allowed": [
+              "all"
+            ],
+            "excluded": []
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "CH0112537516",
+      "condition": {
+        "kind": "minimum_initial_subscription",
+        "amount": 0,
+        "currency": "CHF"
+      },
+      "citations": [
+        {
+          "document": "bnp-ch-bonds-chf-prospectus-2026-06-29",
+          "page": 5,
+          "quote": "No minimum investment amount applies to the unit classes “A”, “A AC”, “S” and “S AC”.",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "Class A: no minimum investment",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (demo-dataset.md, sample-funds research)",
+          "at": "2026-10-28T09:00:00Z",
+          "condition": {
+            "kind": "minimum_initial_subscription",
+            "amount": 0,
+            "currency": "CHF"
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "CH0112537557",
+      "condition": {
+        "kind": "investor_category",
+        "allowed": [
+          "qualified"
+        ],
+        "excluded": []
+      },
+      "citations": [
+        {
+          "document": "bnp-ch-bonds-chf-prospectus-2026-06-29",
+          "page": 5,
+          "quote": "Class “I” and class “I AC” units may only be held by qualified investors within the meaning of Art. 10 para 3 and 3ter CISA.",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "Class I: qualified investors under CISA art. 10(3) and (3ter)",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (demo-dataset.md, sample-funds research)",
+          "at": "2026-10-28T09:00:00Z",
+          "condition": {
+            "kind": "investor_category",
+            "allowed": [
+              "qualified"
+            ],
+            "excluded": []
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "CH0112537557",
+      "condition": {
+        "kind": "minimum_initial_subscription",
+        "amount": 1000000,
+        "currency": "CHF"
+      },
+      "citations": [
+        {
+          "document": "bnp-ch-bonds-chf-prospectus-2026-06-29",
+          "page": 5,
+          "quote": "A minimum investment amount of CHF 1 million applies to unit classes “I” and “I AC” for initial purchases of shares",
+          "quoteFoundOnPage": true
+        },
+        {
+          "document": "bnp-ch-bonds-chf-kid-i",
+          "page": 1,
+          "quote": "Mindestzeichnungsbetrag bei Erstzeichnung: CHF 1'000'000",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "Class I: CHF 1 million minimum initial investment",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (demo-dataset.md, sample-funds research)",
+          "at": "2026-10-28T09:00:00Z",
+          "condition": {
+            "kind": "minimum_initial_subscription",
+            "amount": 1000000,
+            "currency": "CHF"
+          }
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "documentId": "bnp-ch-bonds-chf-prospectus-2026-06-29",
+      "contentSha256": "3d3aabb7f26ca8bc8f423ed13bc9901ca0cd67014976fb1ebc27ae1ab4d74945",
+      "fmdEditionDate": null,
+      "pdfEditionDate": "2026-06-29",
+      "confidentiality": "public"
+    },
+    {
+      "documentId": "bnp-ch-bonds-chf-kid-a",
+      "contentSha256": "97038409ecf863ce3c3655dfe107618b2ed485d7c1a62f7a4897dffcccc5601b",
+      "fmdEditionDate": null,
+      "pdfEditionDate": null,
+      "confidentiality": "public"
+    },
+    {
+      "documentId": "bnp-ch-bonds-chf-kid-i",
+      "contentSha256": "c7ac33445a4de55e977fe7877cbf68a2cbb68678c57ba3d0751ef7b3baf6add8",
+      "fmdEditionDate": null,
+      "pdfEditionDate": null,
+      "confidentiality": "public"
+    }
+  ],
+  "drafting": {
+    "model": "none: hand-written fixture",
+    "endpoint": "none",
+    "draftedAt": "2026-10-28T09:00:00Z"
+  },
+  "validation": {
+    "validator": "fixture (demo-dataset.md, sample-funds research)",
+    "validatedAt": "2026-10-28T09:00:00Z"
+  }
+}

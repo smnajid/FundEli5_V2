@@ -1,0 +1,2 @@
+Fund: {fund}. Share classes: {classes}.
+For each share class, list every rule as a separate bullet: kind, scope, parameter values, and the supporting quote. Rate your confidence 0-1 for each rule.

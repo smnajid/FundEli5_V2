@@ -1,0 +1,135 @@
+{
+  "_comment": "PROTOTYPE answer key, hand-made by reading the documents (no LLM extraction). Nordea 1 – Global Climate and Environment Fund, prospectus June 2026 + KIDs published 20/05/2026. Page numbers are PDF pages of the full 944-page prospectus. 'optional' rules don't count toward recall; 'negative' rules must NOT be extracted with the given value; 'accept' lists alternative acceptable values.",
+  "fund": "Nordea 1 – Global Climate and Environment Fund",
+  "share_classes": {
+    "BP-EUR": "LU0348926287",
+    "BI-EUR": "LU0348927095"
+  },
+  "rules": [
+    {
+      "id": "us-person",
+      "share_class": "*",
+      "scope": "fund",
+      "kind": "us_person_exclusion",
+      "params": {"us_person_definition": "reg_s", "excludes_us_citizens": false},
+      "accept": {"us_person_definition": ["reg_s", "mixed"]},
+      "citations": [
+        {"doc": "prospectus", "page": 3, "quote": "US persons may not subscribe for shares in the SICAV"},
+        {"doc": "prospectus", "page": 5, "quote": "any other U.S. person defined by US Rule 902 of Regulation S"}
+      ],
+      "note": "Board/management company can decide otherwise. US taxpayers who are not US persons (CFTC Rule 4.7 'Non-United States person') may subscribe, so citizenship alone does not exclude."
+    },
+    {
+      "id": "category-BP",
+      "share_class": "BP-EUR",
+      "scope": "share_class",
+      "kind": "investor_category",
+      "params": {"allowed_categories": ["all"]},
+      "citations": [{"doc": "prospectus", "page": 123, "quote": "P All investors."}]
+    },
+    {
+      "id": "category-BI",
+      "share_class": "BI-EUR",
+      "scope": "share_class",
+      "kind": "investor_category",
+      "params": {"allowed_categories": ["institutional"]},
+      "accept": {"allowed_categories": [["institutional"], ["institutional", "professional"]]},
+      "citations": [
+        {"doc": "prospectus", "page": 123, "quote": "I Institutional investors."},
+        {"doc": "prospectus", "page": 5, "quote": "Investors within the meaning of article 174 of the 2010 Law"}
+      ],
+      "note": "Art. 174 definition includes financial professionals investing for retail clients under a discretionary management agreement, so a retail client inside a discretionary mandate can get in."
+    },
+    {
+      "id": "minimum-BP",
+      "share_class": "BP-EUR",
+      "scope": "share_class",
+      "kind": "minimum_initial_subscription",
+      "params": {"amount": 0, "currency": "EUR"},
+      "accept": {"amount": [0, null], "currency": ["EUR", null]},
+      "citations": [{"doc": "prospectus", "page": 123, "quote": "P All investors. Yes None None"}]
+    },
+    {
+      "id": "minimum-BI",
+      "share_class": "BI-EUR",
+      "scope": "share_class",
+      "kind": "minimum_initial_subscription",
+      "params": {"amount": 75000, "currency": "EUR"},
+      "citations": [
+        {"doc": "prospectus", "page": 123, "quote": "EUR 75,000 or"},
+        {"doc": "prospectus", "page": 124, "quote": "Amounts apply for each share class of each fund, and include initial investments made by switches"}
+      ],
+      "note": "Or equivalent in other currencies; the management company may reduce or waive minimums (p139)."
+    },
+    {
+      "id": "mandate-only-BI",
+      "share_class": "BI-EUR",
+      "scope": "share_class",
+      "kind": "mandate_only_class",
+      "negative": true,
+      "params": {"mandate_only": true},
+      "citations": [],
+      "note": "Trap: BI is institutional, not mandate-only. Extracting mandate_only=true is a false positive."
+    },
+    {
+      "id": "kid-BP",
+      "share_class": "BP-EUR",
+      "scope": "share_class",
+      "kind": "kid_required_for_retail",
+      "params": {"kid_available": true},
+      "citations": [{"doc": "kid-BP-EUR", "page": 1, "quote": "ISIN: LU0348926287"}]
+    },
+    {
+      "id": "kid-BI",
+      "share_class": "BI-EUR",
+      "scope": "share_class",
+      "kind": "kid_required_for_retail",
+      "params": {"kid_available": true},
+      "citations": [{"doc": "kid-BI-EUR", "page": 1, "quote": "ISIN: LU0348927095"}]
+    },
+
+    {"id": "tm-client-BP", "share_class": "BP-EUR", "scope": "share_class", "kind": "target_market", "params": {"dimension": "client_type", "value": "all"},
+     "citations": [{"doc": "kid-BP-EUR", "page": 1, "quote": "The fund is suitable for all types of investors through all distribution channels."}]},
+    {"id": "tm-knowledge-BP", "share_class": "BP-EUR", "scope": "share_class", "kind": "target_market", "params": {"dimension": "knowledge_experience", "value": "basic"},
+     "accept": {"value": ["basic", "informed"]},
+     "citations": [{"doc": "kid-BP-EUR", "page": 1, "quote": "accept and understand that the value of the fund is directly linked to the value of underlying investments"}]},
+    {"id": "tm-loss-BP", "share_class": "BP-EUR", "scope": "share_class", "kind": "target_market", "params": {"dimension": "loss_bearing", "value": "full_loss"},
+     "citations": [{"doc": "kid-BP-EUR", "page": 1, "quote": "the invested amount can be lost entirely"}]},
+    {"id": "tm-sri-BP", "share_class": "BP-EUR", "scope": "share_class", "kind": "target_market", "params": {"dimension": "risk_sri", "value": "4"},
+     "citations": [{"doc": "kid-BP-EUR", "page": 1, "quote": "We have classified this Fund as 4 out of 7"}]},
+    {"id": "tm-horizon-BP", "share_class": "BP-EUR", "scope": "share_class", "kind": "target_market", "params": {"dimension": "horizon_years", "value": "5"},
+     "citations": [{"doc": "kid-BP-EUR", "page": 1, "quote": "Recommended Holding period: 5 years"}]},
+
+    {"id": "tm-client-BI", "share_class": "BI-EUR", "scope": "share_class", "kind": "target_market", "params": {"dimension": "client_type", "value": "all"},
+     "citations": [{"doc": "kid-BI-EUR", "page": 1, "quote": "The fund is suitable for all types of investors through all distribution channels."}],
+     "note": "Contradicts the institutional-only Hard Restriction: expected to be flagged (see contradiction-BI)."},
+    {"id": "tm-knowledge-BI", "share_class": "BI-EUR", "scope": "share_class", "kind": "target_market", "params": {"dimension": "knowledge_experience", "value": "basic"},
+     "accept": {"value": ["basic", "informed"]},
+     "citations": [{"doc": "kid-BI-EUR", "page": 1, "quote": "accept and understand that the value of the fund is directly linked to the value of underlying investments"}]},
+    {"id": "tm-loss-BI", "share_class": "BI-EUR", "scope": "share_class", "kind": "target_market", "params": {"dimension": "loss_bearing", "value": "full_loss"},
+     "citations": [{"doc": "kid-BI-EUR", "page": 1, "quote": "the invested amount can be lost entirely"}]},
+    {"id": "tm-sri-BI", "share_class": "BI-EUR", "scope": "share_class", "kind": "target_market", "params": {"dimension": "risk_sri", "value": "4"},
+     "citations": [{"doc": "kid-BI-EUR", "page": 1, "quote": "We have classified this Fund as 4 out of 7"}]},
+    {"id": "tm-horizon-BI", "share_class": "BI-EUR", "scope": "share_class", "kind": "target_market", "params": {"dimension": "horizon_years", "value": "5"},
+     "citations": [{"doc": "kid-BI-EUR", "page": 1, "quote": "Recommended Holding period: 5 years"}]},
+
+    {
+      "id": "contradiction-BI",
+      "share_class": "BI-EUR",
+      "scope": "share_class",
+      "kind": "contradiction",
+      "params": {},
+      "bonus": true,
+      "citations": [],
+      "note": "KID 'all types of investors' vs prospectus 'Institutional investors'. Scored as a bonus: any extracted rule for BI-EUR with contradiction=true."
+    },
+
+    {"id": "registration", "share_class": "*", "scope": "fund", "kind": "unmodelled_restriction", "optional": true, "params": {},
+     "citations": [{"doc": "prospectus", "page": 3, "quote": "investing in these shares is legal only where the shares are registered for public sale"}],
+     "note": "Belongs to Fund Registration (separate input), not the Rule Card; fine either way."},
+    {"id": "reject-right", "share_class": "*", "scope": "fund", "kind": "unmodelled_restriction", "optional": true, "params": {},
+     "citations": [{"doc": "prospectus", "page": 138, "quote": "Reject or cancel any application to open an account or any"}]},
+    {"id": "closure", "share_class": "*", "scope": "fund", "kind": "unmodelled_restriction", "optional": true, "params": {},
+     "citations": [{"doc": "prospectus", "page": 138, "quote": "Soft or hard close a fund or share class to further"}]}
+  ]
+}

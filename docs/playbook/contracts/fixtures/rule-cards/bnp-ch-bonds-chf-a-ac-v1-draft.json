@@ -1,0 +1,23 @@
+{
+  "fundId": null,
+  "fundName": "BNP PARIBAS (CH) Bonds CHF",
+  "shareClasses": ["CH0114292532"],
+  "version": 1,
+  "status": "draft",
+  "rules": [],
+  "sources": [
+    {
+      "documentId": "bnp-ch-bonds-chf-prospectus-2026-06-29",
+      "contentSha256": "3d3aabb7f26ca8bc8f423ed13bc9901ca0cd67014976fb1ebc27ae1ab4d74945",
+      "fmdEditionDate": null,
+      "pdfEditionDate": "2026-06-29",
+      "confidentiality": "public"
+    }
+  ],
+  "drafting": {
+    "model": "none: hand-written fixture (demo row 25)",
+    "endpoint": "none",
+    "draftedAt": "2026-10-28T00:00:00Z"
+  },
+  "validation": null
+}

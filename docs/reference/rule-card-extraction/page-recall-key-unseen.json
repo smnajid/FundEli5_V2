@@ -1,0 +1,97 @@
+[
+ {"doc":"x-agif-en","subFund":"Allianz Dynamic Allocation Plus Equity","rules":[
+  {"kind":"description","page":150,"quote":"Allianz Dynamic Allocation Plus Equity The investment policy aims at long-term capital growth"},
+  {"kind":"us-person","page":2,"quote":"Investment Restrictions applying to US Persons"},
+  {"kind":"share-class eligibility","page":24,"quote":"May only be acquired by Institutional Investors"},
+  {"kind":"minimum","page":26,"quote":"3.3 Minimum Investment Amount"}]},
+ {"doc":"x-amundi-en","subFund":"LYXOR FLEXIBLE ALLOCATION","rules":[
+  {"kind":"description","page":77,"quote":"Lyxor Investment Funds - LYXOR FLEXIBLE ALLOCATION The Reference Currency"},
+  {"kind":"us-person","page":79,"quote":"US Persons may not invest in the Sub- Fund","alt":[36,38]},
+  {"kind":"share-class eligibility","page":80,"quote":"only available to Japanese institutional investors","alt":[81]},
+  {"kind":"minimum","page":81,"quote":"MINIMUM INVESTMENT Class A (EUR): EUR 1,000"}]},
+ {"doc":"x-blk-bgf-en","subFund":"Global Allocation Fund","rules":[
+  {"kind":"description","page":122,"quote":"Global Allocation Fund seeks to maximise total return"},
+  {"kind":"us-person","page":188,"quote":"no US Persons will be permitted to own Shares","alt":[7]},
+  {"kind":"share-class eligibility","page":157,"quote":"Class I Shares are only available to Institutional Investors","alt":[158,188]},
+  {"kind":"minimum","page":161,"quote":"Minimum Subscription The minimum initial subscription"}]},
+ {"doc":"x-blk-bgif-en","subFund":"iShares World Equity Index Fund (LU)","rules":[
+  {"kind":"description","page":35,"quote":"The investment objective of the Fund is to match the performance of the MSCI World Index"},
+  {"kind":"us-person","page":72,"quote":"US Persons are not permitted to own Shares"},
+  {"kind":"share-class eligibility","page":40,"quote":"Class X Shares are reserved for subscription to investors who satisfy the eligibility"},
+  {"kind":"minimum","page":42,"quote":"Minimum Subscription The minimum initial subscription amounts are as follows"}]},
+ {"doc":"x-candriam-en","subFund":"Candriam Bonds Emerging Markets","rules":[
+  {"kind":"description","page":89,"quote":"Candriam Bonds Emerging Markets Fact Sheet"},
+  {"kind":"us-person","page":2,"quote":"will not be registered in the United States"},
+  {"kind":"share-class eligibility","page":10,"quote":"The PI Class is reserved for institutional investors"},
+  {"kind":"minimum","page":93,"quote":"9. Minimum subscription","alt":[10,11]}]},
+ {"doc":"x-candriam-fr","subFund":"Candriam Bonds Credit Opportunities","rules":[
+  {"kind":"description","page":82,"quote":"Candriam Bonds Credit Opportunities Fiche Technique"},
+  {"kind":"us-person","page":2,"quote":"ne seront pas enregistrées aux Etats-Unis"},
+  {"kind":"share-class eligibility","page":9,"quote":"La classe PI réservée aux investisseurs institutionnels"},
+  {"kind":"minimum","page":85,"quote":"9. Souscription minimale","alt":[9,10]}]},
+ {"doc":"x-ch-200141-en","subFund":"U ASSET ALLOCATION - DYNAMIC EUR","rules":[
+  {"kind":"description","page":85,"quote":"APPENDIX XVII U ASSET ALLOCATION - DYNAMIC EUR"},
+  {"kind":"us-person","page":2,"quote":"may not be acquired or held, directly or indirectly, by a U.S. Person"},
+  {"kind":"share-class eligibility","page":33,"quote":"reserved for UBP clients who have signed a Discretionary Portfolio Management mandate"},
+  {"kind":"minimum","page":33,"quote":"Type A Shares with a minimum initial subscription of USD 10"}]},
+ {"doc":"x-ch-5475-de","subFund":"Swiss Rock (Lux) Dachfonds Sicav - Ausgewogen","rules":[
+  {"kind":"description","page":62,"quote":"Teilfonds 2: Swiss Rock (Lux) Dachfonds Sicav - Ausgewogen 1. Anlageziel"},
+  {"kind":"us-person","page":2,"quote":"noch einer US-Person oder auf deren Rechnung angeboten oder verkauft werden"},
+  {"kind":"minimum","page":64,"quote":"Mindestzeichnung Keine"},
+  {"kind":"target-market","page":69,"quote":"4. Profil des Anlegerkreises"}]},
+ {"doc":"x-dws-funds-de","subFund":"DWS Funds ESG-Garant","rules":[
+  {"kind":"description","page":82,"quote":"Für den Teilfonds mit dem Namen DWS Funds ESG-Garant gelten"},
+  {"kind":"us-person","page":20,"quote":"in den Vereinigten Staaten von Amerika oder an US-Personen bestimmt"},
+  {"kind":"share-class eligibility","page":24,"quote":"Anlegerart Institutionelle Anleger I"},
+  {"kind":"minimum","page":27,"quote":"von diesen Mindesterstanlagebeträgen"}]},
+ {"doc":"x-dws-strat-de","subFund":"DB ESG Balanced SAA (USD)","rules":[
+  {"kind":"description","page":75,"quote":"Für den Teilfonds mit dem Namen DB ESG Balanced SAA (USD) gelten"},
+  {"kind":"us-person","page":24,"quote":"Vereinigten Staaten von Amerika oder an US-Personen bestimmt"},
+  {"kind":"share-class eligibility","page":28,"quote":"a) Anlegerart"},
+  {"kind":"minimum","page":31,"quote":"H. Mindesterstanlagebeträge"}]},
+ {"doc":"x-jpm-liq-fr","subFund":"EUR Liquidity LVNAV Fund","rules":[
+  {"kind":"description","page":77,"quote":"JPMorgan Liquidity Funds – EUR Liquidity LVNAV Fund Ce Compartiment"},
+  {"kind":"us-person","page":2,"quote":"aucune Action ne sera proposée à des Ressortissants américains","alt":[20]},
+  {"kind":"share-class eligibility","page":23,"quote":"sont exclusivement réservées aux Investisseurs institutionnels"},
+  {"kind":"minimum","page":24,"quote":"déroger auxdits montants minimums de souscription initiale","alt":[23]}]},
+ {"doc":"x-jpmf-hk-en","subFund":"Europe Dynamic Fund","rules":[
+  {"kind":"description","page":80,"quote":"JPMorgan Funds - Europe Dynamic Fund Objective, Process, Policies and Risks"},
+  {"kind":"us-person","page":45,"quote":"Shares are not available to, or for the benefit of, any US Person","alt":[292,303]},
+  {"kind":"share-class eligibility","page":280,"quote":"BASE SHARE CLASSES AND THEIR CHARACTERISTICS"},
+  {"kind":"minimum","page":280,"quote":"Minimum investment and holding amounts"}]},
+ {"doc":"x-lafrancaise-fr","subFund":"Multistrategies Obligataires","rules":[
+  {"kind":"description","page":10,"quote":"Multistrategies Obligataires Investment Objective and Policy"},
+  {"kind":"us-person","page":3,"quote":"these shares are not available to, or for the benefit of, US persons"},
+  {"kind":"share-class eligibility","page":32,"quote":"B Institutional investors."},
+  {"kind":"minimum","page":11,"quote":"Currency and minimum initial investment","alt":[10,32]}]},
+ {"doc":"x-mg-lux-en","subFund":"M&G (Lux) Asian Local Currency Bond Fund","rules":[
+  {"kind":"description","page":160,"quote":"M&G (Lux) Asian Local Currency Bond Fund Launch Date"},
+  {"kind":"us-person","page":16,"quote":"would be a U.S. Person under Regulation S","alt":[8]},
+  {"kind":"share-class eligibility","page":119,"quote":"Class CI Available to Institutional Investors","alt":[118]},
+  {"kind":"minimum","page":119,"quote":"Minimum investment and holding amounts","alt":[118]}]},
+ {"doc":"x-pictet-en","subFund":"Pictet – Digital","rules":[
+  {"kind":"description","page":167,"quote":"34. PICTET – DIGITAL Allgemeine Hinweise"},
+  {"kind":"us-person","page":7,"quote":"bei denen es sich um US-Personen handelt, nicht angeboten"},
+  {"kind":"share-class eligibility","page":51,"quote":"ZULÄSSIGE ANLEGER","alt":[52]},
+  {"kind":"minimum","page":51,"quote":"MINDESTERSTANLAGEBE"}]},
+ {"doc":"x-robeco-cgf-de","subFund":"RobecoSAM Smart Energy Equities","rules":[
+  {"kind":"description","page":242,"quote":"h) RobecoSAM Smart Energy Equities Anlagepolitik"},
+  {"kind":"us-person","page":2,"quote":"KEINE ANLAGEN IN DEN FONDS TÄTIGEN","alt":[15]},
+  {"kind":"share-class eligibility","page":22,"quote":"Für Anteile der Klassen für institutionelle","alt":[21,23]},
+  {"kind":"minimum","page":22,"quote":"gilt ein Mindestzeichnungsbetrag von USD 1.000.000","alt":[23]}]},
+ {"doc":"x-vontobel-ch-en","subFund":"Sustainable Swiss Equity","rules":[
+  {"kind":"description","page":10,"quote":"a) Sustainable Swiss Equity Investment objective"},
+  {"kind":"us-person","page":31,"quote":"They may not be offered or sold, directly or indirectly, to U.S. persons"},
+  {"kind":"share-class eligibility","page":8,"quote":"authorized investors are “qualified investors” as defined by Art. 10 (3) and (3ter) CISA","alt":[40]},
+  {"kind":"minimum","page":7,"quote":"The initial minimum investment for AE class units","alt":[41,45]},
+  {"kind":"target-market","page":31,"quote":"Profile of the typical investor"}]},
+ {"doc":"x-vontobel-lu-en","subFund":"US Equity","rules":[
+  {"kind":"description","page":100,"quote":"12. Vontobel Fund – US Equity 1. Reference currency USD"},
+  {"kind":"us-person","page":7,"quote":"Information for Prospective Investors who are US Persons","alt":[17]},
+  {"kind":"share-class eligibility","page":18,"quote":"I shares may be subscribed only by institutional investors","alt":[19]},
+  {"kind":"minimum","page":101,"quote":"minimum subscription amount, if any, are stip"}]},
+ {"doc":"x-swisscanto-kid-de","subFund":"Swisscanto (CH) Equity Fund Responsible Switzerland High Quality","rules":[
+  {"kind":"target-market","page":1,"quote":"Kleinanleger-Zielgruppe"}]},
+ {"doc":"x-schroder-isf-en","subFund":"Asian Opportunities","rules":[]},
+ {"doc":"x-gs-supp-en","subFund":"Alternative","rules":[]}
+]

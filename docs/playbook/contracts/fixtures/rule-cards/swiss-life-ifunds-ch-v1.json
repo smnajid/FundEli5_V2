@@ -1,0 +1,309 @@
+{
+  "fundId": null,
+  "fundName": "Swiss Life iFunds (CH) – Bond Swiss Francs Domestic",
+  "shareClasses": [
+    "XXSLICAP0001",
+    "XXSLAMCAP001",
+    "XXSLIA100001"
+  ],
+  "version": 1,
+  "status": "validated",
+  "rules": [
+    {
+      "scope": "fund",
+      "shareClass": null,
+      "condition": {
+        "kind": "investor_category",
+        "allowed": [
+          "qualified"
+        ],
+        "excluded": []
+      },
+      "citations": [
+        {
+          "document": "swiss-life-ifunds-ch-fund-contract-2026-10",
+          "page": 5,
+          "quote": "The group of investors of all sub-funds is limited to qualified investors as per Art. 10, cl. 3 and 3ter CISA",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "Every sub-fund: qualified investors only",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (demo-dataset.md, sample-funds research)",
+          "at": "2026-10-28T09:00:00Z",
+          "condition": {
+            "kind": "investor_category",
+            "allowed": [
+              "qualified"
+            ],
+            "excluded": []
+          }
+        }
+      ]
+    },
+    {
+      "scope": "fund",
+      "shareClass": null,
+      "condition": {
+        "kind": "us_person_exclusion",
+        "definition": "irc_citizenship",
+        "excludesUsCitizens": true
+      },
+      "citations": [
+        {
+          "document": "swiss-life-ifunds-ch-fund-contract-2026-10",
+          "page": 45,
+          "quote": "US person means: (i) a US citizen (including dual or multiple citizenship); (ii) a US resident (a resident alien who holds a Green Card or satisfies the substantial presence test)",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "US persons may not invest; any US citizen, dual nationals included",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (demo-dataset.md, sample-funds research)",
+          "at": "2026-10-28T09:00:00Z",
+          "condition": {
+            "kind": "us_person_exclusion",
+            "definition": "irc_citizenship",
+            "excludesUsCitizens": true
+          }
+        }
+      ]
+    },
+    {
+      "scope": "fund",
+      "shareClass": null,
+      "condition": {
+        "kind": "unmodelled_restriction",
+        "status": "noted",
+        "notedReason": "Units of an investor who stops qualifying are redeemed later: no condition at subscription"
+      },
+      "citations": [
+        {
+          "document": "swiss-life-ifunds-ch-fund-contract-2026-10",
+          "page": 9,
+          "quote": "the investor’s units may be compulsorily redeemed pursuant to section 5, cl. 7 and 8",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "Units may be compulsorily redeemed if the investor stops meeting the conditions",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (demo-dataset.md, sample-funds research)",
+          "at": "2026-10-28T09:00:00Z",
+          "condition": {
+            "kind": "unmodelled_restriction",
+            "status": "noted",
+            "notedReason": "Units of an investor who stops qualifying are redeemed later: no condition at subscription"
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "XXSLICAP0001",
+      "condition": {
+        "kind": "investor_category",
+        "allowed": [
+          "qualified"
+        ],
+        "excluded": []
+      },
+      "citations": [
+        {
+          "document": "swiss-life-ifunds-ch-fund-contract-2026-10",
+          "page": 7,
+          "quote": "Unit class I Cap: the units of this unit class are exclusively open to all qualified investors pursuant to Art. 10, cl. 3 and 3ter CISA.",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "I Cap: all qualified investors under CISA art. 10(3) and (3ter)",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (demo-dataset.md, sample-funds research)",
+          "at": "2026-10-28T09:00:00Z",
+          "condition": {
+            "kind": "investor_category",
+            "allowed": [
+              "qualified"
+            ],
+            "excluded": []
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "XXSLAMCAP001",
+      "condition": {
+        "kind": "investor_category",
+        "allowed": [
+          "qualified"
+        ],
+        "excluded": [
+          "hnwi_opt_out",
+          "cisa_art_10_3ter_mandate_client"
+        ]
+      },
+      "citations": [
+        {
+          "document": "swiss-life-ifunds-ch-fund-contract-2026-10",
+          "page": 7,
+          "quote": "Qualified investors pursuant to Art. 10, cl. 3ter CISA and high net worth individuals pursuant to Art. 5, cl. 1 FinSA are excluded.",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "AM Cap: qualified investors under CISA art. 10(3); 10(3ter) mandate clients and HNWI opt-outs excluded",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (demo-dataset.md, sample-funds research)",
+          "at": "2026-10-28T09:00:00Z",
+          "condition": {
+            "kind": "investor_category",
+            "allowed": [
+              "qualified"
+            ],
+            "excluded": [
+              "hnwi_opt_out",
+              "cisa_art_10_3ter_mandate_client"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "XXSLAMCAP001",
+      "condition": {
+        "kind": "mandate_only_class",
+        "manager": "Swiss Life"
+      },
+      "citations": [
+        {
+          "document": "swiss-life-ifunds-ch-fund-contract-2026-10",
+          "page": 7,
+          "quote": "available exclusively to qualified investors pursuant to Art. 10, cl. 3 CISA who have concluded an asset management mandate or another remunerated financial services contract with Swiss Life Asset Management Ltd",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "AM Cap: only with a Swiss Life asset management or financial services contract",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (demo-dataset.md, sample-funds research)",
+          "at": "2026-10-28T09:00:00Z",
+          "condition": {
+            "kind": "mandate_only_class",
+            "manager": "Swiss Life"
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "XXSLIA100001",
+      "condition": {
+        "kind": "investor_category",
+        "allowed": [
+          "qualified"
+        ],
+        "excluded": [
+          "cisa_art_10_3ter_mandate_client"
+        ]
+      },
+      "citations": [
+        {
+          "document": "swiss-life-ifunds-ch-fund-contract-2026-10",
+          "page": 8,
+          "quote": "Qualified investors pursuant to Art. 10, cl. 3ter CISA are excluded.",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "I-A 1: qualified investors; 10(3ter) mandate clients excluded",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (demo-dataset.md, sample-funds research)",
+          "at": "2026-10-28T09:00:00Z",
+          "condition": {
+            "kind": "investor_category",
+            "allowed": [
+              "qualified"
+            ],
+            "excluded": [
+              "cisa_art_10_3ter_mandate_client"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "XXSLIA100001",
+      "condition": {
+        "kind": "mandate_only_class",
+        "manager": "Swiss Life"
+      },
+      "citations": [
+        {
+          "document": "swiss-life-ifunds-ch-fund-contract-2026-10",
+          "page": 8,
+          "quote": "who have concluded an asset management mandate or other financial services contract in return for payment with Swiss Life Asset Management Ltd",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "I-A 1: only with a Swiss Life asset management or financial services contract",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (demo-dataset.md, sample-funds research)",
+          "at": "2026-10-28T09:00:00Z",
+          "condition": {
+            "kind": "mandate_only_class",
+            "manager": "Swiss Life"
+          }
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "documentId": "swiss-life-ifunds-ch-fund-contract-2026-10",
+      "contentSha256": "2c35fc59f5729e6415f900491eefb000c9fe4ce9283663d6a4891a06f51aa49a",
+      "fmdEditionDate": null,
+      "pdfEditionDate": "2026-10",
+      "confidentiality": "public"
+    }
+  ],
+  "drafting": {
+    "model": "none: hand-written fixture",
+    "endpoint": "none",
+    "draftedAt": "2026-10-28T09:00:00Z"
+  },
+  "validation": {
+    "validator": "fixture (demo-dataset.md, sample-funds research)",
+    "validatedAt": "2026-10-28T09:00:00Z"
+  }
+}

@@ -1,0 +1,22 @@
+# PROTOTYPE, ticket #32. Download each URL to docs/<name>.pdf (curl -sSL -A 'Mozilla/5.0'), then ./run.sh --recall=page-recall-key-unseen.json [--v2]
+x-agif-en           https://www.fsc.bg/wp-content/uploads/2022/05/2022-05-12_FP_EN_Allianz-Global-Investors-Fund.pdf
+x-amundi-en         https://www.amundi.lu/professional/dl/doc/prospectus/LU1841612499/ENG/LUX
+x-blk-bgf-en        https://www.blackrock.com/gls-download/literature/prospectus/blackrock-global-funds-prospectus-en.pdf
+x-blk-bgif-en       https://www.blackrock.com/uk/literature/prospectus/blackrock-global-index-funds-prospectus-en.pdf
+x-candriam-en       https://www.candriam.com/siteassets/funds/regulator-pages/pt---candriam-bonds/candriam-bonds_pr_16.09.2024_en-final.pdf
+x-candriam-fr       https://www.uff.net/espace-client/documentations//LU0157931550_prospectus.pdf
+x-ch-200141-en      https://swissfunddata.ch/sfdpub/docs/fpd-200141_28_11-20250826-en.pdf
+x-ch-5475-de        https://www.swissfunddata.ch/sfdpub/docs/fpd-5475-20181231-de.pdf
+x-dws-funds-de      https://epflicht-hessen.hebis.de/download/pdf/8590307.pdf
+x-dws-strat-de      https://www.easybank.at/markets/dokumente/VPDE20230101-0001675496.pdf
+x-gs-supp-en        https://am.gs.com/public-assets/documents/f817241d-822d-11ef-8e26-4d61a0c60069
+x-jpm-liq-fr        https://am.jpmorgan.com/content/dam/jpm-am-aem/emea/regional/fr/regulatory/prospectus/jpmorgan-liquidity-funds-prospectus-fr.pdf
+x-jpmf-hk-en        https://dbs.com.hk/iwov-resources/pdf/investments/fundshareholders/JPMF_HKWrapper_and_Prospectus_Jan_2025.pdf
+x-lafrancaise-fr    https://doc.la-francaise.com/documents/lt/LU1523323860/prospectus-sur-umbrella/fr/
+x-mg-lux-en         https://www.mandg.com/dam/investments/common/shared/en/documents/funds-literature/prospectus/mandg-lux-global-funds_prospectus_eng.pdf
+x-pictet-en         https://fsl.lv1871.de/product/LU0104884860/vkp
+x-robeco-cgf-de     https://www.easybank.at/markets/dokumente/VPDE20220501-0001516067.pdf
+x-schroder-isf-en   https://www.fsc.bg/wp-content/uploads/2025/03/6-20250101-schroder-international-selection-fund-00-00-pr-en-00.pdf
+x-swisscanto-kid-de https://assets.finanzfluss.de/hippoverse/documents/CH0493868035-kiid.pdf
+x-vontobel-ch-en    https://am.vontobel.com/en/document/e46a261c-1b7c-4152-b9f4-ed17af417df6/Sales-Prospectus_20260417_EN_Vontobel-Fund-(CH).pdf
+x-vontobel-lu-en    https://am.vontobel.com/en/document/ce1226d3-a244-4d7d-944a-57e9efe9f617/Sales-Prospectus_20241001_EN_Vontobel-Fund.pdf

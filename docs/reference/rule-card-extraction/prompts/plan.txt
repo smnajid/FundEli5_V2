@@ -1,0 +1,7 @@
+Files in the current directory (read them with the Read tool; PDFs over 20 pages need several reads using the pages parameter):
+{files}
+
+Fund: {fund}. Return the Rule Card for share classes {classes} as JSON.
+{outputRules}
+Every rule needs at least one citation: the file, the 1-based page number within that file, and a quote copied verbatim
+(one contiguous passage, no ellipsis) from that page. Read every page before answering.

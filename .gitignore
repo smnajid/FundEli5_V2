@@ -1,0 +1,13 @@
+.DS_Store
+.claude/settings.local.json
+.idea/
+
+.claude/worktrees/
+*.swp
+
+# Backend build output
+backend/target/
+
+# Page text cache next to the fund documents; Jev ranking cache
+fund-documents/*.pages.json
+jev-rankings/

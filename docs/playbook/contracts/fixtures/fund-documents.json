@@ -1,0 +1,133 @@
+[
+  {
+    "documentId": "nordea1-prospectus-2026-06",
+    "isins": [
+      "LU0348926287",
+      "LU0348927095"
+    ],
+    "type": "prospectus",
+    "language": "en",
+    "fmdEditionDate": null,
+    "pdfEditionDate": "2026-06",
+    "confidentiality": "public",
+    "contentSha256": "77cf3ae3082a99539306781c237c2bb6f138ed029e57c7c91874a781d717c8b4",
+    "sourceUrl": null,
+    "file": "prospectus.pdf"
+  },
+  {
+    "documentId": "nordea1-gce-kid-bp-eur",
+    "isins": [
+      "LU0348926287"
+    ],
+    "type": "kid",
+    "language": "en",
+    "fmdEditionDate": null,
+    "pdfEditionDate": null,
+    "confidentiality": "public",
+    "contentSha256": "7ff266176c49a724830cc53218f1734c9606352d952a8ce556449489d3b7995d",
+    "sourceUrl": null,
+    "file": "kid-BP-EUR.pdf"
+  },
+  {
+    "documentId": "nordea1-gce-kid-bi-eur",
+    "isins": [
+      "LU0348927095"
+    ],
+    "type": "kid",
+    "language": "en",
+    "fmdEditionDate": null,
+    "pdfEditionDate": null,
+    "confidentiality": "public",
+    "contentSha256": "41ba208cd4a54ec5017ba9d1683af48ddc6922267cd1f40cbef31a1e3aa856c9",
+    "sourceUrl": null,
+    "file": "kid-BI-EUR.pdf"
+  },
+  {
+    "documentId": "nordea-sif-prospectus-2026-09",
+    "isins": [
+      "LU2607415275"
+    ],
+    "type": "prospectus",
+    "language": "en",
+    "fmdEditionDate": null,
+    "pdfEditionDate": "2026-09",
+    "confidentiality": "public",
+    "contentSha256": "cbf5196ce92b7e854c81b56b2b172f6235ec1ef2be50aacbeb7b6400b632c367",
+    "sourceUrl": null,
+    "file": "sif-prospectus.pdf"
+  },
+  {
+    "documentId": "nordea-sif-kid-bw-sek",
+    "isins": [
+      "LU2607415275"
+    ],
+    "type": "kid",
+    "language": "en",
+    "fmdEditionDate": null,
+    "pdfEditionDate": null,
+    "confidentiality": "public",
+    "contentSha256": "1242f0eda802a77d439a89285eea6e602320f971a99600b60ffc2905ba54e324",
+    "sourceUrl": null,
+    "file": "sif-kid-BW-SEK.pdf"
+  },
+  {
+    "documentId": "bnp-ch-bonds-chf-prospectus-2026-06-29",
+    "isins": [
+      "CH0112537516",
+      "CH0114292532",
+      "CH0112537557"
+    ],
+    "type": "prospectus",
+    "language": "en",
+    "fmdEditionDate": null,
+    "pdfEditionDate": "2026-06-29",
+    "confidentiality": "public",
+    "contentSha256": "3d3aabb7f26ca8bc8f423ed13bc9901ca0cd67014976fb1ebc27ae1ab4d74945",
+    "sourceUrl": null,
+    "file": "bnp-prospectus.pdf"
+  },
+  {
+    "documentId": "bnp-ch-bonds-chf-kid-a",
+    "isins": [
+      "CH0112537516"
+    ],
+    "type": "kid",
+    "language": "de",
+    "fmdEditionDate": null,
+    "pdfEditionDate": null,
+    "confidentiality": "public",
+    "contentSha256": "97038409ecf863ce3c3655dfe107618b2ed485d7c1a62f7a4897dffcccc5601b",
+    "sourceUrl": null,
+    "file": "bnp-kid-A.pdf"
+  },
+  {
+    "documentId": "bnp-ch-bonds-chf-kid-i",
+    "isins": [
+      "CH0112537557"
+    ],
+    "type": "kid",
+    "language": "de",
+    "fmdEditionDate": null,
+    "pdfEditionDate": null,
+    "confidentiality": "public",
+    "contentSha256": "c7ac33445a4de55e977fe7877cbf68a2cbb68678c57ba3d0751ef7b3baf6add8",
+    "sourceUrl": null,
+    "file": "bnp-kid-I.pdf"
+  },
+  {
+    "documentId": "swiss-life-ifunds-ch-fund-contract-2026-10",
+    "isins": [
+      "XXSLICAP0001",
+      "XXSLAMCAP001",
+      "XXSLIA100001"
+    ],
+    "type": "fund_contract",
+    "language": "en",
+    "fmdEditionDate": null,
+    "pdfEditionDate": "2026-10",
+    "confidentiality": "public",
+    "contentSha256": "2c35fc59f5729e6415f900491eefb000c9fe4ce9283663d6a4891a06f51aa49a",
+    "sourceUrl": null,
+    "file": "sl-contract.pdf"
+  }
+]

@@ -1,0 +1,132 @@
+{
+  "_comment": "PROTOTYPE answer key (#39), drafted by Claude from the PDFBox page text, checked against an independent blind answer key (Claude subagent, prospectus text only): every scored rule agrees; not yet checked by a human. BlackRock Global Funds prospectus (English), sub-fund Global Allocation Fund. Prospectus only (no KIDs downloaded). Pages are PDF pages of the 724-page document.",
+  "fund": "BlackRock Global Funds – Global Allocation Fund",
+  "share_classes": {
+    "A2-USD": "Class A, non-distributing, USD",
+    "I2-USD": "Class I, non-distributing, USD"
+  },
+  "rules": [
+    {
+      "id": "us-person",
+      "share_class": "*",
+      "scope": "fund",
+      "kind": "us_person_exclusion",
+      "params": {
+        "us_person_definition": "reg_s",
+        "excludes_us_citizens": false
+      },
+      "accept": {
+        "us_person_definition": [
+          "reg_s",
+          "mixed"
+        ]
+      },
+      "citations": [
+        {
+          "doc": "x-blk-bgf-en",
+          "page": 188,
+          "quote": "The Directors have resolved that no US Persons will be permitted to own Shares"
+        },
+        {
+          "doc": "x-blk-bgf-en",
+          "page": 7,
+          "quote": "US Persons are not permitted to subscribe for Shares"
+        }
+      ],
+      "note": "'US Person' means any US resident or other person specified in Regulation S: residence, not citizenship."
+    },
+    {
+      "id": "category-A",
+      "share_class": "A2-USD",
+      "scope": "share_class",
+      "kind": "investor_category",
+      "params": {
+        "allowed_categories": [
+          "all"
+        ]
+      },
+      "citations": [
+        {
+          "doc": "x-blk-bgf-en",
+          "page": 156,
+          "quote": "Class A Shares are available to all investors"
+        }
+      ]
+    },
+    {
+      "id": "category-I",
+      "share_class": "I2-USD",
+      "scope": "share_class",
+      "kind": "investor_category",
+      "params": {
+        "allowed_categories": [
+          "institutional"
+        ]
+      },
+      "citations": [
+        {
+          "doc": "x-blk-bgf-en",
+          "page": 157,
+          "quote": "Class I Shares are available as Distributing and Non-Distributing Shares to Institutional Investors"
+        },
+        {
+          "doc": "x-blk-bgf-en",
+          "page": 188,
+          "quote": "Class I Shares, Class J Shares, Class SI Shares and Class X Shares are only available to Institutional Investors"
+        }
+      ]
+    },
+    {
+      "id": "minimum-A",
+      "share_class": "A2-USD",
+      "scope": "share_class",
+      "kind": "minimum_initial_subscription",
+      "params": {
+        "amount": 5000,
+        "currency": "USD"
+      },
+      "citations": [
+        {
+          "doc": "x-blk-bgf-en",
+          "page": 161,
+          "quote": "Class K Shares is currently USD5,000"
+        }
+      ]
+    },
+    {
+      "id": "minimum-I",
+      "share_class": "I2-USD",
+      "scope": "share_class",
+      "kind": "minimum_initial_subscription",
+      "params": {
+        "amount": 10000000,
+        "currency": "USD"
+      },
+      "citations": [
+        {
+          "doc": "x-blk-bgf-en",
+          "page": 161,
+          "quote": "for Class I Shares, Class J Shares, Class X Shares and Class Z Shares USD10 million"
+        }
+      ]
+    },
+    {
+      "id": "mandate-I",
+      "share_class": "I2-USD",
+      "scope": "share_class",
+      "kind": "mandate_only_class",
+      "params": {
+        "mandate_only": true
+      },
+      "negative": true,
+      "citations": [
+        {
+          "doc": "x-blk-bgf-en",
+          "page": 157,
+          "quote": "They are only available at the Management Company’s discretion"
+        }
+      ],
+      "note": "Trap: Class D is meant for discretionary managers; Class I is institutional, not mandate-only."
+    }
+  ]
+}

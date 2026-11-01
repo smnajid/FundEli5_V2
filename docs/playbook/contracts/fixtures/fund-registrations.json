@@ -1,0 +1,130 @@
+[
+  {
+    "isin": "LU0348926287",
+    "registrations": [
+      {
+        "country": "CH",
+        "investorTypes": [
+          "all"
+        ]
+      },
+      {
+        "country": "LU",
+        "investorTypes": [
+          "all"
+        ]
+      }
+    ],
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  },
+  {
+    "isin": "LU0348927095",
+    "registrations": [
+      {
+        "country": "CH",
+        "investorTypes": [
+          "all"
+        ]
+      },
+      {
+        "country": "LU",
+        "investorTypes": [
+          "all"
+        ]
+      }
+    ],
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  },
+  {
+    "isin": "LU2607415275",
+    "registrations": [
+      {
+        "country": "LU",
+        "investorTypes": [
+          "well_informed"
+        ]
+      }
+    ],
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  },
+  {
+    "isin": "CH0112537516",
+    "registrations": [
+      {
+        "country": "CH",
+        "investorTypes": [
+          "all"
+        ]
+      }
+    ],
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  },
+  {
+    "isin": "CH0114292532",
+    "registrations": [
+      {
+        "country": "CH",
+        "investorTypes": [
+          "all"
+        ]
+      }
+    ],
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  },
+  {
+    "isin": "CH0112537557",
+    "registrations": [
+      {
+        "country": "CH",
+        "investorTypes": [
+          "qualified"
+        ]
+      }
+    ],
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  },
+  {
+    "isin": "XXSLICAP0001",
+    "registrations": [
+      {
+        "country": "CH",
+        "investorTypes": [
+          "qualified"
+        ]
+      }
+    ],
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  },
+  {
+    "isin": "XXSLAMCAP001",
+    "registrations": [
+      {
+        "country": "CH",
+        "investorTypes": [
+          "qualified"
+        ]
+      }
+    ],
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  },
+  {
+    "isin": "XXSLIA100001",
+    "registrations": [
+      {
+        "country": "CH",
+        "investorTypes": [
+          "qualified"
+        ]
+      }
+    ],
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  },
+  {
+    "isin": "XXNOTCOV0001",
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  },
+  {
+    "isin": "XXNOTCOV0002",
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  }
+]

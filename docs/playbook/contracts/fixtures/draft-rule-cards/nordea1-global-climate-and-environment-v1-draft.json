@@ -1,0 +1,331 @@
+{
+  "fundId": null,
+  "fundName": "Nordea 1 – Global Climate and Environment Fund",
+  "shareClasses": [
+    "LU0348926287",
+    "LU0348927095"
+  ],
+  "version": 1,
+  "status": "draft",
+  "rules": [
+    {
+      "scope": "fund",
+      "shareClass": null,
+      "condition": {
+        "kind": "us_person_exclusion",
+        "definition": "reg_s",
+        "excludesUsCitizens": false
+      },
+      "citations": [
+        {
+          "document": "nordea1-prospectus-2026-06",
+          "page": 3,
+          "quote": "Unless otherwise decided by the board or the management company, US persons may not subscribe for shares in the SICAV.",
+          "quoteFoundOnPage": true
+        },
+        {
+          "document": "nordea1-prospectus-2026-06",
+          "page": 5,
+          "quote": "US person Any of the following, but not limited to: • a US resident",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "US persons may not subscribe; the definition is Reg S, citizenship alone is not listed",
+      "confidence": 0.9,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "drafted",
+          "by": "Rule Card pipeline (none: hand-written fixture)",
+          "at": "2026-11-02T08:00:00Z",
+          "condition": {
+            "kind": "us_person_exclusion",
+            "definition": "reg_s",
+            "excludesUsCitizens": false
+          }
+        }
+      ]
+    },
+    {
+      "scope": "fund",
+      "shareClass": null,
+      "condition": {
+        "kind": "kid_required_for_retail",
+        "kidAvailable": true
+      },
+      "citations": [
+        {
+          "document": "nordea1-gce-kid-bp-eur",
+          "page": 1,
+          "quote": "Key Information Document",
+          "quoteFoundOnPage": true
+        },
+        {
+          "document": "nordea1-gce-kid-bi-eur",
+          "page": 1,
+          "quote": "Key Information Document",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "A PRIIPs KID is published for each class",
+      "confidence": 0.95,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "drafted",
+          "by": "Rule Card pipeline (none: hand-written fixture)",
+          "at": "2026-11-02T08:00:00Z",
+          "condition": {
+            "kind": "kid_required_for_retail",
+            "kidAvailable": true
+          }
+        }
+      ]
+    },
+    {
+      "scope": "fund",
+      "shareClass": null,
+      "condition": {
+        "kind": "unmodelled_restriction",
+        "status": "blocking",
+        "notedReason": null
+      },
+      "citations": [
+        {
+          "document": "nordea1-prospectus-2026-06",
+          "page": 138,
+          "quote": "Reject or cancel any application to open an account or any request to subscribe for or transfer shares",
+          "quoteFoundOnPage": true
+        },
+        {
+          "document": "nordea1-prospectus-2026-06",
+          "page": 138,
+          "quote": "Soft or hard close a fund or share class to further investment",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "The board may reject or cancel applications, and close a fund or class",
+      "confidence": 0.7,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "drafted",
+          "by": "Rule Card pipeline (none: hand-written fixture)",
+          "at": "2026-11-02T08:00:00Z",
+          "condition": {
+            "kind": "unmodelled_restriction",
+            "status": "blocking",
+            "notedReason": null
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU0348926287",
+      "condition": {
+        "kind": "investor_category",
+        "allowed": [
+          "all"
+        ],
+        "excluded": []
+      },
+      "citations": [
+        {
+          "document": "nordea1-prospectus-2026-06",
+          "page": 123,
+          "quote": "P All investors. Yes None None",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "P classes: all investors",
+      "confidence": 0.85,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "drafted",
+          "by": "Rule Card pipeline (none: hand-written fixture)",
+          "at": "2026-11-02T08:00:00Z",
+          "condition": {
+            "kind": "investor_category",
+            "allowed": [
+              "all"
+            ],
+            "excluded": []
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU0348926287",
+      "condition": {
+        "kind": "minimum_initial_subscription",
+        "amount": 0,
+        "currency": "EUR"
+      },
+      "citations": [
+        {
+          "document": "nordea1-prospectus-2026-06",
+          "page": 123,
+          "quote": "P All investors. Yes None None",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "P classes: no minimum initial investment",
+      "confidence": 0.9,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "drafted",
+          "by": "Rule Card pipeline (none: hand-written fixture)",
+          "at": "2026-11-02T08:00:00Z",
+          "condition": {
+            "kind": "minimum_initial_subscription",
+            "amount": 0,
+            "currency": "EUR"
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU0348927095",
+      "condition": {
+        "kind": "investor_category",
+        "allowed": [
+          "institutional"
+        ],
+        "excluded": []
+      },
+      "citations": [
+        {
+          "document": "nordea1-prospectus-2026-06",
+          "page": 123,
+          "quote": "I Institutional investors. Yes None EUR 75,000 or equivalent in other currencies",
+          "quoteFoundOnPage": true
+        },
+        {
+          "document": "nordea1-prospectus-2026-06",
+          "page": 5,
+          "quote": "institutional investors Investors within the meaning of article 174 of the 2010 Law, such as credit institutions and other financial professionals investing on the behalf of themselves or other investors (whether retail in connection with a discretionary management agreement",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "I classes: institutional investors only, says the prospectus",
+      "confidence": 0.85,
+      "contradiction": true,
+      "history": [
+        {
+          "action": "drafted",
+          "by": "Rule Card pipeline (none: hand-written fixture)",
+          "at": "2026-11-02T08:00:00Z",
+          "condition": {
+            "kind": "investor_category",
+            "allowed": [
+              "institutional"
+            ],
+            "excluded": []
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU0348927095",
+      "condition": {
+        "kind": "investor_category",
+        "allowed": [
+          "all"
+        ],
+        "excluded": []
+      },
+      "citations": [
+        {
+          "document": "nordea1-gce-kid-bi-eur",
+          "page": 1,
+          "quote": "The fund is suitable for all types of investors through all distribution channels.",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "BI-EUR: suitable for all types of investors, says the KID",
+      "confidence": 0.6,
+      "contradiction": true,
+      "history": [
+        {
+          "action": "drafted",
+          "by": "Rule Card pipeline (none: hand-written fixture)",
+          "at": "2026-11-02T08:00:00Z",
+          "condition": {
+            "kind": "investor_category",
+            "allowed": [
+              "all"
+            ],
+            "excluded": []
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU0348927095",
+      "condition": {
+        "kind": "minimum_initial_subscription",
+        "amount": 75000,
+        "currency": "EUR"
+      },
+      "citations": [
+        {
+          "document": "nordea1-prospectus-2026-06",
+          "page": 123,
+          "quote": "I Institutional investors. Yes None EUR 75,000 or equivalent in other currencies",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "I classes: EUR 75,000 minimum initial investment",
+      "confidence": 0.9,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "drafted",
+          "by": "Rule Card pipeline (none: hand-written fixture)",
+          "at": "2026-11-02T08:00:00Z",
+          "condition": {
+            "kind": "minimum_initial_subscription",
+            "amount": 75000,
+            "currency": "EUR"
+          }
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "documentId": "nordea1-prospectus-2026-06",
+      "contentSha256": "77cf3ae3082a99539306781c237c2bb6f138ed029e57c7c91874a781d717c8b4",
+      "fmdEditionDate": null,
+      "pdfEditionDate": "2026-06",
+      "confidentiality": "public"
+    },
+    {
+      "documentId": "nordea1-gce-kid-bp-eur",
+      "contentSha256": "7ff266176c49a724830cc53218f1734c9606352d952a8ce556449489d3b7995d",
+      "fmdEditionDate": null,
+      "pdfEditionDate": null,
+      "confidentiality": "public"
+    },
+    {
+      "documentId": "nordea1-gce-kid-bi-eur",
+      "contentSha256": "41ba208cd4a54ec5017ba9d1683af48ddc6922267cd1f40cbef31a1e3aa856c9",
+      "fmdEditionDate": null,
+      "pdfEditionDate": null,
+      "confidentiality": "public"
+    }
+  ],
+  "drafting": {
+    "model": "none: hand-written fixture, as the pipeline drafts it",
+    "endpoint": "none",
+    "draftedAt": "2026-11-02T08:00:00Z"
+  },
+  "validation": null
+}

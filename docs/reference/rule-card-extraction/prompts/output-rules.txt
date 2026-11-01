@@ -1,0 +1,3 @@
+One object per rule per share class (share_class "*" for fund-scope rules that apply to every class).
+Fill only the fields relevant to the kind, null the rest. Target market values: client_type in {all, retail, professional, institutional};
+knowledge_experience in {basic, informed, advanced}; loss_bearing in {no_loss, limited_loss, full_loss}; risk_sri and horizon_years as plain numbers in a string.
