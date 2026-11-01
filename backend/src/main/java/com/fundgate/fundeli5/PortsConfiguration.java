@@ -9,6 +9,7 @@ import com.fundgate.fundeli5.fundregistrations.fixture.FixtureFundRegistrations;
 import com.fundgate.fundeli5.fxrates.FxRates;
 import com.fundgate.fundeli5.fxrates.fixture.FixtureFxRates;
 import com.fundgate.fundeli5.llm.LlmEgress;
+import com.fundgate.fundeli5.llm.claudeplan.ClaudePlanLlmEgress;
 import com.fundgate.fundeli5.llm.replay.ReplayLlmEgress;
 import com.fundgate.fundeli5.shareclasses.ShareClasses;
 import com.fundgate.fundeli5.shareclasses.fixture.FixtureShareClasses;
@@ -18,6 +19,7 @@ import com.fundgate.fundeli5.privacygate.presidio.PresidioPersonalDataDetector;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -40,6 +42,17 @@ public class PortsConfiguration {
     @ConditionalOnProperty(name = "fundeli5.llm.endpoint", havingValue = "replay", matchIfMissing = true)
     LlmEgress llmEgress(@Value("${fundeli5.llm.recordings}") String recordings) {
         return new ReplayLlmEgress(Path.of(recordings));
+    }
+
+    /** {@code claude-plan}: the Claude plan through the {@code claude -p} subprocess (V2 live mode). */
+    @Bean
+    @ConditionalOnProperty(name = "fundeli5.llm.endpoint", havingValue = "claude-plan")
+    LlmEgress claudePlanLlmEgress(
+            @Value("${fundeli5.llm.claude-plan.command:claude}") String command,
+            @Value("${fundeli5.llm.claude-plan.schema:}") String schema,
+            @Value("${fundeli5.llm.claude-plan.timeout:5m}") Duration timeout) {
+        return new ClaudePlanLlmEgress(command, schema.isBlank() ? Optional.empty() : Optional.of(Path.of(schema)),
+                timeout);
     }
 
     @Configuration(proxyBeanMethods = false)
