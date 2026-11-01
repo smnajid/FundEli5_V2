@@ -41,7 +41,9 @@ class ClaudePlanLlmEgressTest {
         assertThat(response).isEqualTo(new LlmResponse("hello back"));
         assertThat(Files.readString(dir.resolve("stdin.txt"))).isEqualTo("the prompt");
         assertThat(Files.readAllLines(dir.resolve("args.txt")))
-                .containsExactly("-p", "--output-format", "json", "--model", "sonnet", "--system-prompt", "be brief");
+                .containsExactly("-p", "--output-format", "json", "--model", "sonnet", "--system-prompt", "be brief",
+                        "--no-session-persistence", "--tools", "", "--setting-sources", "user",
+                        "--disable-slash-commands");
     }
 
     @Test
@@ -96,6 +98,28 @@ class ClaudePlanLlmEgressTest {
                 .complete(new LlmRequest("m", "s", "p")))
                 .isInstanceOf(ClaudePlanException.class)
                 .hasMessageContaining("timed out");
+    }
+
+    @Test
+    void aSchemaWithoutStructuredOutputFails() throws IOException {
+        Path claude = fake("cat > /dev/null\necho '{\"is_error\":false,\"result\":\"prose\"}'\n");
+        Path schema = dir.resolve("schema.json");
+        Files.writeString(schema, "{}");
+
+        assertThatThrownBy(() -> new ClaudePlanLlmEgress(claude.toString(), Optional.of(schema),
+                Duration.ofSeconds(10)).complete(new LlmRequest("m", "s", "p")))
+                .isInstanceOf(ClaudePlanException.class);
+    }
+
+    @Test
+    void aLargePromptIsDeliveredWhole() throws IOException {
+        Path claude = fake(RECORD + "echo '{\"is_error\":false,\"result\":\"ok\"}'\n");
+        String prompt = "x".repeat(300_000);
+
+        new ClaudePlanLlmEgress(claude.toString(), Optional.empty(), Duration.ofSeconds(20))
+                .complete(new LlmRequest("m", "s", prompt));
+
+        assertThat(Files.readString(dir.resolve("stdin.txt"))).hasSize(300_000);
     }
 
     @Test
