@@ -24,6 +24,16 @@ class ArchitectureTest {
             .should().dependOnClassesThat().resideInAPackage("..llm..")
             .allowEmptyShould(true);
 
+    /** ADR 0004: the egress client is the only code that can reach a model over the network. */
+    @ArchTest
+    static final ArchRule onlyTheEgressReachesTheNetwork = noClasses()
+            .that().resideOutsideOfPackages("..llm..", "..web..", ROOT)
+            .and().resideOutsideOfPackages("..fixture..", "..folder..")
+            .should().dependOnClassesThat().resideInAnyPackage(
+                    "com.anthropic..", "java.net.http..", "org.springframework.web.client..",
+                    "org.springframework.web.reactive.function.client..")
+            .allowEmptyShould(true);
+
     /** 2. Only the Privacy Gate builds its output type. */
     @ArchTest
     static final ArchRule onlyPrivacyGateConstructsGatedEmail = noClasses()

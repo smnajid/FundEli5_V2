@@ -11,6 +11,8 @@ import com.fundgate.fundeli5.fundregistrations.FundRegistrations;
 import com.fundgate.fundeli5.fundregistrations.fixture.FixtureFundRegistrations;
 import com.fundgate.fundeli5.fxrates.FxRates;
 import com.fundgate.fundeli5.fxrates.fixture.FixtureFxRates;
+import com.fundgate.fundeli5.llm.LlmEgress;
+import com.fundgate.fundeli5.llm.replay.ReplayLlmEgress;
 import com.fundgate.fundeli5.shareclasses.ShareClasses;
 import com.fundgate.fundeli5.shareclasses.fixture.FixtureShareClasses;
 import org.junit.jupiter.api.Test;
@@ -27,6 +29,15 @@ class PortSelectionTest {
             assertThat(context.getBean(ShareClasses.class)).isInstanceOf(FixtureShareClasses.class);
             assertThat(context.getBean(FundRegistrations.class)).isInstanceOf(FixtureFundRegistrations.class);
             assertThat(context.getBean(FxRates.class)).isInstanceOf(FixtureFxRates.class);
+        }
+    }
+
+    @Test
+    void bothRuntimesWireTheReplayEgressByDefault() {
+        for (String profile : new String[] {"default", "pipeline"}) {
+            try (ConfigurableApplicationContext context = start("--spring.profiles.active=" + profile)) {
+                assertThat(context.getBean(LlmEgress.class)).isInstanceOf(ReplayLlmEgress.class);
+            }
         }
     }
 
