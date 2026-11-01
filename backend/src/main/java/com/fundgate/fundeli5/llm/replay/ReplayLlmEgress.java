@@ -29,9 +29,10 @@ public class ReplayLlmEgress implements LlmEgress {
             .enable(DeserializationFeature.FAIL_ON_NULL_CREATOR_PROPERTIES)
             .build();
 
-    private final Map<LlmRequest, LlmResponse> recordings = new HashMap<>();
+    private final Map<LlmRequest, LlmResponse> recordings;
 
     public ReplayLlmEgress(Path folder) {
+        Map<LlmRequest, LlmResponse> loaded = new HashMap<>();
         List<Path> files;
         try (Stream<Path> listing = Files.list(folder)) {
             files = listing.filter(p -> p.getFileName().toString().endsWith(".json")).sorted().toList();
@@ -48,10 +49,11 @@ public class ReplayLlmEgress implements LlmEgress {
             if (recording.request() == null || recording.response() == null) {
                 throw new IllegalStateException("Bad recording " + file.getFileName() + ": needs request and response");
             }
-            if (recordings.putIfAbsent(recording.request(), recording.response()) != null) {
+            if (loaded.putIfAbsent(recording.request(), recording.response()) != null) {
                 throw new IllegalStateException("Bad recording " + file.getFileName() + ": request already recorded");
             }
         }
+        this.recordings = Map.copyOf(loaded);
     }
 
     @Override
