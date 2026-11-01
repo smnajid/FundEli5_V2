@@ -86,7 +86,8 @@ class RuleCatalogEngineTest {
     }
 
     static RuleCard card(RuleCard.Status status, List<Rule> rules, List<RuleCard.Source> sources) {
-        return new RuleCard("f", "Fund", List.of(CLASS), 1, status, rules, sources, null, null);
+        return new RuleCard("f", "Fund", List.of(CLASS), 1, status, rules, sources, null,
+                status == RuleCard.Status.VALIDATED ? new RuleCard.Validation("v", java.time.Instant.EPOCH) : null);
     }
 
     static RuleCard validated(Rule... rules) {
@@ -211,11 +212,11 @@ class RuleCatalogEngineTest {
     // ---- Contradictions, Stale cards, unknown kinds
 
     @Test
-    void aContradictionBetweenDocumentsIsFlaggedButDoesNotChangeTheVerdict() {
+    void aContradictionBetweenDocumentsIsFlaggedAndGivesReview() {
         Rule contradicted = new Rule(Rule.Scope.FUND, null, new Condition.MandateOnlyClass("pass"), List.of(PAGE_9),
                 "Minimum differs between prospectus and KID", 0.6, true, List.of());
         EngineResult result = check(validated(contradicted), "LOC90000101");
-        assertThat(result.verdict()).isEqualTo(Verdict.ELIGIBLE);
+        assertThat(result.verdict()).isEqualTo(Verdict.NEEDS_REVIEW);
         assertThat(result.justification().warnings()).singleElement()
                 .satisfies(w -> assertThat(w).contains("contradict").contains("Minimum differs"));
     }
@@ -249,6 +250,26 @@ class RuleCatalogEngineTest {
     @Test
     void aValidatedCardWithNoRuleForTheClassNeverGivesEligible() {
         assertThat(check(validated(), "LOC90000101").verdict()).isEqualTo(Verdict.NEEDS_REVIEW);
+    }
+
+    @Test
+    void aRuleWithoutACitationCannotPass() {
+        assertThat(check(validated(fundRule(new Condition.MandateOnlyClass("pass"))), true, "LOC90000101").verdict())
+                .isEqualTo(Verdict.NEEDS_REVIEW);
+    }
+
+    @Test
+    void aClassRuleThatDoesNotApplyLeavesTheFundRuleInForce() {
+        EngineResult result = check(validated(scripted("fail"),
+                classRule(new Condition.MandateOnlyClass("n/a"), PAGE_9)), false, "LOC90000101");
+        assertThat(result.verdict()).isEqualTo(Verdict.NOT_ELIGIBLE);
+    }
+
+    @Test
+    void aValidatedCardWithoutAValidationRecordDoesNotDecide() {
+        RuleCard unsigned = new RuleCard("f", "Fund", List.of(CLASS), 1, RuleCard.Status.VALIDATED,
+                List.of(scripted("pass")), List.of(), null, null);
+        assertThat(check(unsigned, "LOC90000101").verdict()).isEqualTo(Verdict.NEEDS_REVIEW);
     }
 
     // ---- The same inputs give the same answer

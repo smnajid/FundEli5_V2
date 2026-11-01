@@ -28,6 +28,9 @@ public class FixtureRuleCards implements RuleCards {
 
     @Override
     public Optional<RuleCard> forShareClass(Isin isin) {
+        if (!Files.isDirectory(folder)) {
+            return Optional.empty();
+        }
         try (Stream<Path> files = Files.list(folder)) {
             List<RuleCard> cards = files.filter(f -> f.toString().endsWith(".json")).sorted()
                     .map(RuleCardJson::read).filter(c -> c.shareClasses().contains(isin)).toList();

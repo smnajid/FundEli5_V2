@@ -57,14 +57,17 @@ public class RuleCatalogEngine implements RuleEngine {
         }
         RuleCard card = found.get();
         ClientProfile profile = clientProfiles.clientProfile(request.portfolio());
-        if (!COVERED_LEGAL_ENTITIES.contains(profile.legalEntity())) {
-            return review(FrameOutcomes.regimeNotCovered(profile.legalEntity()));
+        if (profile == null || !COVERED_LEGAL_ENTITIES.contains(profile.legalEntity())) {
+            return review(FrameOutcomes.regimeNotCovered(profile == null ? "unknown" : profile.legalEntity()));
         }
-        if (card.status() != RuleCard.Status.VALIDATED) {
+        if (card.status() != RuleCard.Status.VALIDATED || card.validation() == null) {
             return review(FrameOutcomes.cardNotValidated());
         }
         ShareClass shareClass = shareClasses.all().stream()
                 .filter(s -> s.isin().equals(request.shareClass())).findFirst().orElse(null);
+        if (shareClass == null) {
+            return review(FrameOutcomes.fundNotCovered());
+        }
         Facts facts = new Facts(request, profile, shareClass);
 
         List<RuleOutcome> outcomes = new ArrayList<>();
@@ -112,20 +115,37 @@ public class RuleCatalogEngine implements RuleEngine {
             outcomes.add(FrameOutcomes.noPlugIn(rules.get(0).condition()));
             return;
         }
-        List<RuleOutcome> ofKind = new ArrayList<>();
         boolean accumulates = plugin.get().accumulates();
-        for (Rule rule : accumulates ? rules : classLevelOverridesFundLevel(rules)) {
-            if (rule.contradiction()) {
-                warnings.add("The documents contradict each other on: " + rule.summary());
-            }
-            evaluate(plugin.get(), rule, facts).ifPresent(ofKind::add);
-        }
+        List<RuleOutcome> ofKind = new ArrayList<>();
         if (accumulates) {
+            rules.forEach(rule -> ofKind.addAll(evaluateRule(plugin.get(), rule, facts, warnings)));
             outcomes.addAll(ofKind);
-        } else {
-            ofKind.stream().max(Comparator.comparingInt(RuleCatalogEngine::severity))
-                    .ifPresent(outcomes::add);
+            return;
         }
+        // A class-level rule overrides the fund-level one, but only when it has something to say.
+        List<Rule> classLevel = rules.stream().filter(r -> r.scope() == Rule.Scope.SHARE_CLASS).toList();
+        classLevel.forEach(rule -> ofKind.addAll(evaluateRule(plugin.get(), rule, facts, warnings)));
+        if (ofKind.isEmpty()) {
+            rules.stream().filter(r -> r.scope() == Rule.Scope.FUND)
+                    .forEach(rule -> ofKind.addAll(evaluateRule(plugin.get(), rule, facts, warnings)));
+        }
+        ofKind.stream().max(Comparator.comparingInt(RuleCatalogEngine::severity)).ifPresent(outcomes::add);
+    }
+
+    private List<RuleOutcome> evaluateRule(RuleKindPlugin<?> plugin, Rule rule, Facts facts, List<String> warnings) {
+        List<RuleOutcome> found = new ArrayList<>();
+        if (rule.contradiction()) {
+            warnings.add("The documents contradict each other on: " + rule.summary());
+            found.add(new RuleOutcome(plugin.kind(), RuleOutcome.Result.REVIEW,
+                    "The documents contradict each other on: " + rule.summary(), rule.citations()));
+        }
+        if (rule.citations().isEmpty()) {
+            found.add(new RuleOutcome(plugin.kind(), RuleOutcome.Result.REVIEW,
+                    "The rule carries no Citation, so it cannot decide: " + rule.summary(), List.of()));
+            return found;
+        }
+        evaluate(plugin, rule, facts).ifPresent(found::add);
+        return found;
     }
 
     private static int severity(RuleOutcome outcome) {
@@ -134,11 +154,6 @@ public class RuleCatalogEngine implements RuleEngine {
             case REVIEW -> 1;
             case FAIL -> 2;
         };
-    }
-
-    private static List<Rule> classLevelOverridesFundLevel(List<Rule> rules) {
-        List<Rule> classLevel = rules.stream().filter(r -> r.scope() == Rule.Scope.SHARE_CLASS).toList();
-        return classLevel.isEmpty() ? rules : classLevel;
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
