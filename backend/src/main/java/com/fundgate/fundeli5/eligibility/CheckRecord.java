@@ -45,4 +45,10 @@ public record CheckRecord(
         llmCalls = List.copyOf(llmCalls);
         suggestionDecisions = List.copyOf(suggestionDecisions);
     }
+
+    /** Masked: the record holds a Client Profile snapshot and must not reach a log by accident. */
+    @Override
+    public String toString() {
+        return "CheckRecord[" + id + "]";
+    }
 }

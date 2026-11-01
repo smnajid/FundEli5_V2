@@ -7,6 +7,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OutcomeView } from './outcomeView';
+import { CorrectionView } from './correctionView';
 import { LlmCallView } from './llmCallView';
 
 
@@ -15,9 +17,16 @@ export interface CheckRecordView {
     checkedAt?: string;
     portfolioReference?: string;
     shareClassIsin?: string;
-    verdict?: CheckRecordView.VerdictEnum;
+    amount?: number;
+    currency?: string;
+    ruleCardVersion?: number;
+    scaleMappingVersion?: string;
     engineVersion?: string;
+    clientFieldsRead?: Array<string>;
+    verdict?: CheckRecordView.VerdictEnum;
+    outcomes?: Array<OutcomeView>;
     llmCalls?: Array<LlmCallView>;
+    corrections?: Array<CorrectionView>;
 }
 export namespace CheckRecordView {
     export const VerdictEnum = {
