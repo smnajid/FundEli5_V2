@@ -246,7 +246,7 @@ public class AnswerSteps {
 
     @Then("the {} rule gives {word}")
     public void theRuleGives(String rule, String result) {
-        String kind = rule.toUpperCase().replace(' ', '_');
+        String kind = rule.toUpperCase().replace(' ', '_').replace('-', '_');
         List<String> results = new ArrayList<>();
         answer.path("checks").forEach(c -> c.path("outcomes").forEach(o -> {
             if (o.path("kind").asString().equals(kind)) {

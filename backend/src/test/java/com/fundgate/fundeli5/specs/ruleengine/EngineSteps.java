@@ -10,6 +10,7 @@ import com.fundgate.fundeli5.clientprofiles.PortfolioReference;
 import com.fundgate.fundeli5.eligibility.RuleOutcome;
 import com.fundgate.fundeli5.eligibility.SubscriptionRequest;
 import com.fundgate.fundeli5.fundregistrations.FundRegistrations;
+import com.fundgate.fundeli5.fxrates.FxRates;
 import com.fundgate.fundeli5.rulecard.Condition;
 import com.fundgate.fundeli5.rulecard.Rule;
 import com.fundgate.fundeli5.rulecard.RuleCard;
@@ -67,6 +68,7 @@ public class EngineSteps {
     @Autowired ClientProfiles clientProfiles;
     @Autowired ShareClasses shareClasses;
     @Autowired FundRegistrations fundRegistrations;
+    @Autowired FxRates fxRates;
     @Autowired RuleCatalog catalog;
     @Autowired LlmEgress egress;
     @Autowired AnswerSteps answerSteps;
@@ -129,12 +131,27 @@ public class EngineSteps {
             results.add(engine().check(lastRequest));
         }
         abortIfAPlugInIsMissing(result);
+        abortIfTheRegistrationIsNotEvaluated(lastRequest);
         publishToGenericSteps(result);
     }
 
     private RuleCatalogEngine engine() {
-        return new RuleCatalogEngine(ruleCards, clientProfiles, shareClasses, new Lookups(fundRegistrations), catalog,
+        return new RuleCatalogEngine(ruleCards, clientProfiles, shareClasses, new Lookups(fundRegistrations, fxRates), catalog,
                 editions);
+    }
+
+    /**
+     * Fund Registration is not a rule on the card and its rule lands after S4b: a check the bank's record
+     * would fail or send to Review must not run against an engine that ignores the record.
+     */
+    private void abortIfTheRegistrationIsNotEvaluated(SubscriptionRequest request) {
+        var profile = clientProfiles.clientProfile(request.portfolio());
+        if (profile != null && profile.client() != null && profile.client().residenceCountry() != null
+                && !(fundRegistrations.registration(request.shareClass(), profile.client().residenceCountry())
+                        instanceof com.fundgate.fundeli5.fundregistrations.Registration.Registered)) {
+            throw new TestAbortedException("waits for the Fund Registration rule: the bank's record does not "
+                    + "register the class where the client lives");
+        }
     }
 
     private void abortIfAPlugInIsMissing(EngineResult result) {
