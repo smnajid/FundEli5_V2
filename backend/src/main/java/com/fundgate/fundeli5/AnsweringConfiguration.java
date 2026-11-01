@@ -6,7 +6,8 @@ import com.fundgate.fundeli5.checkrecord.memory.InMemoryCheckRecords;
 import com.fundgate.fundeli5.clientprofiles.ClientProfiles;
 import com.fundgate.fundeli5.llm.LlmEgress;
 import com.fundgate.fundeli5.privacygate.PrivacyGate;
-import com.fundgate.fundeli5.privacygate.stub.StubPrivacyGate;
+import com.fundgate.fundeli5.privacygate.DefaultPrivacyGate;
+import com.fundgate.fundeli5.privacygate.PersonalDataDetector;
 import com.fundgate.fundeli5.replydrafter.ReplyDrafter;
 import com.fundgate.fundeli5.replydrafter.stub.TemplateReplyDrafter;
 import com.fundgate.fundeli5.requestparser.RequestParser;
@@ -41,8 +42,8 @@ import org.springframework.context.annotation.Profile;
 public class AnsweringConfiguration {
 
     @Bean
-    PrivacyGate privacyGate(ClientProfiles clientProfiles) {
-        return new StubPrivacyGate(clientProfiles);
+    PrivacyGate privacyGate(ClientProfiles clientProfiles, PersonalDataDetector detector) {
+        return new DefaultPrivacyGate(clientProfiles, detector);
     }
 
     @Bean

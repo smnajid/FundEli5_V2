@@ -24,11 +24,14 @@ class ArchitectureTest {
             .should().dependOnClassesThat().resideInAPackage("..llm..")
             .allowEmptyShould(true);
 
-    /** ADR 0004: the egress client is the only code that can reach a model over the network. */
+    /**
+     * ADR 0004: the egress client is the only code that can reach a model over the network. The Presidio
+     * adapter calls a local detector service, never a model (ADR 0009).
+     */
     @ArchTest
     static final ArchRule onlyTheEgressReachesTheNetwork = noClasses()
             .that().resideOutsideOfPackages("..llm..", "..web..", ROOT)
-            .and().resideOutsideOfPackages("..fixture..", "..folder..")
+            .and().resideOutsideOfPackages("..fixture..", "..folder..", "..privacygate.presidio..")
             .should().dependOnClassesThat().resideInAnyPackage(
                     "com.anthropic..", "java.net.http..", "org.springframework.web.client..",
                     "org.springframework.web.reactive.function.client..")
