@@ -117,6 +117,9 @@ class AnswerController {
         if (value == null) {
             return;
         }
+        if (value instanceof java.util.Collection<?> c && c.isEmpty()) {
+            return; // "none on file" is not a value read
+        }
         if (!value.getClass().isRecord()) {
             names.add(prefix);
             return;

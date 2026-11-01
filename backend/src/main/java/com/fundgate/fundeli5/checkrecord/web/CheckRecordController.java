@@ -21,7 +21,15 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("/api/check-records")
 class CheckRecordController {
 
+    /** The fields the dealer may correct in the parsed request form (screens.md). */
+    private static final java.util.Set<String> EDITABLE = java.util.Set.of("shareClass", "amount", "currency",
+            "clientInitiated");
+
     private final CheckRecords checkRecords;
+
+    private static boolean tooLong(String value) {
+        return value != null && value.length() > 200;
+    }
 
     CheckRecordController(CheckRecords checkRecords) {
         this.checkRecords = checkRecords;
@@ -30,6 +38,12 @@ class CheckRecordController {
     @PostMapping("/{id}/corrections")
     @ResponseStatus(HttpStatus.CREATED)
     void correct(@PathVariable UUID id, @RequestBody CorrectionBody body) {
+        if (body.field() != null && !EDITABLE.contains(body.field())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "field must be one of " + EDITABLE);
+        }
+        if (tooLong(body.parsedValue()) || tooLong(body.dealerValue()) || tooLong(body.by())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "values are limited to 200 characters");
+        }
         if (body.field() == null || body.parsedValue() == null || body.dealerValue() == null
                 || body.field().isBlank() || body.dealerValue().isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "field, parsedValue and dealerValue are required");
