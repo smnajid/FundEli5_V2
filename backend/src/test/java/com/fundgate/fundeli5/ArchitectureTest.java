@@ -68,4 +68,14 @@ class ArchitectureTest {
             .should().accessFieldWhere(com.tngtech.archunit.core.domain.JavaFieldAccess.Predicates.target(
                     owner(describe("RuleKind", c -> c.getName().equals("com.fundgate.fundeli5.rulecard.RuleKind")))))
             .allowEmptyShould(true);
+
+    /** Domain classes import no Spring, Jackson or PDFBox; only the adapters, readers and wiring do. */
+    @ArchTest
+    static final ArchRule domainClassesImportNoFrameworks = noClasses()
+            .that().resideInAnyPackage("..eligibility..", "..rulecard..", "..citation..", "..bankdata..",
+                    "..clientprofiles..", "..shareclasses..", "..funddocuments..", "..fundregistrations..", "..fxrates..")
+            .and().resideOutsideOfPackages("..fixture..", "..folder..", "..json..")
+            .should().dependOnClassesThat().resideInAnyPackage(
+                    "org.springframework..", "tools.jackson..", "com.fasterxml.jackson..", "org.apache.pdfbox..")
+            .allowEmptyShould(true);
 }
