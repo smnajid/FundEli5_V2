@@ -13,11 +13,16 @@ import com.fundgate.fundeli5.requestparser.RequestParser;
 import com.fundgate.fundeli5.requestparser.replay.ReplayRequestParser;
 import com.fundgate.fundeli5.ruleengine.RuleEngine;
 import com.fundgate.fundeli5.fundregistrations.FundRegistrations;
+import com.fundgate.fundeli5.fxrates.FxRates;
 import com.fundgate.fundeli5.rulecard.RuleCards;
 import com.fundgate.fundeli5.rulecard.fixture.FixtureRuleCards;
 import com.fundgate.fundeli5.ruleengine.EditionLookup;
 import com.fundgate.fundeli5.ruleengine.RuleCatalog;
 import com.fundgate.fundeli5.ruleengine.RuleCatalogEngine;
+import com.fundgate.fundeli5.ruleengine.plugin.InvestorCategoryPlugin;
+import com.fundgate.fundeli5.ruleengine.plugin.MandateOnlyClassPlugin;
+import com.fundgate.fundeli5.ruleengine.plugin.MinimumInitialSubscriptionPlugin;
+import com.fundgate.fundeli5.ruleengine.plugin.UsPersonExclusionPlugin;
 import com.fundgate.fundeli5.ruleengine.plugin.KidRequiredForRetailPlugin;
 import com.fundgate.fundeli5.ruleengine.plugin.Lookups;
 import java.nio.file.Path;
@@ -64,7 +69,8 @@ public class AnsweringConfiguration {
     /** One plug-in per rule kind, in the order their outcomes are shown; each later ticket adds its kinds here. */
     @Bean
     RuleCatalog ruleCatalog() {
-        return new RuleCatalog(List.of(new KidRequiredForRetailPlugin()));
+        return new RuleCatalog(List.of(new InvestorCategoryPlugin(), new UsPersonExclusionPlugin(),
+                new MinimumInitialSubscriptionPlugin(), new MandateOnlyClassPlugin(), new KidRequiredForRetailPlugin()));
     }
 
     /** No edition check until the bank's fund master data is read online: the contract's "absent means none". */
@@ -76,8 +82,8 @@ public class AnsweringConfiguration {
     @Bean
     @Lazy
     RuleEngine ruleEngine(RuleCards ruleCards, ClientProfiles clientProfiles, ShareClasses shareClasses,
-            FundRegistrations fundRegistrations, RuleCatalog catalog, EditionLookup editions) {
-        return new RuleCatalogEngine(ruleCards, clientProfiles, shareClasses, new Lookups(fundRegistrations), catalog,
+            FundRegistrations fundRegistrations, FxRates fxRates, RuleCatalog catalog, EditionLookup editions) {
+        return new RuleCatalogEngine(ruleCards, clientProfiles, shareClasses, new Lookups(fundRegistrations, fxRates), catalog,
                 editions);
     }
 

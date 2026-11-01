@@ -109,7 +109,7 @@ class RuleCatalogEngineTest {
         RuleCatalog catalog = new RuleCatalog(List.of(new ScriptedPlugin(accumulates), new KidRequiredForRetailPlugin()));
         RuleCatalogEngine engine = new RuleCatalogEngine(i -> i.equals(CLASS) ? card : Optional.empty(),
                 new FixtureClientProfiles(FIXTURES), new FixtureShareClasses(FIXTURES),
-                new Lookups(new FixtureFundRegistrations(FIXTURES)), catalog, editions);
+                new Lookups(new FixtureFundRegistrations(FIXTURES), null), catalog, editions);
         return engine.check(request(portfolio, isin));
     }
 
@@ -302,7 +302,7 @@ class RuleCatalogEngineTest {
         var profiles = new FixtureClientProfiles(FIXTURES);
         Facts retail = new Facts(request("LOC90000101", CLASS), profiles.clientProfile(new PortfolioReference("LOC90000101")), null);
         Facts professional = new Facts(request("LOC90000201", CLASS), profiles.clientProfile(new PortfolioReference("LOC90000201")), null);
-        Lookups lookups = new Lookups(null);
+        Lookups lookups = new Lookups(null, null);
 
         assertThat(kid.evaluate(new Condition.KidRequiredForRetail(true), retail, lookups).orElseThrow().result())
                 .isEqualTo(RuleOutcome.Result.PASS);
