@@ -1,5 +1,6 @@
 package com.fundgate.fundeli5.answering.web;
 
+import com.fundgate.fundeli5.Runtimes;
 import com.fundgate.fundeli5.answering.Answer;
 import com.fundgate.fundeli5.answering.AnswerService;
 import com.fundgate.fundeli5.bankdata.Currency;
@@ -28,7 +29,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 /** The dealer's flow over HTTP. Every route lives under {@code /api}. */
 @RestController
-@Profile("!pipeline")
+@Profile("!" + Runtimes.PIPELINE)
 @RequestMapping("/api")
 class AnswerController {
 
@@ -48,12 +49,19 @@ class AnswerController {
     /** Intake: the Requester's email, pasted. */
     @PostMapping("/answers")
     AnswerView answer(@RequestBody EmailBody body) {
+        if (body.email() == null || body.email().isBlank() || body.email().length() > 50_000) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "An email of up to 50,000 characters is required");
+        }
         return view(answers.answerEmail(body.email()));
     }
 
     /** The request form filled by hand: still checked, answered from a template, no model call. */
     @PostMapping("/answers/by-hand")
     AnswerView answerByHand(@RequestBody HandRequestBody body) {
+        if (body.portfolioReference() == null || body.shareClassIsin() == null || body.currency() == null
+                || body.amount() == null || body.amount().signum() <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Portfolio, share class, currency and a positive amount are required");
+        }
         try {
             ShareClass shareClass = shareClasses.all().stream()
                     .filter(c -> c.isin().value().equals(body.shareClassIsin())).findFirst()

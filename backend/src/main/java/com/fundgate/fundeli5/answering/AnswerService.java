@@ -68,7 +68,7 @@ public class AnswerService {
         try {
             parsed = parser.parse(email.text());
         } catch (RuntimeException e) {
-            LOG.log(System.Logger.Level.WARNING, "The Request Parser failed: " + e.getMessage());
+            LOG.log(System.Logger.Level.WARNING, "The Request Parser failed: " + e.getClass().getSimpleName());
             return Answer.refused("The AI could not read this email. Enter the request by hand.", List.of());
         }
         CheckRecord.LlmCall call = new CheckRecord.LlmCall(parsed.model(), parsed.prompt(), List.of(), parsed.response());
