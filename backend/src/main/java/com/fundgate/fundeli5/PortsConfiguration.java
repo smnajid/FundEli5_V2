@@ -8,6 +8,8 @@ import com.fundgate.fundeli5.fundregistrations.FundRegistrations;
 import com.fundgate.fundeli5.fundregistrations.fixture.FixtureFundRegistrations;
 import com.fundgate.fundeli5.fxrates.FxRates;
 import com.fundgate.fundeli5.fxrates.fixture.FixtureFxRates;
+import com.fundgate.fundeli5.llm.LlmEgress;
+import com.fundgate.fundeli5.llm.replay.ReplayLlmEgress;
 import com.fundgate.fundeli5.shareclasses.ShareClasses;
 import com.fundgate.fundeli5.shareclasses.fixture.FixtureShareClasses;
 import java.nio.file.Path;
@@ -27,6 +29,13 @@ import org.springframework.context.annotation.Profile;
  */
 @Configuration(proxyBeanMethods = false)
 public class PortsConfiguration {
+
+    /** The only path to a model (ADR 0004), in both runtimes; {@code replay} serves recordings. */
+    @Bean
+    @ConditionalOnProperty(name = "fundeli5.llm.endpoint", havingValue = "replay", matchIfMissing = true)
+    LlmEgress llmEgress(@Value("${fundeli5.llm.recordings}") String recordings) {
+        return new ReplayLlmEgress(Path.of(recordings));
+    }
 
     @Configuration(proxyBeanMethods = false)
     @Profile("!" + Runtimes.PIPELINE)
