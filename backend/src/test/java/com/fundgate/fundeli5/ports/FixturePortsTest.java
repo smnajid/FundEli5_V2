@@ -147,4 +147,25 @@ class FixturePortsTest {
 
         assertThatThrownBy(() -> documents.content(new DocumentId("nope"))).isInstanceOf(DocumentUnavailable.class);
     }
+
+    @Test
+    void aMalformedValueIsAnErrorNotADefault(@org.junit.jupiter.api.io.TempDir Path dir) throws Exception {
+        Files.createDirectories(dir.resolve("client-profiles"));
+        Files.writeString(dir.resolve("client-profiles/LOC90000999.json"), """
+                {"portfolioRef":"LOC90000999","portfolioId":"4b0f6f3e-2f7a-4c55-9a59-0c8f1d5b7e21",
+                 "legalEntity":"LOC","retrievedAt":"2026-11-02T08:00:00Z",
+                 "client":{"usPerson":{"usPermanentResident":"unknown"}}}""");
+
+        assertThatThrownBy(() -> new FixtureClientProfiles(dir).clientProfile(new PortfolioReference("LOC90000999")))
+                .isInstanceOf(com.fundgate.fundeli5.clientprofiles.ClientDataUnavailable.class);
+    }
+
+    @Test
+    void aFixtureNamedForAnotherPortfolioIsRefused(@org.junit.jupiter.api.io.TempDir Path dir) throws Exception {
+        Files.createDirectories(dir.resolve("client-profiles"));
+        Files.copy(FIXTURES.resolve("client-profiles/LOC90000201.json"), dir.resolve("client-profiles/LOC90000101.json"));
+
+        assertThatThrownBy(() -> new FixtureClientProfiles(dir).clientProfile(new PortfolioReference("LOC90000101")))
+                .isInstanceOf(com.fundgate.fundeli5.clientprofiles.ClientDataUnavailable.class);
+    }
 }

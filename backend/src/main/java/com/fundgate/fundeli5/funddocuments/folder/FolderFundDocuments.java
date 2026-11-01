@@ -18,7 +18,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 
 /**
@@ -72,24 +71,32 @@ public class FolderFundDocuments implements FundDocuments {
     private List<FundDocument> all() {
         try {
             List<FundDocument> documents = new ArrayList<>();
-            for (JsonNode node : Json.read(manifest)) {
+            for (JsonNode node : Json.readList(manifest)) {
                 documents.add(document(node));
             }
             return List.copyOf(documents);
-        } catch (IOException | JacksonException e) {
+        } catch (IOException | RuntimeException e) {
             throw new FundDataUnavailable("Cannot read " + manifest.getFileName(), e);
         }
     }
 
+    /** A private placement memorandum is confidential whatever the manifest says. */
+    private static Confidentiality confidentiality(JsonNode node, FundDocument.DocumentType type) {
+        return type == FundDocument.DocumentType.PPM
+                ? Confidentiality.CONFIDENTIAL
+                : Json.enumOrNull(node, "confidentiality", Confidentiality.class);
+    }
+
     private static FundDocument document(JsonNode node) {
+        FundDocument.DocumentType type = Json.enumOrNull(node, "type", FundDocument.DocumentType.class);
         return new FundDocument(
                 new DocumentId(requiredString(node, "documentId")),
                 java.util.Objects.requireNonNull(strings(node, "isins"), "Missing required field: isins").stream().map(Isin::new).toList(),
-                Json.enumOrNull(node, "type", FundDocument.DocumentType.class),
+                type,
                 string(node, "language"),
                 editionDate(node, "fmdEditionDate"),
                 editionDate(node, "pdfEditionDate"),
-                Json.enumOrNull(node, "confidentiality", Confidentiality.class),
+                confidentiality(node, type),
                 string(node, "contentSha256"),
                 string(node, "sourceUrl"),
                 string(node, "file"));

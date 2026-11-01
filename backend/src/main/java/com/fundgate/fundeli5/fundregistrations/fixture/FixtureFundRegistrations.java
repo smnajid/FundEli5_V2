@@ -16,7 +16,6 @@ import java.nio.file.Path;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 
 /**
@@ -64,13 +63,13 @@ public class FixtureFundRegistrations implements FundRegistrations {
 
     private JsonNode entryFor(Isin isin) {
         try {
-            for (JsonNode entry : Json.read(file)) {
+            for (JsonNode entry : Json.readList(file)) {
                 if (isin.equals(isin(entry, "isin"))) {
                     return entry;
                 }
             }
             return null;
-        } catch (IOException | JacksonException e) {
+        } catch (IOException | RuntimeException e) {
             throw new FundDataUnavailable("Cannot read " + file.getFileName(), e);
         }
     }

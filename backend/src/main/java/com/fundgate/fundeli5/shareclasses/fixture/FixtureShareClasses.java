@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 
 /** Reads {@code share-classes.json} under the fixtures directory. */
@@ -33,11 +32,14 @@ public class FixtureShareClasses implements ShareClasses {
     public List<ShareClass> all() {
         try {
             List<ShareClass> classes = new ArrayList<>();
-            for (JsonNode node : Json.read(file)) {
+            for (JsonNode node : Json.readList(file)) {
+                if (string(node, "isin") == null) {
+                    continue; // an instrument without an ISIN is not offered (contract)
+                }
                 classes.add(shareClass(node));
             }
             return List.copyOf(classes);
-        } catch (IOException | JacksonException e) {
+        } catch (IOException | RuntimeException e) {
             throw new FundDataUnavailable("Cannot read " + file.getFileName(), e);
         }
     }

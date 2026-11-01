@@ -30,7 +30,19 @@ public final class Json {
     }
 
     public static JsonNode read(Path file) throws IOException {
-        return MAPPER.readTree(Files.readString(file));
+        JsonNode root = MAPPER.readTree(Files.readString(file));
+        return root;
+    }
+
+    /** The items of a file whose root must be a list. */
+    public static List<JsonNode> readList(Path file) throws IOException {
+        JsonNode root = read(file);
+        if (!root.isArray()) {
+            throw new IllegalArgumentException(file.getFileName() + " must hold a list");
+        }
+        List<JsonNode> items = new ArrayList<>();
+        root.forEach(items::add);
+        return items;
     }
 
     /** The child, or {@code null} when absent or JSON null. */
@@ -44,7 +56,13 @@ public final class Json {
 
     public static String string(JsonNode node, String field) {
         JsonNode child = child(node, field);
-        return child == null ? null : child.asString();
+        if (child == null) {
+            return null;
+        }
+        if (!child.isString()) {
+            throw new IllegalArgumentException("Expected text in " + field);
+        }
+        return child.asString();
     }
 
     public static String requiredString(JsonNode node, String field) {
@@ -57,16 +75,73 @@ public final class Json {
 
     public static Boolean bool(JsonNode node, String field) {
         JsonNode child = child(node, field);
-        return child == null ? null : child.asBoolean();
+        if (child != null && !child.isBoolean()) {
+            throw new IllegalArgumentException("Expected true or false in " + field);
+        }
+        return child == null ? null : child.booleanValue();
+    }
+
+    public static boolean requiredBool(JsonNode node, String field) {
+        Boolean value = bool(node, field);
+        if (value == null) {
+            throw new IllegalArgumentException("Missing required field: " + field);
+        }
+        return value;
+    }
+
+    public static int requiredInt(JsonNode node, String field) {
+        Integer value = integer(node, field);
+        if (value == null) {
+            throw new IllegalArgumentException("Missing required field: " + field);
+        }
+        return value;
+    }
+
+    public static double requiredDouble(JsonNode node, String field) {
+        BigDecimal value = decimal(node, field);
+        if (value == null) {
+            throw new IllegalArgumentException("Missing required field: " + field);
+        }
+        return value.doubleValue();
+    }
+
+    public static List<JsonNode> requiredArray(JsonNode node, String field) {
+        List<JsonNode> value = array(node, field);
+        if (value == null) {
+            throw new IllegalArgumentException("Missing required field: " + field);
+        }
+        return value;
+    }
+
+    public static BigDecimal requiredDecimal(JsonNode node, String field) {
+        BigDecimal value = decimal(node, field);
+        if (value == null) {
+            throw new IllegalArgumentException("Missing required field: " + field);
+        }
+        return value;
+    }
+
+    public static List<String> requiredStrings(JsonNode node, String field) {
+        List<String> value = strings(node, field);
+        if (value == null) {
+            throw new IllegalArgumentException("Missing required field: " + field);
+        }
+        return value;
     }
 
     public static Integer integer(JsonNode node, String field) {
         JsonNode child = child(node, field);
-        return child == null ? null : child.asInt();
+        if (child != null && !child.isIntegralNumber()) {
+            throw new IllegalArgumentException("Expected a whole number in " + field);
+        }
+        return child == null ? null : child.intValue();
     }
 
     public static BigDecimal decimal(JsonNode node, String field) {
         JsonNode child = child(node, field);
+        if (child != null && !child.isNumber()) {
+            throw new IllegalArgumentException("Expected a number in " + field);
+        }
         return child == null ? null : child.decimalValue();
     }
 
@@ -111,6 +186,9 @@ public final class Json {
         if (child == null) {
             return null;
         }
+        if (!child.isArray()) {
+            throw new IllegalArgumentException("Expected a list in " + field);
+        }
         List<JsonNode> items = new ArrayList<>();
         child.forEach(items::add);
         return items;
@@ -119,7 +197,12 @@ public final class Json {
     /** The array's strings, or {@code null} when the array is absent (unknown). */
     public static List<String> strings(JsonNode node, String field) {
         List<JsonNode> items = array(node, field);
-        return items == null ? null : items.stream().map(JsonNode::asString).toList();
+        return items == null ? null : items.stream().map(n -> {
+            if (!n.isString()) {
+                throw new IllegalArgumentException("Expected text items in " + field);
+            }
+            return n.asString();
+        }).toList();
     }
 
     /** A lower-snake-case value as its enum constant; {@code null} when absent or matching none. */

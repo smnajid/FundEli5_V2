@@ -13,7 +13,6 @@ import com.fundgate.fundeli5.fxrates.FxRates;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
-import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 
 /** Reads {@code fx-rates.json}; only the stored direction is answered, nothing is derived. */
@@ -28,13 +27,13 @@ public class FixtureFxRates implements FxRates {
     @Override
     public Optional<FxRate> rate(Currency base, Currency quote) {
         try {
-            for (JsonNode node : Json.read(file)) {
+            for (JsonNode node : Json.readList(file)) {
                 if (base.equals(currency(node, "base")) && quote.equals(currency(node, "quote"))) {
                     return Optional.of(new FxRate(base, quote, decimal(node, "rate"), date(node, "date"), string(node, "source")));
                 }
             }
             return Optional.empty();
-        } catch (IOException | JacksonException e) {
+        } catch (IOException | RuntimeException e) {
             throw new FundDataUnavailable("Cannot read " + file.getFileName(), e);
         }
     }

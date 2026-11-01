@@ -30,7 +30,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 
 /**
@@ -47,20 +46,34 @@ public class FixtureClientProfiles implements ClientProfiles {
 
     @Override
     public Optional<PortfolioId> portfolioId(PortfolioReference ref) {
-        return load(ref).map(json -> portfolioId(json));
+        return load(ref).map(json -> {
+            try {
+                return portfolioId(json);
+            } catch (RuntimeException e) {
+                throw new ClientDataUnavailable("Malformed client fixture", e);
+            }
+        });
     }
 
     @Override
     public ClientProfile clientProfile(PortfolioReference ref) {
         JsonNode json = load(ref).orElseThrow(() -> new PortfolioNotFound(ref));
-        return new ClientProfile(
-                new PortfolioReference(requiredString(json, "portfolioRef")),
-                portfolioId(json),
-                requiredString(json, "legalEntity"),
-                instant(json, "retrievedAt"),
-                client(child(json, "client")),
-                classification(child(json, "classification")),
-                portfolio(child(json, "portfolio")));
+        try {
+            ClientProfile profile = new ClientProfile(
+                    new PortfolioReference(requiredString(json, "portfolioRef")),
+                    portfolioId(json),
+                    requiredString(json, "legalEntity"),
+                    instant(json, "retrievedAt"),
+                    client(child(json, "client")),
+                    classification(child(json, "classification")),
+                    portfolio(child(json, "portfolio")));
+            if (!profile.portfolioRef().equals(ref) || !profile.legalEntity().equals(ref.legalEntity())) {
+                throw new IllegalArgumentException("fixture does not match the reference asked for");
+            }
+            return profile;
+        } catch (RuntimeException e) {
+            throw new ClientDataUnavailable("Malformed client fixture", e);
+        }
     }
 
     private Optional<JsonNode> load(PortfolioReference ref) {
@@ -70,8 +83,8 @@ public class FixtureClientProfiles implements ClientProfiles {
         }
         try {
             return Optional.of(Json.read(file));
-        } catch (IOException | JacksonException e) {
-            throw new ClientDataUnavailable("Cannot read client fixture " + file.getFileName(), e);
+        } catch (IOException | RuntimeException e) {
+            throw new ClientDataUnavailable("Cannot read client fixture", e);
         }
     }
 

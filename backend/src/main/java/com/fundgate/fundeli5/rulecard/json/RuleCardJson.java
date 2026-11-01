@@ -1,18 +1,20 @@
 package com.fundgate.fundeli5.rulecard.json;
 
 import static com.fundgate.fundeli5.bankdata.json.Json.array;
-import static com.fundgate.fundeli5.bankdata.json.Json.bool;
+import static com.fundgate.fundeli5.bankdata.json.Json.requiredArray;
+import static com.fundgate.fundeli5.bankdata.json.Json.requiredBool;
+import static com.fundgate.fundeli5.bankdata.json.Json.requiredDouble;
+import static com.fundgate.fundeli5.bankdata.json.Json.requiredInt;
 import static com.fundgate.fundeli5.bankdata.json.Json.child;
 import static com.fundgate.fundeli5.bankdata.json.Json.currency;
-import static com.fundgate.fundeli5.bankdata.json.Json.decimal;
+import static com.fundgate.fundeli5.bankdata.json.Json.requiredDecimal;
+import static com.fundgate.fundeli5.bankdata.json.Json.requiredStrings;
 import static com.fundgate.fundeli5.bankdata.json.Json.editionDate;
 import static com.fundgate.fundeli5.bankdata.json.Json.instant;
-import static com.fundgate.fundeli5.bankdata.json.Json.integer;
 import static com.fundgate.fundeli5.bankdata.json.Json.isin;
 import static com.fundgate.fundeli5.bankdata.json.Json.requiredEnum;
 import static com.fundgate.fundeli5.bankdata.json.Json.requiredString;
 import static com.fundgate.fundeli5.bankdata.json.Json.string;
-import static com.fundgate.fundeli5.bankdata.json.Json.strings;
 
 import com.fundgate.fundeli5.bankdata.Confidentiality;
 import com.fundgate.fundeli5.bankdata.InvestorType;
@@ -50,11 +52,11 @@ public final class RuleCardJson {
         return new RuleCard(
                 string(card, "fundId"),
                 requiredString(card, "fundName"),
-                strings(card, "shareClasses").stream().map(com.fundgate.fundeli5.bankdata.Isin::new).toList(),
-                integer(card, "version"),
+                requiredStrings(card, "shareClasses").stream().map(com.fundgate.fundeli5.bankdata.Isin::new).toList(),
+                requiredInt(card, "version"),
                 requiredEnum(card, "status", RuleCard.Status.class),
-                array(card, "rules").stream().map(RuleCardJson::rule).toList(),
-                array(card, "sources").stream().map(RuleCardJson::source).toList(),
+                requiredArray(card, "rules").stream().map(RuleCardJson::rule).toList(),
+                requiredArray(card, "sources").stream().map(RuleCardJson::source).toList(),
                 drafting(child(card, "drafting")),
                 validation(child(card, "validation")));
     }
@@ -64,10 +66,10 @@ public final class RuleCardJson {
                 requiredEnum(rule, "scope", Rule.Scope.class),
                 isin(rule, "shareClass"),
                 condition(child(rule, "condition")),
-                array(rule, "citations").stream().map(RuleCardJson::citation).toList(),
+                requiredArray(rule, "citations").stream().map(RuleCardJson::citation).toList(),
                 string(rule, "summary"),
-                child(rule, "confidence").asDouble(),
-                bool(rule, "contradiction"),
+                requiredDouble(rule, "confidence"),
+                requiredBool(rule, "contradiction"),
                 history(array(rule, "history")));
     }
 
@@ -81,22 +83,22 @@ public final class RuleCardJson {
     private static Citation citation(JsonNode citation) {
         return new Citation(
                 requiredString(citation, "document"),
-                integer(citation, "page"),
+                requiredInt(citation, "page"),
                 requiredString(citation, "quote"),
-                bool(citation, "quoteFoundOnPage"));
+                requiredBool(citation, "quoteFoundOnPage"));
     }
 
     private static Condition condition(JsonNode condition) {
         String kind = requiredString(condition, "kind");
         return switch (kind) {
-            case "investor_category" -> new Condition.InvestorCategory(investorTypes(condition), strings(condition, "excluded"));
+            case "investor_category" -> new Condition.InvestorCategory(investorTypes(condition), requiredStrings(condition, "excluded"));
             case "us_person_exclusion" -> new Condition.UsPersonExclusion(
                     requiredEnum(condition, "definition", Condition.UsPersonDefinition.class),
-                    bool(condition, "excludesUsCitizens"));
+                    requiredBool(condition, "excludesUsCitizens"));
             case "minimum_initial_subscription" -> new Condition.MinimumInitialSubscription(
-                    decimal(condition, "amount"), currency(condition, "currency"));
+                    requiredDecimal(condition, "amount"), currency(condition, "currency"));
             case "mandate_only_class" -> new Condition.MandateOnlyClass(string(condition, "manager"));
-            case "kid_required_for_retail" -> new Condition.KidRequiredForRetail(bool(condition, "kidAvailable"));
+            case "kid_required_for_retail" -> new Condition.KidRequiredForRetail(requiredBool(condition, "kidAvailable"));
             case "target_market" -> new Condition.TargetMarket(
                     requiredEnum(condition, "dimension", Condition.Dimension.class), requiredString(condition, "value"));
             case "unmodelled_restriction" -> new Condition.UnmodelledRestriction(
@@ -107,7 +109,7 @@ public final class RuleCardJson {
 
     private static Set<InvestorType> investorTypes(JsonNode condition) {
         Set<InvestorType> allowed = new HashSet<>();
-        for (String value : strings(condition, "allowed")) {
+        for (String value : requiredStrings(condition, "allowed")) {
             InvestorType type = Json.enumOrNull(InvestorType.class, value);
             if (type == null) {
                 throw new IllegalArgumentException("Unknown investor type: " + value);
