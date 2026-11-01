@@ -22,7 +22,7 @@ import com.fundgate.fundeli5.ruleengine.plugin.KidRequiredForRetailPlugin;
 import com.fundgate.fundeli5.ruleengine.plugin.Lookups;
 import java.nio.file.Path;
 import com.fundgate.fundeli5.shareclasscatalog.ShareClassCatalog;
-import com.fundgate.fundeli5.shareclasscatalog.stub.TokenShareClassCatalog;
+import com.fundgate.fundeli5.shareclasscatalog.MatchingShareClassCatalog;
 import com.fundgate.fundeli5.shareclasses.ShareClasses;
 import java.time.Clock;
 import java.util.List;
@@ -53,7 +53,7 @@ public class AnsweringConfiguration {
     @Bean
     @Lazy
     ShareClassCatalog shareClassCatalog(ShareClasses shareClasses) {
-        return new TokenShareClassCatalog(shareClasses);
+        return new MatchingShareClassCatalog(shareClasses);
     }
 
     @Bean
