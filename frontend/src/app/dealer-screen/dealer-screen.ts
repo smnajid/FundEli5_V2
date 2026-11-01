@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { catchError, map, of, switchMap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
-import { AnswerControllerService, AnswerView, CheckView } from '../generated/api';
+import { AnswerControllerService, AnswerView, CheckRecordView, CheckView } from '../generated/api';
 
 const VERDICT_LABEL: Record<NonNullable<CheckView['verdict']>, string> = {
   ELIGIBLE: 'Eligible',
@@ -44,7 +46,7 @@ const VERDICT_LABEL: Record<NonNullable<CheckView['verdict']>, string> = {
       }
 
       @for (check of r.checks ?? []; track $index) {
-        <section class="check" [class]="'verdict-' + (check.verdict ?? '').toLowerCase()">
+        <section class="check" [attr.data-verdict]="check.verdict">
           <p>
             <code>{{ check.portfolioReference }}</code>
             <strong>{{ label(check) }}</strong>
@@ -89,6 +91,7 @@ const VERDICT_LABEL: Record<NonNullable<CheckView['verdict']>, string> = {
 })
 export class DealerScreen {
   private readonly api = inject(AnswerControllerService);
+  private readonly destroyRef = inject(DestroyRef);
 
   protected readonly email = signal('');
   protected readonly busy = signal(false);
@@ -97,7 +100,7 @@ export class DealerScreen {
   protected readonly recordIds = signal<string[]>([]);
 
   protected label(check: CheckView): string {
-    return check.verdict ? VERDICT_LABEL[check.verdict] : '';
+    return check.verdict ? VERDICT_LABEL[check.verdict] : 'Unknown';
   }
 
   protected answerIt(): void {
@@ -105,34 +108,42 @@ export class DealerScreen {
     if (!text) return;
     this.busy.set(true);
     this.error.set(null);
-    this.api.answer({ email: text }).subscribe({
-      next: (view) => {
-        this.result.set(view);
-        this.recordIds.set([]);
-        this.loadRecordIds(view);
-      },
-      error: () => this.fail(),
-    });
+    this.result.set(null);
+    this.recordIds.set([]);
+    // The answer carries no record id, so the ids are the records that appear because of this answer.
+    this.api
+      .checkRecords()
+      .pipe(
+        catchError(() => of(null)),
+        switchMap((before) =>
+          this.api.answer({ email: text }).pipe(
+            switchMap((view) =>
+              this.api.checkRecords().pipe(
+                map((after) => ({ view, ids: newIds(before, after) })),
+                catchError(() => of({ view, ids: null })),
+              ),
+            ),
+          ),
+        ),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
+        next: ({ view, ids }) => {
+          this.result.set(view);
+          if (ids === null)
+            this.error.set('The answer is shown, but its Check Record id could not be loaded.');
+          else this.recordIds.set(ids);
+          this.busy.set(false);
+        },
+        error: () => {
+          this.busy.set(false);
+          this.error.set('Could not answer this email. Try again.');
+        },
+      });
   }
+}
 
-  /** The answer carries no record id; the newest records, one per check, are this answer's. */
-  private loadRecordIds(view: AnswerView): void {
-    const count = view.checks?.length ?? 0;
-    if (count === 0) {
-      this.busy.set(false);
-      return;
-    }
-    this.api.checkRecords().subscribe({
-      next: (records) => {
-        this.recordIds.set(records.slice(-count).flatMap((r) => (r.id ? [r.id] : [])));
-        this.busy.set(false);
-      },
-      error: () => this.fail(),
-    });
-  }
-
-  private fail(): void {
-    this.busy.set(false);
-    this.error.set('Could not answer this email. Is the backend running?');
-  }
+function newIds(before: CheckRecordView[] | null, after: CheckRecordView[]): string[] {
+  const known = new Set((before ?? []).map((r) => r.id));
+  return after.flatMap((r) => (r.id && !known.has(r.id) ? [r.id] : []));
 }

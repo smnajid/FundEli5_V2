@@ -48,7 +48,13 @@ async function paste(fixture: ReturnType<typeof setup>, text: string) {
 
 describe('DealerScreen', () => {
   it('shows verdicts, reply and Check Record ids for a pasted email', async () => {
-    const api = { answer: vi.fn(() => of(answer)), checkRecords: vi.fn(() => of(records)) };
+    const api = {
+      answer: vi.fn(() => of(answer)),
+      checkRecords: vi
+        .fn()
+        .mockReturnValueOnce(of([records[0]]))
+        .mockReturnValueOnce(of(records)),
+    };
     const el = await paste(setup(api), 'Please buy');
 
     expect(api.answer).toHaveBeenCalledWith({ email: 'Please buy' });
@@ -80,9 +86,27 @@ describe('DealerScreen', () => {
   });
 
   it('shows an error when the backend fails', async () => {
-    const api = { answer: vi.fn(() => throwError(() => new Error('boom'))), checkRecords: vi.fn() };
+    const api = {
+      answer: vi.fn(() => throwError(() => new Error('boom'))),
+      checkRecords: vi.fn(() => of([])),
+    };
     const el = await paste(setup(api), 'x');
     expect(el.querySelector('[role="alert"]')?.textContent).toContain('Could not answer');
+  });
+
+  it('still shows the answer when the Check Record ids cannot load', async () => {
+    const api = {
+      answer: vi.fn(() => of(answer)),
+      checkRecords: vi
+        .fn()
+        .mockReturnValueOnce(of([]))
+        .mockReturnValueOnce(throwError(() => new Error('x'))),
+    };
+    const el = await paste(setup(api), 'Please buy');
+    expect(el.textContent).toContain('Dear Marc');
+    expect(el.querySelector('[role="alert"]')?.textContent).toContain(
+      'Check Record id could not be loaded',
+    );
   });
 
   it('does not call the backend for an empty email', async () => {
