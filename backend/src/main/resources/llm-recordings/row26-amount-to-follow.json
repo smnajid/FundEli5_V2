@@ -1,0 +1,10 @@
+{
+  "request": {
+    "model": "claude-sonnet-5-5",
+    "system": "You read an email asking whether portfolios may subscribe to funds. Portfolios appear as UUIDs.\nAnswer with a JSON array only, one object per portfolio and share class asked about:\n{\"portfolioId\": <uuid>, \"shareClass\": <text as written>, \"amount\": <number or null>,\n \"currency\": <ISO code or null>, \"clientInitiated\": <true or false>}.\nUse null for what the email does not say. Never guess.",
+    "prompt": "From: Marc Aebi\nSubject: 216c5cc3-990a-4bec-adb7-212cbea7f259 - Nordea Global Climate BI-EUR\n\nPlease check whether 216c5cc3-990a-4bec-adb7-212cbea7f259 can subscribe to Nordea Global Climate BI-EUR. Amount to follow."
+  },
+  "response": {
+    "text": "[{\"portfolioId\": \"216c5cc3-990a-4bec-adb7-212cbea7f259\", \"shareClass\": \"Nordea Global Climate BI-EUR\", \"amount\": null, \"currency\": null, \"clientInitiated\": false}]"
+  }
+}
