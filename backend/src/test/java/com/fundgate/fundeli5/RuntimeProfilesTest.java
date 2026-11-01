@@ -16,7 +16,7 @@ class RuntimeProfilesTest {
 
     @Test
     void dealerAppStartsAWebServerAndReadsClientProfilesShareClassesAndFundRegistrations() {
-        try (ConfigurableApplicationContext context = start()) {
+        try (ConfigurableApplicationContext context = start("--spring.profiles.active=default")) {
             assertThat(context).isInstanceOf(WebServerApplicationContext.class);
             assertThat(((WebServerApplicationContext) context).getWebServer().getPort()).isPositive();
             assertThat(context.getBeansOfType(ClientProfiles.class)).hasSize(1);
@@ -36,7 +36,7 @@ class RuntimeProfilesTest {
 
     @Test
     void dealerAppNeverReadsFundDocuments() {
-        try (ConfigurableApplicationContext context = start()) {
+        try (ConfigurableApplicationContext context = start("--spring.profiles.active=default")) {
             assertThat(context.getBeansOfType(FundDocuments.class)).isEmpty();
         }
     }
