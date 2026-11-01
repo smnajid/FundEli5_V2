@@ -24,7 +24,10 @@ public record CheckRecord(
         List<SuggestionDecision> suggestionDecisions) {
 
     /** One call to a model: what was sent after the Privacy Gate, and what came back. */
-    public record LlmCall(String model, String gatedPrompt, String response) {
+    public record LlmCall(String model, String gatedPrompt, List<String> fieldsSent, String response) {
+        public LlmCall {
+            fieldsSent = List.copyOf(fieldsSent);
+        }
     }
 
     public enum Decision { ACCEPTED, DISMISSED }

@@ -4,6 +4,6 @@ package com.fundgate.fundeli5.clientprofiles;
 public class PortfolioNotFound extends RuntimeException {
 
     public PortfolioNotFound(PortfolioReference ref) {
-        super("Portfolio not found: " + ref);
+        super("Portfolio not found: " + ref /* masked by toString */);
     }
 }

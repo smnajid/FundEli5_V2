@@ -83,6 +83,7 @@ public record ClientProfile(
 
     public enum ManagerKind { BANK, EXTERNAL_SUPERVISED, EXTERNAL_OTHER }
 
+    /** {@code name} and declaration labels are free text: on no Privacy Gate allow-list. */
     public record Manager(ManagerKind kind, String name) {
     }
 

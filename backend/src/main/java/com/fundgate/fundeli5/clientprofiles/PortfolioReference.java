@@ -18,8 +18,9 @@ public record PortfolioReference(String value) {
         return value.substring(0, 3);
     }
 
+    /** Masked, so a log line or a prompt template never prints the reference by accident. */
     @Override
     public String toString() {
-        return value;
+        return value.substring(0, 3) + "*****" + value.substring(8);
     }
 }
