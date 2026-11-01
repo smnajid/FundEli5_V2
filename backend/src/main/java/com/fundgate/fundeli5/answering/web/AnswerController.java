@@ -79,7 +79,7 @@ class AnswerController {
     /** What each check read and sent to a model, oldest first. */
     @GetMapping("/check-records")
     List<CheckRecordView> checkRecords() {
-        return checkRecords.all().stream().map(AnswerController::view).toList();
+        return checkRecords.all().stream().map(this::view).toList();
     }
 
     private static AnswerView view(Answer a) {
@@ -94,11 +94,41 @@ class AnswerController {
                 a.unclear(), EDITABLE_FIELDS, a.reply());
     }
 
-    private static CheckRecordView view(CheckRecord r) {
+    private CheckRecordView view(CheckRecord r) {
         return new CheckRecordView(r.id(), r.checkedAt(), r.request().portfolio().value(),
-                r.request().shareClass().value(), r.verdict(), r.engineVersion(),
+                r.request().shareClass().value(), r.request().amount(), r.request().currency().code(),
+                r.ruleCardVersion(), r.scaleMappingVersion(), r.engineVersion(), clientFieldsRead(r.clientProfile()),
+                r.verdict(), r.justification().outcomes().stream().map(o -> new OutcomeView(o.kind().name(),
+                        o.result().name(), o.explanation())).toList(),
                 r.llmCalls().stream().map(c -> new LlmCallView(c.model(), c.gatedPrompt(), c.fieldsSent(),
-                        c.response())).toList());
+                        c.response())).toList(),
+                checkRecords.correctionsOf(r.id()).stream().map(c -> new CorrectionView(c.field(), c.parsedValue(),
+                        c.dealerValue(), c.by(), c.at())).toList());
+    }
+
+    /** The names of the Client Profile fields that held a value when the check read them; never the values. */
+    private static List<String> clientFieldsRead(Object profile) {
+        List<String> names = new java.util.ArrayList<>();
+        collect("", profile, names);
+        return names;
+    }
+
+    private static void collect(String prefix, Object value, List<String> names) {
+        if (value == null) {
+            return;
+        }
+        if (!value.getClass().isRecord()) {
+            names.add(prefix);
+            return;
+        }
+        for (var component : value.getClass().getRecordComponents()) {
+            try {
+                String name = prefix.isEmpty() ? component.getName() : prefix + "." + component.getName();
+                collect(name, component.getAccessor().invoke(value), names);
+            } catch (ReflectiveOperationException e) {
+                throw new IllegalStateException(e);
+            }
+        }
     }
 
     record EmailBody(String email) {
@@ -123,7 +153,12 @@ class AnswerController {
     }
 
     record CheckRecordView(UUID id, Instant checkedAt, String portfolioReference, String shareClassIsin,
-            Verdict verdict, String engineVersion, List<LlmCallView> llmCalls) {
+            BigDecimal amount, String currency, Integer ruleCardVersion, String scaleMappingVersion,
+            String engineVersion, List<String> clientFieldsRead, Verdict verdict, List<OutcomeView> outcomes,
+            List<LlmCallView> llmCalls, List<CorrectionView> corrections) {
+    }
+
+    record CorrectionView(String field, String parsedValue, String dealerValue, String by, Instant at) {
     }
 
     record LlmCallView(String model, String gatedPrompt, List<String> fieldsSent, String response) {
