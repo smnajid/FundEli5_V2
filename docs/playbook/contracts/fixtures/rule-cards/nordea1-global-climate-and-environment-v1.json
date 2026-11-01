@@ -261,6 +261,326 @@
           }
         }
       ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU0348926287",
+      "condition": {
+        "kind": "target_market",
+        "dimension": "client_type",
+        "value": "all"
+      },
+      "citations": [
+        {
+          "document": "nordea1-gce-kid-bp-eur",
+          "page": 1,
+          "quote": "The fund is suitable for all types of investors through all distribution channels.",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "Target Market: all types of investors",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (KID of the class, S4c)",
+          "at": "2026-11-01T09:00:00Z",
+          "condition": {
+            "kind": "target_market",
+            "dimension": "client_type",
+            "value": "all"
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU0348926287",
+      "condition": {
+        "kind": "target_market",
+        "dimension": "knowledge_experience",
+        "value": "basic"
+      },
+      "citations": [
+        {
+          "document": "nordea1-gce-kid-bp-eur",
+          "page": 1,
+          "quote": "accept and understand that the value of the fund is directly linked to the value of underlying investments",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "Target Market: basic knowledge and experience",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (KID of the class, S4c)",
+          "at": "2026-11-01T09:00:00Z",
+          "condition": {
+            "kind": "target_market",
+            "dimension": "knowledge_experience",
+            "value": "basic"
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU0348926287",
+      "condition": {
+        "kind": "target_market",
+        "dimension": "loss_bearing",
+        "value": "full_loss"
+      },
+      "citations": [
+        {
+          "document": "nordea1-gce-kid-bp-eur",
+          "page": 1,
+          "quote": "the invested amount can be lost entirely",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "Target Market: the invested amount can be lost entirely",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (KID of the class, S4c)",
+          "at": "2026-11-01T09:00:00Z",
+          "condition": {
+            "kind": "target_market",
+            "dimension": "loss_bearing",
+            "value": "full_loss"
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU0348926287",
+      "condition": {
+        "kind": "target_market",
+        "dimension": "risk_sri",
+        "value": "4"
+      },
+      "citations": [
+        {
+          "document": "nordea1-gce-kid-bp-eur",
+          "page": 1,
+          "quote": "We have classified this Fund as 4 out of 7, which is a medium risk class.",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "Target Market: summary risk indicator 4 of 7",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (KID of the class, S4c)",
+          "at": "2026-11-01T09:00:00Z",
+          "condition": {
+            "kind": "target_market",
+            "dimension": "risk_sri",
+            "value": "4"
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU0348926287",
+      "condition": {
+        "kind": "target_market",
+        "dimension": "horizon_years",
+        "value": "5"
+      },
+      "citations": [
+        {
+          "document": "nordea1-gce-kid-bp-eur",
+          "page": 1,
+          "quote": "Recommended Holding period: 5 years",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "Target Market: recommended holding period 5 years",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (KID of the class, S4c)",
+          "at": "2026-11-01T09:00:00Z",
+          "condition": {
+            "kind": "target_market",
+            "dimension": "horizon_years",
+            "value": "5"
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU0348927095",
+      "condition": {
+        "kind": "target_market",
+        "dimension": "client_type",
+        "value": "all"
+      },
+      "citations": [
+        {
+          "document": "nordea1-gce-kid-bi-eur",
+          "page": 1,
+          "quote": "The fund is suitable for all types of investors through all distribution channels.",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "Target Market: all types of investors",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (KID of the class, S4c)",
+          "at": "2026-11-01T09:00:00Z",
+          "condition": {
+            "kind": "target_market",
+            "dimension": "client_type",
+            "value": "all"
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU0348927095",
+      "condition": {
+        "kind": "target_market",
+        "dimension": "knowledge_experience",
+        "value": "basic"
+      },
+      "citations": [
+        {
+          "document": "nordea1-gce-kid-bi-eur",
+          "page": 1,
+          "quote": "accept and understand that the value of the fund is directly linked to the value of underlying investments",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "Target Market: basic knowledge and experience",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (KID of the class, S4c)",
+          "at": "2026-11-01T09:00:00Z",
+          "condition": {
+            "kind": "target_market",
+            "dimension": "knowledge_experience",
+            "value": "basic"
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU0348927095",
+      "condition": {
+        "kind": "target_market",
+        "dimension": "loss_bearing",
+        "value": "full_loss"
+      },
+      "citations": [
+        {
+          "document": "nordea1-gce-kid-bi-eur",
+          "page": 1,
+          "quote": "the invested amount can be lost entirely",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "Target Market: the invested amount can be lost entirely",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (KID of the class, S4c)",
+          "at": "2026-11-01T09:00:00Z",
+          "condition": {
+            "kind": "target_market",
+            "dimension": "loss_bearing",
+            "value": "full_loss"
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU0348927095",
+      "condition": {
+        "kind": "target_market",
+        "dimension": "risk_sri",
+        "value": "4"
+      },
+      "citations": [
+        {
+          "document": "nordea1-gce-kid-bi-eur",
+          "page": 1,
+          "quote": "We have classified this Fund as 4 out of 7, which is a medium risk class.",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "Target Market: summary risk indicator 4 of 7",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (KID of the class, S4c)",
+          "at": "2026-11-01T09:00:00Z",
+          "condition": {
+            "kind": "target_market",
+            "dimension": "risk_sri",
+            "value": "4"
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU0348927095",
+      "condition": {
+        "kind": "target_market",
+        "dimension": "horizon_years",
+        "value": "5"
+      },
+      "citations": [
+        {
+          "document": "nordea1-gce-kid-bi-eur",
+          "page": 1,
+          "quote": "Recommended Holding period: 5 years",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "Target Market: recommended holding period 5 years",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (KID of the class, S4c)",
+          "at": "2026-11-01T09:00:00Z",
+          "condition": {
+            "kind": "target_market",
+            "dimension": "horizon_years",
+            "value": "5"
+          }
+        }
+      ]
     }
   ],
   "sources": [

@@ -74,12 +74,14 @@ public class EngineSteps {
     @Autowired AnswerSteps answerSteps;
 
     private EditionLookup editions;
+    private boolean unmodelledLeftBlocking;
     private List<EngineResult> results;
     private SubscriptionRequest lastRequest;
 
     @Before
     public void freshScenario() {
         editions = EditionLookup.none();
+        unmodelledLeftBlocking = false;
         results = new ArrayList<>();
         ((SpyLlmEgress) egress).reset();
     }
@@ -104,7 +106,7 @@ public class EngineSteps {
 
     @Given("Nordea's {string} clause is Blocking on GCE-BP's Rule Card")
     public void theClauseIsBlocking(String clause) {
-        throw new TestAbortedException("waits for the Unmodelled Restriction plug-in (S4c)");
+        unmodelledLeftBlocking = true;
     }
 
     @Given("the fund master data lists a newer prospectus edition than the one GCE-BP's Rule Card was drafted from")
@@ -136,8 +138,26 @@ public class EngineSteps {
     }
 
     private RuleCatalogEngine engine() {
-        return new RuleCatalogEngine(ruleCards, clientProfiles, shareClasses, new Lookups(fundRegistrations, fxRates), catalog,
+        return new RuleCatalogEngine(unmodelledLeftBlocking ? withBlockingRestrictions(ruleCards) : ruleCards,
+                clientProfiles, shareClasses, new Lookups(fundRegistrations, fxRates), catalog,
                 editions);
+    }
+
+    /** The same cards with every Noted restriction put back to Blocking, as the Rule Card Validator would leave it. */
+    private static RuleCards withBlockingRestrictions(RuleCards cards) {
+        return isin -> cards.forShareClass(isin).map(card -> new RuleCard(card.fundId(), card.fundName(),
+                card.shareClasses(), card.version(), card.status(),
+                card.rules().stream().map(EngineSteps::blocking).toList(), card.sources(), card.drafting(),
+                card.validation()));
+    }
+
+    private static Rule blocking(Rule rule) {
+        if (!(rule.condition() instanceof Condition.UnmodelledRestriction restriction)) {
+            return rule;
+        }
+        return new Rule(rule.scope(), rule.shareClass(),
+                new Condition.UnmodelledRestriction(Condition.RestrictionStatus.BLOCKING, restriction.notedReason()),
+                rule.citations(), rule.summary(), rule.confidence(), rule.contradiction(), rule.history());
     }
 
     /**
@@ -171,11 +191,17 @@ public class EngineSteps {
             check.put("verdict", r.verdict().name());
             ArrayNode outcomes = check.putArray("outcomes");
             for (RuleOutcome o : r.justification().outcomes()) {
-                outcomes.addObject().put("kind", o.kind().name()).put("result", o.result().name())
+                outcomes.addObject().put("kind", kindForGenericSteps(o)).put("result", o.result().name())
                         .put("explanation", o.explanation());
             }
         }
         ReflectionTestUtils.setField(answerSteps, "answer", answer);
+    }
+
+    /** The spec says "the Unmodelled Restrictions rule" (plural); the generic step derives the kind from those words. */
+    private static String kindForGenericSteps(RuleOutcome outcome) {
+        String name = outcome.kind().name();
+        return name.equals("UNMODELLED_RESTRICTION") ? name + "S" : name;
     }
 
     // ---- Then
@@ -221,15 +247,15 @@ public class EngineSteps {
 
     @Then("the Target Market rule cites the risk profile, ability to bear losses and horizon of portfolio LOC90000102")
     public void theTargetMarketRuleCitesThePortfolio() {
-        assertThat(outcomeOf("TARGET_MARKET").explanation()).contains("risk", "loss", "horizon");
+        assertThat(allExplanationsOf("TARGET_MARKET")).contains("risk", "loss", "horizon");
     }
 
     @Then("the Target Market rule cites client {int}'s knowledge and experience in funds")
     public void theTargetMarketRuleCitesTheClient(int client) {
-        assertThat(outcomeOf("TARGET_MARKET").explanation()).containsIgnoringCase("knowledge");
+        assertThat(allExplanationsOf("TARGET_MARKET")).containsIgnoringCase("knowledge");
     }
 
-    /** A "—" means the card has no such rule; a Warning cell is checked where the Target Market plug-in lands. */
+    /** A "—" means the card has no such rule; a Warning cell is the Target Market plug-in's "no Target Market source" warning. */
     @Then("the rule outcomes are:")
     public void theRuleOutcomesAre(DataTable table) {
         for (Map.Entry<String, String> row : table.asMap().entrySet()) {
@@ -241,16 +267,30 @@ public class EngineSteps {
                     .filter(o -> o.kind().name().equals(kind) && !o.citations().isEmpty()).toList();
             switch (row.getValue()) {
                 case "—" -> assertThat(ofKind).as(row.getKey()).isEmpty();
-                case "Pass", "Fail", "Review" -> assertThat(ofKind).as(row.getKey()).extracting(o -> o.result().name())
-                        .containsExactly(row.getValue().toUpperCase());
-                default -> { /* a warning: shown by the Target Market plug-in, S4c */ }
+                case "Pass", "Fail", "Review" -> {
+                    // A kind that shows every rule (Unmodelled, Target Market) is judged by its worst outcome.
+                    assertThat(ofKind).as(row.getKey()).isNotEmpty();
+                    assertThat(worst(ofKind)).as(row.getKey()).isEqualTo(row.getValue().toUpperCase());
+                }
+                default -> assertThat(last().justification().warnings()).as(row.getKey())
+                        .anyMatch(w -> w.contains("no Target Market source"));
             }
         }
+    }
+
+    private static String worst(List<RuleOutcome> outcomes) {
+        List<String> results = outcomes.stream().map(o -> o.result().name()).toList();
+        return results.contains("FAIL") ? "FAIL" : results.contains("REVIEW") ? "REVIEW" : "PASS";
     }
 
     private EngineResult last() {
         assertThat(results).as("a check ran").isNotEmpty();
         return results.get(results.size() - 1);
+    }
+
+    private String allExplanationsOf(String kind) {
+        return String.join(" ", last().justification().outcomes().stream()
+                .filter(o -> o.kind().name().equals(kind)).map(RuleOutcome::explanation).toList());
     }
 
     private RuleOutcome outcomeOf(String kind) {

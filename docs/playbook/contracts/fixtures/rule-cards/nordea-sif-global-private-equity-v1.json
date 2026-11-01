@@ -174,6 +174,134 @@
           }
         }
       ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU2607415275",
+      "condition": {
+        "kind": "target_market",
+        "dimension": "knowledge_experience",
+        "value": "basic"
+      },
+      "citations": [
+        {
+          "document": "nordea-sif-kid-bw-sek",
+          "page": 1,
+          "quote": "knowledge and/or experience of these types of products",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "Target Market: knowledge and/or experience of private equity",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (KID of the class, S4c)",
+          "at": "2026-11-01T09:00:00Z",
+          "condition": {
+            "kind": "target_market",
+            "dimension": "knowledge_experience",
+            "value": "basic"
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU2607415275",
+      "condition": {
+        "kind": "target_market",
+        "dimension": "loss_bearing",
+        "value": "full_loss"
+      },
+      "citations": [
+        {
+          "document": "nordea-sif-kid-bw-sek",
+          "page": 1,
+          "quote": "the invested amount can be lost entirely",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "Target Market: the invested amount can be lost entirely",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (KID of the class, S4c)",
+          "at": "2026-11-01T09:00:00Z",
+          "condition": {
+            "kind": "target_market",
+            "dimension": "loss_bearing",
+            "value": "full_loss"
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU2607415275",
+      "condition": {
+        "kind": "target_market",
+        "dimension": "risk_sri",
+        "value": "6"
+      },
+      "citations": [
+        {
+          "document": "nordea-sif-kid-bw-sek",
+          "page": 1,
+          "quote": "We have classified this fund as 6 out of 7, which is the second-highest risk class.",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "Target Market: summary risk indicator 6 of 7",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (KID of the class, S4c)",
+          "at": "2026-11-01T09:00:00Z",
+          "condition": {
+            "kind": "target_market",
+            "dimension": "risk_sri",
+            "value": "6"
+          }
+        }
+      ]
+    },
+    {
+      "scope": "share_class",
+      "shareClass": "LU2607415275",
+      "condition": {
+        "kind": "target_market",
+        "dimension": "horizon_years",
+        "value": "10"
+      },
+      "citations": [
+        {
+          "document": "nordea-sif-kid-bw-sek",
+          "page": 1,
+          "quote": "Recommended Holding period: 10 years",
+          "quoteFoundOnPage": true
+        }
+      ],
+      "summary": "Target Market: recommended holding period 10 years",
+      "confidence": 1.0,
+      "contradiction": false,
+      "history": [
+        {
+          "action": "added_by_validator",
+          "by": "fixture (KID of the class, S4c)",
+          "at": "2026-11-01T09:00:00Z",
+          "condition": {
+            "kind": "target_market",
+            "dimension": "horizon_years",
+            "value": "10"
+          }
+        }
+      ]
     }
   ],
   "sources": [
