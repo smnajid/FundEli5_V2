@@ -35,7 +35,7 @@ Two runtimes, split on whether they touch client data, sharing one store.
 | **Share Class catalog** | online | fund/class mention or ISIN → Share Class(es); a fund named without a class fans out to all its classes. The same matcher serves the reverse-lookup search ([screens](screens.md#reverse-lookup-what-can-this-portfolio-buy)) | no |
 | **Validation UI** | online | Draft card → corrected, Validated card; Unmodelled Restrictions marked Blocking/Noted (ADR 0003); who and when kept per version | no |
 | **Intake** | online | pasted text or `.eml` → raw request text | no |
-| **Privacy Gate** | online | raw text → pseudonymised text + local Portfolio Reference ↔ Portfolio Id map; client facts → allow-listed fields for one call | no |
+| **Privacy Gate** | online | raw text → pseudonymised text + local Portfolio Reference ↔ Portfolio Id map, then a personal-data scan of that text by the `PersonalDataDetector` port (Presidio, [ADR 0009](../adr/0009-presidio-detects-personal-data-in-emails.md)); a PERSON left, an unknown reference or a detector that is down refuses; client facts → allow-listed fields for one call | no |
 | **Request Parser** | online | pseudonymised text → editable list of Subscription Requests (Portfolio Id, Share Class mention, amount, currency, client-initiated) | yes |
 | **Rule Engine** | online | Subscription Request + Validated Rule Card + Client Profile + Fund Registration + Scale Mapping → Verdict + Justification | **never** |
 | **Reverse lookup** | online | portfolio + amount → engine run against every Share Class in the catalog; Draft-only or card-less classes give Needs Review, as a single check would | no |
@@ -50,7 +50,7 @@ The **Client Profile**, **Share Classes**, **Fund Documents** and **Fund Registr
 ## Data flow of one request
 
 1. The Fund Dealer pastes the Requester's email. Requesters identify portfolios by **Portfolio Reference only, never client data** (*provisional: to confirm with the business partners and the desk*).
-2. The Privacy Gate swaps every `[A-Z]{3}\d{8}` match for its Portfolio Id through the CRM, then re-scans. If a known client name or a reference the CRM does not know is still there, **no LLM call is made** and the dealer fills the request form by hand.
+2. The Privacy Gate swaps every `[A-Z]{3}\d{8}` match for its Portfolio Id through the CRM, then scans the result for personal data (Presidio, ADR 0009). If a person's name or a reference the CRM does not know is still there, **no LLM call is made** and the dealer fills the request form by hand.
 3. The Request Parser turns the pseudonymised text into Subscription Requests. The dealer sees them in an editable form; several references give several checks; anything unresolved becomes Needs Review "request unclear", never a guess.
 4. The Rule Engine runs each check, with no LLM. A Share Class with only a Draft card, or no card, gives Needs Review ("Rule Card not validated" / "Fund not covered"); a Draft card never gives Eligible or Not Eligible.
 5. On Needs Review, the advisory lane drafts Advisory Suggestions: Requester Questions and Dealer To-dos. They are labelled AI-generated and **never change the Verdict** ([ADR 0007](../adr/0007-advisory-suggestions-never-change-the-verdict.md)). The dealer accepts or dismisses each one, optionally noting why on a dismissal.
