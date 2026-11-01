@@ -5,6 +5,7 @@ api.base.service.ts
 api.module.ts
 api/answerController.service.ts
 api/api.ts
+api/checkRecordController.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -12,6 +13,8 @@ index.ts
 model/answerView.ts
 model/checkRecordView.ts
 model/checkView.ts
+model/correctionBody.ts
+model/correctionView.ts
 model/emailBody.ts
 model/handRequestBody.ts
 model/llmCallView.ts
