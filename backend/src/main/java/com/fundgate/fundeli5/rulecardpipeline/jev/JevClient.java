@@ -28,8 +28,9 @@ public class JevClient {
 
     public JevClient(String baseUrl, String apiKey, String model, Duration timeout) {
         URI base = URI.create(baseUrl);
-        if (!"http".equals(base.getScheme()) && !"https".equals(base.getScheme())) {
-            throw new IllegalArgumentException("The Jev URL must be http or https");
+        boolean loopback = "127.0.0.1".equals(base.getHost()) || "localhost".equals(base.getHost());
+        if (!"https".equals(base.getScheme()) && !("http".equals(base.getScheme()) && loopback)) {
+            throw new IllegalArgumentException("The Jev URL must be https (http only for localhost)");
         }
         this.endpoint = URI.create(baseUrl.replaceAll("/+$", "") + "/v1/systemone");
         this.apiKey = apiKey == null ? "" : apiKey;
@@ -62,10 +63,9 @@ public class JevClient {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new JevUnavailable("Interrupted while calling Jev");
+        } catch (JevUnavailable e) {
+            throw e;
         } catch (IOException | RuntimeException e) {
-            if (e instanceof JevUnavailable unavailable) {
-                throw unavailable;
-            }
             throw new JevUnavailable("Jev cannot be used: " + e.getClass().getSimpleName());
         }
     }

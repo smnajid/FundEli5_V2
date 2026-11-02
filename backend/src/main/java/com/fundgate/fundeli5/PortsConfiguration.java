@@ -133,7 +133,7 @@ public class PortsConfiguration {
                 @Value("${fundeli5.jev.timeout:60s}") Duration timeout,
                 @Value("${fundeli5.jev.cache-dir:target/jev-rankings}") String cacheDir) {
             return new CachedPageRanking(new JevPageRanking(new JevClient(url, apiKey, model, timeout)),
-                    Path.of(cacheDir));
+                    Path.of(cacheDir), model + "|questions-v1");
         }
 
         @Bean

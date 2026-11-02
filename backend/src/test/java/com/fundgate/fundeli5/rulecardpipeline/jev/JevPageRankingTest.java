@@ -143,11 +143,17 @@ class JevPageRankingTest {
     }
 
     @Test
+    void anEmptyDocumentRanksNothingAndTerminates() {
+        assertThat(ranking().rank(List.of()).get(PageTopic.MINIMUM)).isEmpty();
+        assertThat(requests.get()).isZero();
+    }
+
+    @Test
     void aSecondRunReadsTheCacheAndCallsJevNoMore(@TempDir Path dir) {
         var pages = document(300, Map.of(200, PageTopic.MINIMUM));
-        PageSelection first = new PageSelector(new CachedPageRanking(ranking(), dir), 25).select(pages);
+        PageSelection first = new PageSelector(new CachedPageRanking(ranking(), dir, "t"), 25).select(pages);
         int after = requests.get();
-        PageSelection second = new PageSelector(new CachedPageRanking(ranking(), dir), 25).select(pages);
+        PageSelection second = new PageSelector(new CachedPageRanking(ranking(), dir, "t"), 25).select(pages);
         assertThat(requests.get()).isEqualTo(after);
         assertThat(second).isEqualTo(first);
     }

@@ -34,6 +34,13 @@ public class JevPageRanking implements PageRanking {
         Map<PageTopic, List<Integer>> candidates = new EnumMap<>(PageTopic.class);
         Map<PageTopic, List<List<Integer>>> dropped = new EnumMap<>(PageTopic.class);
         Map<PageTopic, List<Integer>> finalOrder = new EnumMap<>(PageTopic.class);
+        if (pages.isEmpty()) {
+            Map<PageTopic, List<Integer>> none = new EnumMap<>(PageTopic.class);
+            for (PageTopic topic : PageTopic.values()) {
+                none.put(topic, List.of());
+            }
+            return none;
+        }
         List<Integer> all = new ArrayList<>();
         for (int p = 1; p <= pages.size(); p++) {
             all.add(p);

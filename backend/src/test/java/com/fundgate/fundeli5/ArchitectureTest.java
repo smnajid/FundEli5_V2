@@ -110,4 +110,11 @@ class ArchitectureTest {
             .should().dependOnClassesThat().resideInAnyPackage(
                     "org.springframework..", "tools.jackson..", "com.fasterxml.jackson..", "org.apache.pdfbox..")
             .allowEmptyShould(true);
+
+    /** The Jev client is offline-only: only the Rule Card pipeline and the root wiring may use it. */
+    @ArchTest
+    static final ArchRule onlyThePipelineUsesJev = noClasses()
+            .that().resideOutsideOfPackages("..rulecardpipeline..", ROOT)
+            .should().dependOnClassesThat().resideInAnyPackage("..rulecardpipeline.jev..")
+            .allowEmptyShould(true);
 }

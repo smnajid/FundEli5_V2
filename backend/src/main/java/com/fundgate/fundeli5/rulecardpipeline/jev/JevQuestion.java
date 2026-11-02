@@ -2,7 +2,7 @@ package com.fundgate.fundeli5.rulecardpipeline.jev;
 
 import java.util.List;
 
-/** One question: {@code type} is choice, noul (yes/no) or score; {@code criteria} are the options or the criterion. */
+/** One question (the type is spelled "noul" in the Jev API): {@code type} is choice, noul (yes/no) or score; {@code criteria} are the options or the criterion. */
 public record JevQuestion(String type, String instructions, List<String> criteria) {
 
     public static JevQuestion choice(String instructions, List<String> options) {
