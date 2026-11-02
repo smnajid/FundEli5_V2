@@ -19,22 +19,17 @@
       "quoteFoundOnPage" : true
     }, {
       "document" : "nordea-sif-prospectus-2026-09",
-      "page" : 3,
-      "quote" : "Investments in these funds are only suitable for well-informed investors who can afford the risks involved.",
-      "quoteFoundOnPage" : true
-    }, {
-      "document" : "nordea-sif-prospectus-2026-09",
       "page" : 5,
-      "quote" : "Well informed investor, as defined in article 2 of the Luxembourg law of 13 February 2007 relating to specialised investment funds, as amended from time to time.",
+      "quote" : "Well informed investor, as defined in article 2 of the Luxembourg law of 13 February 2007 relating to specialised investment funds",
       "quoteFoundOnPage" : true
     } ],
-    "summary" : "The SICAV-FIS, including this fund, is offered only to well-informed investors as defined in article 2 of the Luxembourg SIF Law.",
-    "confidence" : 0.97,
+    "summary" : "Shares of every fund and class in the SICAV-FIS may only be offered to well-informed investors as defined in article 2 of the SIF Law.",
+    "confidence" : 0.95,
     "contradiction" : false,
     "history" : [ {
       "action" : "drafted",
       "by" : "pipeline",
-      "at" : "2026-11-02T07:47:08.620093558Z",
+      "at" : "2026-11-02T12:09:16.828822464Z",
       "condition" : {
         "kind" : "investor_category",
         "allowed" : [ "well_informed" ],
@@ -55,23 +50,18 @@
       "quote" : "Well-informed investors at the discretion of the AIFM",
       "quoteFoundOnPage" : true
     }, {
-      "document" : "nordea-sif-prospectus-2026-09",
-      "page" : 23,
-      "quote" : "Classes of Accumulating Share Classes are characterised by the prefix “B”.",
-      "quoteFoundOnPage" : true
-    }, {
       "document" : "nordea-sif-kid-bw-sek",
       "page" : 1,
-      "quote" : "Nordea Specialised Investment Fund, SICAV-FIS – Global Private Equity Fund - BW - SEK Share Class",
+      "quote" : "Global Private Equity Fund - BW - SEK Share Class",
       "quoteFoundOnPage" : true
     } ],
-    "summary" : "Core class W, of which BW SEK is the accumulating version, is available to well-informed investors at the discretion of the AIFM.",
-    "confidence" : 0.9,
+    "summary" : "Core class W, of which BW SEK is the accumulating SEK version, is available to well-informed investors at the discretion of the AIFM.",
+    "confidence" : 0.85,
     "contradiction" : false,
     "history" : [ {
       "action" : "drafted",
       "by" : "pipeline",
-      "at" : "2026-11-02T07:47:08.635522033Z",
+      "at" : "2026-11-02T12:09:16.830970996Z",
       "condition" : {
         "kind" : "investor_category",
         "allowed" : [ "well_informed" ],
@@ -94,7 +84,12 @@
     }, {
       "document" : "nordea-sif-prospectus-2026-09",
       "page" : 3,
-      "quote" : "US persons do not include any “Non-United States person” as used in Rule 4.7 under the U.S. Commodity Exchange Act, as amended. Therefore, US taxpayers, as defined for US federal income tax purposes, may subscribe for shares in the SICAV-FIS as long as they do not qualify as US persons.",
+      "quote" : "US persons do not include any “Non-United States person” as used in Rule 4.7 under the U.S. Commodity Exchange Act, as amended.",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "nordea-sif-prospectus-2026-09",
+      "page" : 3,
+      "quote" : "US taxpayers, as defined for US federal income tax purposes, may subscribe for shares",
       "quoteFoundOnPage" : true
     }, {
       "document" : "nordea-sif-prospectus-2026-09",
@@ -102,13 +97,13 @@
       "quote" : "any other U.S. person defined by US Rule 902 of the Securities Act of 1933",
       "quoteFoundOnPage" : true
     } ],
-    "summary" : "US persons may not subscribe unless the board or AIFM decides otherwise; the definition combines a bespoke list, Reg S Rule 902 and a CEA Rule 4.7 carve-out, and US taxpayers who are not US persons may subscribe.",
-    "confidence" : 0.85,
+    "summary" : "US persons may not subscribe unless the board or the AIFM decides otherwise. The definition combines a Reg S Rule 902 based list with a carve-out for CEA Rule 4.7 Non-United States persons, and US taxpayers are expressly allowed if they are not US persons.",
+    "confidence" : 0.8,
     "contradiction" : false,
     "history" : [ {
       "action" : "drafted",
       "by" : "pipeline",
-      "at" : "2026-11-02T07:47:08.645705582Z",
+      "at" : "2026-11-02T12:09:16.834518850Z",
       "condition" : {
         "kind" : "us_person_exclusion",
         "definition" : "mixed",
@@ -120,13 +115,13 @@
     "shareClass" : "LU2607415275",
     "condition" : {
       "kind" : "minimum_initial_subscription",
-      "amount" : 100000,
-      "currency" : "EUR"
+      "amount" : 1000000,
+      "currency" : "SEK"
     },
     "citations" : [ {
       "document" : "nordea-sif-prospectus-2026-09",
       "page" : 22,
-      "quote" : "EUR 100,000 or the equivalent amount in other currencies**",
+      "quote" : "EUR 100,000 or the equivalent amount in other currencies",
       "quoteFoundOnPage" : true
     }, {
       "document" : "nordea-sif-prospectus-2026-09",
@@ -136,20 +131,20 @@
     }, {
       "document" : "nordea-sif-prospectus-2026-09",
       "page" : 30,
-      "quote" : "Reduce or waive any stated sales charge, or minimum initial investment amount, for any share class, fund, investor, or request, so long as it is consistent with equal treatment of shareholders",
+      "quote" : "Reduce or waive any stated sales charge, or minimum initial investment amount, for any share class, fund, investor, or request",
       "quoteFoundOnPage" : true
     } ],
-    "summary" : "The W class minimum initial investment is EUR 100,000 or the equivalent in other currencies, which is SEK 1,000,000 at the stated 1 EUR = 10 SEK rate, and the board or AIFM may waive it.",
-    "confidence" : 0.88,
+    "summary" : "The minimum initial investment for class W is EUR 100,000 or equivalent, which is SEK 1,000,000 at the prospectus's fixed 1 EUR = 10 SEK rate. The board or AIFM may waive it.",
+    "confidence" : 0.85,
     "contradiction" : false,
     "history" : [ {
       "action" : "drafted",
       "by" : "pipeline",
-      "at" : "2026-11-02T07:47:08.659576648Z",
+      "at" : "2026-11-02T12:09:16.837236091Z",
       "condition" : {
         "kind" : "minimum_initial_subscription",
-        "amount" : 100000,
-        "currency" : "EUR"
+        "amount" : 1000000,
+        "currency" : "SEK"
       }
     } ]
   }, {
@@ -164,17 +159,103 @@
       "page" : 1,
       "quote" : "ISIN: LU2607415275",
       "quoteFoundOnPage" : true
+    }, {
+      "document" : "nordea-sif-kid-bw-sek",
+      "page" : 1,
+      "quote" : "The document was published on 20/05/2026",
+      "quoteFoundOnPage" : true
     } ],
-    "summary" : "A PRIIPs KID is published for the BW SEK share class.",
-    "confidence" : 0.97,
+    "summary" : "A PRIIPs KID dated 20/05/2026 is published for this share class.",
+    "confidence" : 0.95,
     "contradiction" : false,
     "history" : [ {
       "action" : "drafted",
       "by" : "pipeline",
-      "at" : "2026-11-02T07:47:08.664656073Z",
+      "at" : "2026-11-02T12:09:16.841069449Z",
       "condition" : {
         "kind" : "kid_required_for_retail",
         "kidAvailable" : true
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "LU2607415275",
+    "condition" : {
+      "kind" : "unmodelled_restriction",
+      "status" : "blocking",
+      "notedReason" : null
+    },
+    "citations" : [ {
+      "document" : "nordea-sif-prospectus-2026-09",
+      "page" : 22,
+      "quote" : "Well-informed investors at the discretion of the AIFM",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Access to class W is at the discretion of the AIFM, so being an eligible well-informed investor does not by itself guarantee acceptance.",
+    "confidence" : 0.7,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T12:09:16.841904761Z",
+      "condition" : {
+        "kind" : "unmodelled_restriction",
+        "status" : "blocking",
+        "notedReason" : null
+      }
+    } ]
+  }, {
+    "scope" : "fund",
+    "shareClass" : null,
+    "condition" : {
+      "kind" : "unmodelled_restriction",
+      "status" : "blocking",
+      "notedReason" : null
+    },
+    "citations" : [ {
+      "document" : "nordea-sif-prospectus-2026-09",
+      "page" : 3,
+      "quote" : "Distributing this prospectus, offering these shares for sale, or investing in these shares is legal only where the shares are registered for public sale or where sale is not prohibited by local law or regulation.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Subscriptions are only permitted where the shares are registered for sale or where local law does not prohibit the sale, so the client's jurisdiction must be checked.",
+    "confidence" : 0.7,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T12:09:16.844643403Z",
+      "condition" : {
+        "kind" : "unmodelled_restriction",
+        "status" : "blocking",
+        "notedReason" : null
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "LU2607415275",
+    "condition" : {
+      "kind" : "target_market",
+      "dimension" : "client_type",
+      "value" : "professional"
+    },
+    "citations" : [ {
+      "document" : "nordea-sif-kid-bw-sek",
+      "page" : 1,
+      "quote" : "The fund is intended for well-informed investors as defined in the Luxembourg law of 13 February 2007 on Specialised Investment Funds",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "The KID targets well-informed investors under the SIF Law. This category is not in the allowed values and has been approximated as professional; the desk should review this mapping.",
+    "confidence" : 0.5,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T12:09:16.845923222Z",
+      "condition" : {
+        "kind" : "target_market",
+        "dimension" : "client_type",
+        "value" : "professional"
       }
     } ]
   }, {
@@ -188,16 +269,16 @@
     "citations" : [ {
       "document" : "nordea-sif-kid-bw-sek",
       "page" : 1,
-      "quote" : "The fund is intended for well-informed investors as defined in the Luxembourg law of 13 February 2007 on Specialised Investment Funds with knowledge and/or experience of these types of products",
+      "quote" : "with knowledge and/or experience of these types of products",
       "quoteFoundOnPage" : true
     } ],
-    "summary" : "The KID targets well-informed investors with knowledge and/or experience of these types of products.",
-    "confidence" : 0.65,
+    "summary" : "The KID requires investors to have knowledge and/or experience of this type of product.",
+    "confidence" : 0.7,
     "contradiction" : false,
     "history" : [ {
       "action" : "drafted",
       "by" : "pipeline",
-      "at" : "2026-11-02T07:47:08.667639387Z",
+      "at" : "2026-11-02T12:09:16.849061169Z",
       "condition" : {
         "kind" : "target_market",
         "dimension" : "knowledge_experience",
@@ -215,16 +296,16 @@
     "citations" : [ {
       "document" : "nordea-sif-kid-bw-sek",
       "page" : 1,
-      "quote" : "accept and understand that the value of the fund is directly linked to the value of underlying investments, will fluctuate over time and that the invested amount can be lost entirely",
+      "quote" : "the invested amount can be lost entirely",
       "quoteFoundOnPage" : true
     } ],
-    "summary" : "Investors must be able to bear the loss of the entire invested amount.",
-    "confidence" : 0.95,
+    "summary" : "Investors must accept that they could lose the entire amount invested.",
+    "confidence" : 0.9,
     "contradiction" : false,
     "history" : [ {
       "action" : "drafted",
       "by" : "pipeline",
-      "at" : "2026-11-02T07:47:08.672817412Z",
+      "at" : "2026-11-02T12:09:16.850105985Z",
       "condition" : {
         "kind" : "target_market",
         "dimension" : "loss_bearing",
@@ -246,12 +327,12 @@
       "quoteFoundOnPage" : true
     } ],
     "summary" : "The summary risk indicator is 6 out of 7.",
-    "confidence" : 0.98,
+    "confidence" : 0.95,
     "contradiction" : false,
     "history" : [ {
       "action" : "drafted",
       "by" : "pipeline",
-      "at" : "2026-11-02T07:47:08.676117528Z",
+      "at" : "2026-11-02T12:09:16.853181231Z",
       "condition" : {
         "kind" : "target_market",
         "dimension" : "risk_sri",
@@ -273,17 +354,17 @@
       "quoteFoundOnPage" : true
     }, {
       "document" : "nordea-sif-kid-bw-sek",
-      "page" : 3,
-      "quote" : "This product is designed for longer term investments; you should be prepared to stay invested for at least 10 years.",
+      "page" : 1,
+      "quote" : "The fund is not suitable for well-informed investors that are unable to sustain long-term investment.",
       "quoteFoundOnPage" : true
     } ],
-    "summary" : "The recommended holding period is 10 years.",
-    "confidence" : 0.98,
+    "summary" : "The recommended holding period is 10 years, and the fund is not suitable for investors who cannot stay invested long term.",
+    "confidence" : 0.95,
     "contradiction" : false,
     "history" : [ {
       "action" : "drafted",
       "by" : "pipeline",
-      "at" : "2026-11-02T07:47:08.683652064Z",
+      "at" : "2026-11-02T12:09:16.857081490Z",
       "condition" : {
         "kind" : "target_market",
         "dimension" : "horizon_years",
@@ -307,7 +388,7 @@
   "drafting" : {
     "model" : "claude-opus-5-5",
     "endpoint" : "claude-plan",
-    "draftedAt" : "2026-11-02T07:47:08.683747765Z"
+    "draftedAt" : "2026-11-02T12:09:16.857140391Z"
   },
   "validation" : null
 }

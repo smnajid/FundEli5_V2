@@ -36,7 +36,7 @@ class RecordDemoFundsLiveTest {
         var reader = new SourceReader(new FolderFundDocuments(fixtures, Path.of("../fund-documents")), new PdfBoxPdfText());
         var ranking = new CachedPageRanking(new JevPageRanking(new JevClient("https://api.typesafe.ai",
                 System.getenv("TYPESAFE_API_KEY"), "jev-latest", Duration.ofSeconds(120))),
-                Path.of("target/jev-rankings"), "jev-latest|questions-v1");
+                Path.of("src/test/resources/jev-rankings"), "jev-latest|questions-v1");
         var egress = new RecordingLlmEgress(
                 new ClaudePlanLlmEgress("claude", Optional.empty(), Duration.ofMinutes(15)),
                 Path.of("src/main/resources/llm-recordings"));

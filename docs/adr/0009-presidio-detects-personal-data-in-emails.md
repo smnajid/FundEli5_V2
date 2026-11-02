@@ -33,3 +33,12 @@ Names stay out of the Client Profile (client-profile.md, "Not in the contract").
 - The Gate looks for **names** (PERSON). Other free-text personal data (email address, phone, street address, birth date) is not detected; Requesters send references only, and widening the entities is a later decision.
 - The Presidio service receives pseudonymised text that may still hold a name, so it must run inside the bank's boundary (local container or in-bank host), never a public endpoint. The adapter accepts http(s) URLs only and follows no redirects.
 - After the swap the Gate also refuses anything shaped like a reference that it could not swap (other case, a separator, extra digits).
+
+## Known limits
+
+Recorded at the Integrate checkpoint (#27); mohamed decides on each later.
+
+- Detection is PERSON only; the "never sent" list is wider (see Boundaries above).
+- A failed Request Parser call writes no Check Record.
+- Presidio languages default to `en` only (`fundeli5.privacygate.presidio.languages`).
+- There is no deterministic rescan of the CRM client names after the Gate's swap.
