@@ -85,7 +85,7 @@ public class DefaultPrivacyGate implements PrivacyGate {
     }
 
     /** ruleExplanation is the desk's fixed wording per rule kind and outcome plus Citations: no client value in it. */
-    private static final List<String> REPLY_FIELDS_SENT = List.of("portfolioId", "verdict", "ruleExplanation");
+    private static final List<String> REPLY_FIELDS_SENT = List.of("portfolioId", "verdict", "ruleExplanation", "shareClassName", "alternatives", "language");
 
     @Override
     public GatedPrompt gateReply(ReplyFacts facts) {
