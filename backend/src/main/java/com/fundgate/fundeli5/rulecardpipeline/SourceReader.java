@@ -64,8 +64,8 @@ public class SourceReader {
         }
         try {
             return new SourceDocument(document, pdfText.pages(pdf));
-        } catch (IllegalArgumentException unreadable) {
-            throw new DocumentRefused(document.documentId(), unreadable.getMessage());
+        } catch (RuntimeException unreadable) {
+            throw new DocumentRefused(document.documentId(), "its PDF cannot be read: " + unreadable.getMessage());
         }
     }
 

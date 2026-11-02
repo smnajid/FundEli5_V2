@@ -26,8 +26,8 @@ class QuoteCheckTest {
     @Test
     void treatsNoBreakAndOtherUnicodeSpacesAsWhitespace() {
         // French typography: U+00A0 and U+202F before punctuation; U+2003 em space
-        assertThat(QuoteCheck.found("minimum 1 000 EUR", "minimum 1 000 EUR")).isTrue();
-        assertThat(QuoteCheck.found("minimum 1 000 EUR", "minimum 1 000 EUR")).isTrue();
+        assertThat(QuoteCheck.found("minimum 1 000 EUR", "minimum\u00A01\u202F000\u2003EUR")).isTrue();
+        assertThat(QuoteCheck.found("minimum\u00A01 000 EUR", "minimum 1\u00A0000 EUR")).isTrue();
     }
 
     @Test
@@ -39,8 +39,19 @@ class QuoteCheckTest {
 
     @Test
     void ignoresSoftHyphens() {
-        assertThat(QuoteCheck.found("investors", "inves­tors only")).isTrue();
-        assertThat(QuoteCheck.found("inves­tors", "investors only")).isTrue();
+        assertThat(QuoteCheck.found("investors", "inves\u00ADtors only")).isTrue();
+        assertThat(QuoteCheck.found("inves\u00ADtors", "investors only")).isTrue();
+    }
+
+    @Test
+    void aHyphenAtALineBreakMatchesTheQuoteWithoutTheBreak() {
+        assertThat(QuoteCheck.found("sub-fund", "the sub-\nfund holds")).isTrue();
+        assertThat(QuoteCheck.found("sub-fund", "the sub\u0002\nfund holds")).isTrue();
+    }
+
+    @Test
+    void nextLineIsWhitespaceNotAHyphen() {
+        assertThat(QuoteCheck.found("one two", "one\u0085two")).isTrue();
     }
 
     @Test

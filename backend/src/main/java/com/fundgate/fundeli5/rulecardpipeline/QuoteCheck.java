@@ -18,9 +18,10 @@ import java.util.regex.Pattern;
  */
 public final class QuoteCheck {
 
-    private static final Pattern SOFT_HYPHEN = Pattern.compile("­");
+    private static final Pattern SOFT_HYPHEN = Pattern.compile("\u00AD");
     private static final Pattern CONTROL = Pattern.compile("\\p{Cc}");
-    private static final Pattern WHITESPACE = Pattern.compile("[\\s\\p{Z}]+");
+    private static final Pattern WHITESPACE = Pattern.compile("[\\s\\p{Z}\u0085]+");
+    private static final Pattern HYPHEN_THEN_SPACE = Pattern.compile("- ");
 
     private QuoteCheck() {
     }
@@ -49,6 +50,9 @@ public final class QuoteCheck {
         // Whitespace controls (tab, newline, ...) are whitespace; every other control is a hyphen.
         s = WHITESPACE.matcher(s).replaceAll(" ");
         s = CONTROL.matcher(s).replaceAll("-");
+        // A line-break hyphen leaves "sub-\nfund" as "sub- fund": the space after a hyphen is dropped
+        // on both sides, so it matches "sub-fund" and "subfund" alike only in that position.
+        s = HYPHEN_THEN_SPACE.matcher(s).replaceAll("-");
         return s.strip();
     }
 }

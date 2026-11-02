@@ -26,6 +26,7 @@ public class PipelineSteps {
     private static final Isin SOME_ISIN = new Isin("LU0348926287");
 
     private SourceReading reading;
+    private SourceReader reader;
 
     @Given("a fund document whose metadata has no content hash")
     public void aFundDocumentWithoutAContentHash() {
@@ -45,8 +46,6 @@ public class PipelineSteps {
         };
         reader = new SourceReader(port, pdf -> List.of());
     }
-
-    private SourceReader reader;
 
     @When("the pipeline is asked to draft from it")
     public void thePipelineIsAskedToDraftFromIt() {
