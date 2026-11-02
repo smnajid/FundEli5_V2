@@ -8,6 +8,7 @@ import com.fundgate.fundeli5.rulecard.json.RuleCardJson;
 import com.fundgate.fundeli5.validation.CannotValidate;
 import com.fundgate.fundeli5.validation.Review;
 import com.fundgate.fundeli5.validation.ValidationService;
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.context.annotation.Profile;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import tools.jackson.databind.JsonNode;
 
 /** The Rule Card Validator's screen over HTTP. Every route lives under {@code /api/validation}. */
 @RestController
@@ -59,12 +59,13 @@ class ValidationController {
     }
 
     /** Replaces a rule's condition; {@code condition} is the condition JSON of the Rule Card schema. */
+    @Operation(operationId = "correctRule")
     @PostMapping("/correct")
     ReviewView correct(@RequestBody CorrectBody b) {
         if (b.condition() == null) {
             throw new IllegalArgumentException("condition is required");
         }
-        return view(validation.correct(b.fundName(), b.version(), b.rule(), RuleCardJson.condition(b.condition()),
+        return view(validation.correct(b.fundName(), b.version(), b.rule(), RuleCardJson.condition(RuleCardView.toJson(b.condition())),
                 b.validator()));
     }
 
@@ -79,13 +80,13 @@ class ValidationController {
     }
 
     @PostMapping("/validate")
-    JsonNode validate(@RequestBody CardBody b) {
+    RuleCardView validate(@RequestBody CardBody b) {
         RuleCard card = validation.validate(b.fundName(), b.version(), b.validator());
-        return RuleCardJson.write(card);
+        return RuleCardView.of(card);
     }
 
     private static ReviewView view(Review r) {
-        return new ReviewView(RuleCardJson.write(r.card()), r.contradictions().stream()
+        return new ReviewView(RuleCardView.of(r.card()), r.contradictions().stream()
                 .map(c -> new ContradictionView(c.shareClass() == null ? null : c.shareClass().value(), c.kind(),
                         c.options().stream().map(o -> new OptionView(o.rule(), o.document(), o.summary())).toList()))
                 .toList(), r.unreviewedRules(),
@@ -116,7 +117,7 @@ class ValidationController {
     record DraftSummary(String fundName, int version, List<String> shareClasses) {
     }
 
-    record ReviewView(JsonNode card, List<ContradictionView> contradictions, List<Integer> unreviewedRules,
+    record ReviewView(RuleCardView card, List<ContradictionView> contradictions, List<Integer> unreviewedRules,
             List<SignalView> signals, boolean canValidate, List<String> blockers) {
     }
 
@@ -138,7 +139,7 @@ class ValidationController {
     record FollowBody(String fundName, int version, String shareClass, String kind, String document, String validator) {
     }
 
-    record CorrectBody(String fundName, int version, int rule, JsonNode condition, String validator) {
+    record CorrectBody(String fundName, int version, int rule, RuleCardView.ConditionView condition, String validator) {
     }
 
     record MarkBody(String fundName, int version, int rule, String status, String reason, String validator) {
