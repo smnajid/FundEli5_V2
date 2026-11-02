@@ -69,10 +69,10 @@ class ArchitectureTest {
                     describe("references()", c -> c.getName().equals("references"))))
             .allowEmptyShould(true);
 
-    /** ADR 0004: the online modules reach a model through the gated entry only, never the string-based egress. */
+    /** ADR 0004: the online modules reach a model through the gated entry only, never the string-based egress. The offline pipeline reads public documents and keeps it. */
     @ArchTest
     static final ArchRule onlyTheOfflineSideCallsTheRawEgress = noClasses()
-            .that().resideOutsideOfPackages("..llm..", ROOT)
+            .that().resideOutsideOfPackages("..llm..", "..rulecardpipeline..", ROOT)
             .should().dependOnClassesThat(describe("the raw LlmEgress",
                     c -> c.getName().equals("com.fundgate.fundeli5.llm.LlmEgress")))
             .allowEmptyShould(true);
