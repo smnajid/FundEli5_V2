@@ -26,12 +26,12 @@ class ArchitectureTest {
 
     /**
      * ADR 0004: the egress client is the only code that can reach a model over the network. The Presidio
-     * adapter calls a local detector service, never a model (ADR 0009).
+     * adapter calls a local detector service, never a model (ADR 0009). The Jev client sends public Fund Document pages to the page ranker, never client data.
      */
     @ArchTest
     static final ArchRule onlyTheEgressReachesTheNetwork = noClasses()
             .that().resideOutsideOfPackages("..llm..", "..web..", ROOT)
-            .and().resideOutsideOfPackages("..fixture..", "..folder..", "..privacygate.presidio..")
+            .and().resideOutsideOfPackages("..fixture..", "..folder..", "..privacygate.presidio..", "..rulecardpipeline.jev..")
             .should().dependOnClassesThat().resideInAnyPackage(
                     "com.anthropic..", "java.net.http..", "org.springframework.web.client..",
                     "org.springframework.web.reactive.function.client..")
