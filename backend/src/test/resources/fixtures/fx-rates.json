@@ -1,0 +1,9 @@
+[
+  {
+    "base": "EUR",
+    "quote": "CHF",
+    "rate": 0.9350,
+    "date": "2026-11-02",
+    "source": "assumed, stands in for the bank FX table (demo-dataset.md, FX)"
+  }
+]

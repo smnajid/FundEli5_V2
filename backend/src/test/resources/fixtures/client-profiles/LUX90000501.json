@@ -1,0 +1,72 @@
+{
+  "portfolioRef": "LUX90000501",
+  "portfolioId": "46438cbe-750e-4199-bedb-b527e5e73cfd",
+  "legalEntity": "LUX",
+  "retrievedAt": "2026-11-02T08:00:00Z",
+  "client": {
+    "residenceCountry": "LU",
+    "nationalities": [
+      "BE"
+    ],
+    "taxResidences": [
+      "LU"
+    ],
+    "birthCountry": "BE",
+    "usPerson": {
+      "fatcaStatus": "non_us_person",
+      "usPermanentResident": false
+    },
+    "knowledgeAndExperience": [
+      {
+        "productType": {
+          "code": "FUNDS",
+          "label": "Investment funds"
+        },
+        "level": {
+          "code": "INFORMED",
+          "label": "Informed"
+        }
+      },
+      {
+        "productType": {
+          "code": "PRIVATE_EQUITY",
+          "label": "Private equity"
+        },
+        "level": {
+          "code": "INFORMED",
+          "label": "Informed"
+        }
+      }
+    ]
+  },
+  "classification": {
+    "regime": "mifid",
+    "category": "retail",
+    "classifiedOn": "2026-09-15",
+    "declarations": [
+      {
+        "type": "lu_well_informed_confirmation",
+        "date": "2026-09-15",
+        "label": "Well-informed investor, written confirmation"
+      }
+    ]
+  },
+  "portfolio": {
+    "referenceCurrency": "EUR",
+    "mandate": {
+      "type": "advisory"
+    },
+    "investmentProfile": {
+      "riskProfile": {
+        "code": "2",
+        "label": "Income"
+      },
+      "abilityToBearLosses": {
+        "code": "FULL_LOSS",
+        "label": "Full loss"
+      },
+      "horizonYears": 5,
+      "assessedOn": "2026-03-10"
+    }
+  }
+}

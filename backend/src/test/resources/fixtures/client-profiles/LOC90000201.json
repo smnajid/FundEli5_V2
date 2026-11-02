@@ -1,0 +1,64 @@
+{
+  "portfolioRef": "LOC90000201",
+  "portfolioId": "4b0f6f3e-2f7a-4c55-9a59-0c8f1d5b7e21",
+  "legalEntity": "LOC",
+  "retrievedAt": "2026-11-02T08:00:00Z",
+  "client": {
+    "residenceCountry": "CH",
+    "nationalities": [
+      "CH",
+      "US"
+    ],
+    "taxResidences": [
+      "CH",
+      "US"
+    ],
+    "birthCountry": "US",
+    "usPerson": {
+      "fatcaStatus": "us_person",
+      "usPermanentResident": false
+    },
+    "knowledgeAndExperience": [
+      {
+        "productType": {
+          "code": "FUNDS",
+          "label": "Investment funds"
+        },
+        "level": {
+          "code": "EXPERT",
+          "label": "Expert"
+        }
+      }
+    ]
+  },
+  "classification": {
+    "regime": "finsa",
+    "category": "professional",
+    "classifiedOn": "2024-05-14",
+    "declarations": [
+      {
+        "type": "finsa_hnwi_opt_out",
+        "date": "2024-05-14",
+        "label": "HNWI opt-out, FinSA art. 5(1)"
+      }
+    ]
+  },
+  "portfolio": {
+    "referenceCurrency": "CHF",
+    "mandate": {
+      "type": "advisory"
+    },
+    "investmentProfile": {
+      "riskProfile": {
+        "code": "4",
+        "label": "Growth"
+      },
+      "abilityToBearLosses": {
+        "code": "FULL_LOSS",
+        "label": "Full loss"
+      },
+      "horizonYears": 10,
+      "assessedOn": "2026-03-10"
+    }
+  }
+}

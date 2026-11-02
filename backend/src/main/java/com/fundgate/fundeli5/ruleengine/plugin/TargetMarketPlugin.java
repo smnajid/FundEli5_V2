@@ -2,6 +2,7 @@ package com.fundgate.fundeli5.ruleengine.plugin;
 
 import com.fundgate.fundeli5.bankdata.BankCode;
 import com.fundgate.fundeli5.clientprofiles.ClientProfile;
+import com.fundgate.fundeli5.eligibility.RuleOutcome;
 import com.fundgate.fundeli5.rulecard.Condition;
 import com.fundgate.fundeli5.rulecard.RuleKind;
 import java.util.Optional;
@@ -37,14 +38,19 @@ public final class TargetMarketPlugin implements RuleKindPlugin<Condition.Target
     public Optional<Finding> evaluate(Condition.TargetMarket condition, Facts facts, Lookups lookups) {
         ClientProfile profile = facts.profile();
         var investment = profile.portfolio() == null ? null : profile.portfolio().investmentProfile();
-        return Optional.of(switch (condition.dimension()) {
+        Finding finding = switch (condition.dimension()) {
             case CLIENT_TYPE -> clientType(condition.value());
             case RISK_SRI -> risk(condition.value(), investment == null ? null : investment.riskProfile(), lookups);
             case LOSS_BEARING -> loss(condition.value(),
                     investment == null ? null : investment.abilityToBearLosses(), lookups);
             case HORIZON_YEARS -> horizon(condition.value(), investment == null ? null : investment.horizonYears());
             case KNOWLEDGE_EXPERIENCE -> knowledge(condition.value(), facts, lookups);
-        });
+        };
+        // The Target Market binds in Luxembourg; in Switzerland a mismatch is a warning, never a Verdict.
+        if ("LOC".equals(profile.legalEntity()) && finding.result() != RuleOutcome.Result.PASS) {
+            return Optional.of(Finding.warning("Target Market (warning only in Switzerland): " + finding.explanation()));
+        }
+        return Optional.of(finding);
     }
 
     /** No rule of the kind on the card: the Target Market has no source. */

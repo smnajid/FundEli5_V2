@@ -110,7 +110,11 @@ class RuleCatalogEngineTest {
         RuleCatalogEngine engine = new RuleCatalogEngine(i -> i.equals(CLASS) ? card : Optional.empty(),
                 new FixtureClientProfiles(FIXTURES), new FixtureShareClasses(FIXTURES),
                 new Lookups(new FixtureFundRegistrations(FIXTURES), null), catalog, editions);
-        return engine.check(request(portfolio, isin));
+        EngineResult result = engine.check(request(portfolio, isin));
+        // The Fund Registration outcome is the frame's own; the tests here are about the plug-ins' outcomes.
+        return new EngineResult(result.verdict(), new com.fundgate.fundeli5.eligibility.Justification(
+                result.justification().outcomes().stream().filter(o -> o.kind() != RuleKind.FUND_REGISTRATION).toList(),
+                result.justification().warnings()));
     }
 
     EngineResult check(RuleCard card, String portfolio) {

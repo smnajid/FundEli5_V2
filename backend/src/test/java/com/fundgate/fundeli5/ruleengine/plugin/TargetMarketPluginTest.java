@@ -109,9 +109,9 @@ class TargetMarketPluginTest {
 
     @Test
     void aValueTheMappingCannotReadGivesReviewNotAGuess() {
-        assertThat(check(Dimension.RISK_SRI, "high", "LOC90000102", "FUNDS").result()).isEqualTo(Result.REVIEW);
-        assertThat(check(Dimension.LOSS_BEARING, "lots", "LOC90000102", "FUNDS").result()).isEqualTo(Result.REVIEW);
-        assertThat(check(Dimension.CLIENT_TYPE, "retail only", "LOC90000102", "FUNDS").result())
+        assertThat(check(Dimension.RISK_SRI, "high", "LUX90000301", "FUNDS").result()).isEqualTo(Result.REVIEW);
+        assertThat(check(Dimension.LOSS_BEARING, "lots", "LUX90000301", "FUNDS").result()).isEqualTo(Result.REVIEW);
+        assertThat(check(Dimension.CLIENT_TYPE, "retail only", "LUX90000301", "FUNDS").result())
                 .isEqualTo(Result.REVIEW);
     }
 

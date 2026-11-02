@@ -138,10 +138,26 @@ public final class InvestorCategoryPlugin implements RuleKindPlugin<Condition.In
         return yesIf(mandate.manager().kind() != ClientProfile.ManagerKind.EXTERNAL_OTHER);
     }
 
+    /** Whether the client counts as the given investor type; the Fund Registration rule asks the same question. */
+    boolean clientIs(InvestorType type, Facts facts, Lookups lookups, boolean[] unknown) {
+        ClientProfile profile = facts.profile();
+        InvestorCategory category = profile.classification() == null ? null : profile.classification().category();
+        if (category == null) {
+            unknown[0] = true;
+            return false;
+        }
+        Answer answer = admits(type, profile, category, facts, lookups);
+        unknown[0] |= answer == Answer.UNKNOWN;
+        return answer == Answer.YES;
+    }
+
     private Answer wellInformedByConfirmation(ClientProfile profile, Facts facts, Lookups lookups) {
         Answer confirmed = hasDeclaration(profile, ClientProfile.DeclarationType.LU_WELL_INFORMED_CONFIRMATION);
         if (confirmed != Answer.YES) {
             return confirmed;
+        }
+        if (facts.request().amount() == null) {
+            return Answer.UNKNOWN;
         }
         BigDecimal inEur = Money.convert(facts.request().amount(), facts.request().currency(), new Currency("EUR"),
                 lookups.fxRates()).orElse(null);
