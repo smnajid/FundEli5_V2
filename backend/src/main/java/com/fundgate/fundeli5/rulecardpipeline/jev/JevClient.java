@@ -45,7 +45,7 @@ public class JevClient {
             Map<String, Object> body = new LinkedHashMap<>();
             body.put("state", state);
             body.put("model", model);
-            body.put("questions", questions);
+            body.put("questions", wire(questions));
             HttpRequest.Builder request = HttpRequest.newBuilder(endpoint).timeout(timeout)
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(json.writeValueAsString(body)));
@@ -70,11 +70,32 @@ public class JevClient {
         }
     }
 
+    /** The API takes the options of a question as a dictionary (option to description), not a list. */
+    private static Map<String, Object> wire(Map<String, JevQuestion> questions) {
+        Map<String, Object> out = new LinkedHashMap<>();
+        questions.forEach((id, q) -> {
+            Map<String, String> criteria = new LinkedHashMap<>();
+            q.criteria().forEach(option -> criteria.put(option, option));
+            Map<String, Object> question = new LinkedHashMap<>();
+            question.put("type", q.type());
+            question.put("instructions", q.instructions());
+            question.put("criteria", criteria);
+            out.put(id, question);
+        });
+        return out;
+    }
+
+    /** Answers sit under {@code answers}: a choice gives probabilities and confidence; a noul gives P(yes) alone. */
     private static Map<String, JevAnswer> parse(JsonNode root, Map<String, JevQuestion> asked) {
-        JsonNode answers = root.path("questions");
+        JsonNode answers = root.path("answers");
         Map<String, JevAnswer> out = new LinkedHashMap<>();
         for (String id : asked.keySet()) {
             JsonNode answer = answers.path(id);
+            if ("noul".equals(asked.get(id).type()) && answer.path("noul").isNumber()) {
+                double yes = answer.path("noul").asDouble();
+                out.put(id, new JevAnswer(Map.of("yes", yes, "no", 1 - yes), Math.max(yes, 1 - yes)));
+                continue;
+            }
             JsonNode probabilities = answer.path("probabilities");
             if (!probabilities.isObject() || !answer.path("confidence").isNumber()) {
                 throw new JevUnavailable("Jev answered question " + id + " in an unknown shape");
