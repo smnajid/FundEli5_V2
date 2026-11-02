@@ -193,6 +193,7 @@ label {
 .check code {
   font-size: var(--fs-md);
   font-weight: 600;
+  margin-right: var(--s-1);
 }
 .check .reason {
   color: var(--c-muted);
@@ -288,7 +289,8 @@ details.card > summary {
   cursor: pointer;
   font-weight: 700;
 }
-details.card > summary .muted {
+details.card > summary .muted,
+details.card > summary .privacy-note {
   font-weight: 400;
 }
 
