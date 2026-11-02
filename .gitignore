@@ -11,3 +11,4 @@ backend/target/
 # Page text cache next to the fund documents; Jev ranking cache
 fund-documents/*.pages.json
 jev-rankings/
+!backend/src/test/resources/jev-rankings/

@@ -41,6 +41,14 @@ class RuntimeProfilesTest {
         }
     }
 
+    @Test
+    void refusesToStartWhenTheFixtureDetectorMeetsALiveEndpoint() {
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> start("--spring.profiles.active=default",
+                        "--fundeli5.privacygate.detector=fixture", "--fundeli5.llm.endpoint=claude-plan"))
+                .hasStackTraceContaining("fixture")
+                .hasStackTraceContaining("replay only");
+    }
+
     private static ConfigurableApplicationContext start(String... args) {
         String[] withRandomPort = new String[args.length + 1];
         System.arraycopy(args, 0, withRandomPort, 0, args.length);

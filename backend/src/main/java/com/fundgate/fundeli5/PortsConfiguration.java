@@ -78,7 +78,11 @@ public class PortsConfiguration {
         /** ADR 0009: {@code presidio} calls the analyzer service; {@code fixture} (tests) needs no Docker and knows three names only, so Presidio is the default. */
         @Bean
         @ConditionalOnProperty(name = "fundeli5.privacygate.detector", havingValue = "fixture")
-        PersonalDataDetector fixturePersonalDataDetector() {
+        PersonalDataDetector fixturePersonalDataDetector(@Value("${fundeli5.llm.endpoint:replay}") String endpoint) {
+            if (!"replay".equals(endpoint)) {
+                throw new IllegalStateException("fundeli5.privacygate.detector=fixture knows three names only and is allowed with "
+                        + "fundeli5.llm.endpoint=replay only, not '" + endpoint + "' (ADR 0004, ADR 0009)");
+            }
             return new FixturePersonalDataDetector();
         }
 
