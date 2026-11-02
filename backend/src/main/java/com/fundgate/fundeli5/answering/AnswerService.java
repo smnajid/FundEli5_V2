@@ -73,12 +73,12 @@ public class AnswerService {
         }
         ParseResult parsed;
         try {
-            parsed = parser.parse(email.text());
+            parsed = parser.parse(email);
         } catch (RuntimeException e) {
             LOG.log(System.Logger.Level.WARNING, "The Request Parser failed: " + e.getClass().getSimpleName());
             return Answer.refused("The AI could not read this email. Enter the request by hand.", List.of());
         }
-        CheckRecord.LlmCall call = new CheckRecord.LlmCall(parsed.model(), parsed.prompt(), List.of(), parsed.response());
+        CheckRecord.LlmCall call = new CheckRecord.LlmCall(parsed.model(), parsed.prompt(), parsed.fieldsSent(), parsed.response());
         List<Answer.Check> checks = new ArrayList<>();
         List<PortfolioId> ids = new ArrayList<>();
         List<String> unclear = new ArrayList<>();

@@ -2,8 +2,9 @@ package com.fundgate.fundeli5.requestparser.replay;
 
 import com.fundgate.fundeli5.bankdata.Currency;
 import com.fundgate.fundeli5.clientprofiles.PortfolioId;
-import com.fundgate.fundeli5.llm.LlmEgress;
-import com.fundgate.fundeli5.llm.LlmRequest;
+import com.fundgate.fundeli5.llm.GatedLlmEgress;
+import com.fundgate.fundeli5.llm.GatedLlmRequest;
+import com.fundgate.fundeli5.privacygate.GatedEmail;
 import com.fundgate.fundeli5.requestparser.ParseResult;
 import com.fundgate.fundeli5.requestparser.ParsedRequest;
 import com.fundgate.fundeli5.requestparser.RequestParser;
@@ -29,15 +30,15 @@ public class ReplayRequestParser implements RequestParser {
 
     private static final ObjectMapper MAPPER = JsonMapper.builder().build();
 
-    private final LlmEgress egress;
+    private final GatedLlmEgress egress;
 
-    public ReplayRequestParser(LlmEgress egress) {
+    public ReplayRequestParser(GatedLlmEgress egress) {
         this.egress = egress;
     }
 
     @Override
-    public ParseResult parse(String pseudonymisedText) {
-        String answer = egress.complete(new LlmRequest(MODEL, SYSTEM, pseudonymisedText)).text();
+    public ParseResult parse(GatedEmail email) {
+        String answer = egress.complete(new GatedLlmRequest(MODEL, SYSTEM, email)).text();
         List<ParsedRequest> requests = new ArrayList<>();
         for (JsonNode node : MAPPER.readTree(answer)) {
             requests.add(new ParsedRequest(
@@ -47,6 +48,6 @@ public class ReplayRequestParser implements RequestParser {
                     node.hasNonNull("currency") ? new Currency(node.get("currency").asString()) : null,
                     node.path("clientInitiated").asBoolean(false)));
         }
-        return new ParseResult(requests, MODEL, pseudonymisedText, answer);
+        return new ParseResult(requests, MODEL, email.text(), answer, email.fieldsSent());
     }
 }
