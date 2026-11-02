@@ -3,7 +3,8 @@
 #   ./start.sh            build and start, prints the URL
 #   PORT=9090 ./start.sh  another port (default 8080)
 # Presidio (ADR 0009) is used when it answers on $PRESIDIO_URL (default http://localhost:5002; start it with
-#   docker run -p 5002:3000 mcr.microsoft.com/presidio-analyzer); otherwise the fixture detector runs and says so.
+#   docker build -t fundeli5-presidio docker/presidio && docker run -p 5002:3000 fundeli5-presidio, which loads
+#   English, French and German); otherwise the fixture detector runs and says so.
 set -euo pipefail
 cd "$(dirname "$0")"
 ROOT="$PWD"

@@ -1,0 +1,13 @@
+supported_languages:
+  - en
+  - fr
+  - de
+global_regex_flags: 26
+recognizers:
+  - name: SpacyRecognizer
+    type: predefined
+    supported_languages:
+      - en
+      - fr
+      - de
+    supported_entity: PERSON
