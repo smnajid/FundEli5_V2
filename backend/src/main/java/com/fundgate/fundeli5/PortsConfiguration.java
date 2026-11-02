@@ -16,6 +16,8 @@ import com.fundgate.fundeli5.shareclasses.fixture.FixtureShareClasses;
 import com.fundgate.fundeli5.privacygate.PersonalDataDetector;
 import com.fundgate.fundeli5.privacygate.fixture.FixturePersonalDataDetector;
 import com.fundgate.fundeli5.privacygate.presidio.PresidioPersonalDataDetector;
+import com.fundgate.fundeli5.rulecardpipeline.SourceReader;
+import com.fundgate.fundeli5.rulecardpipeline.pdf.PdfBoxPdfText;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
@@ -110,6 +112,16 @@ public class PortsConfiguration {
                 @Value("${fundeli5.fixtures.dir}") String fixturesDir,
                 @Value("${fundeli5.documents.folder}") String documentsFolder) {
             return new FolderFundDocuments(Path.of(fixturesDir), Path.of(documentsFolder));
+        }
+
+        @Bean
+        SourceReader sourceReader(FundDocuments fundDocuments) {
+            return new SourceReader(fundDocuments, new PdfBoxPdfText());
+        }
+
+        @Bean
+        PipelineRunner pipelineRunner(SourceReader sourceReader) {
+            return new PipelineRunner(sourceReader);
         }
     }
 }
