@@ -16,7 +16,12 @@ import com.fundgate.fundeli5.shareclasses.fixture.FixtureShareClasses;
 import com.fundgate.fundeli5.privacygate.PersonalDataDetector;
 import com.fundgate.fundeli5.privacygate.fixture.FixturePersonalDataDetector;
 import com.fundgate.fundeli5.privacygate.presidio.PresidioPersonalDataDetector;
+import com.fundgate.fundeli5.rulecardpipeline.PageRanking;
+import com.fundgate.fundeli5.rulecardpipeline.PageSelector;
 import com.fundgate.fundeli5.rulecardpipeline.SourceReader;
+import com.fundgate.fundeli5.rulecardpipeline.jev.CachedPageRanking;
+import com.fundgate.fundeli5.rulecardpipeline.jev.JevClient;
+import com.fundgate.fundeli5.rulecardpipeline.jev.JevPageRanking;
 import com.fundgate.fundeli5.rulecardpipeline.pdf.PdfBoxPdfText;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -117,6 +122,24 @@ public class PortsConfiguration {
         @Bean
         SourceReader sourceReader(FundDocuments fundDocuments) {
             return new SourceReader(fundDocuments, new PdfBoxPdfText());
+        }
+
+        /** Page selection by TypeSafe Jev (public documents only), rankings cached on disk. */
+        @Bean
+        PageRanking pageRanking(
+                @Value("${fundeli5.jev.url:https://api.typesafe.ai}") String url,
+                @Value("${fundeli5.jev.api-key:}") String apiKey,
+                @Value("${fundeli5.jev.model:jev-latest}") String model,
+                @Value("${fundeli5.jev.timeout:60s}") Duration timeout,
+                @Value("${fundeli5.jev.cache-dir:target/jev-rankings}") String cacheDir) {
+            return new CachedPageRanking(new JevPageRanking(new JevClient(url, apiKey, model, timeout)),
+                    Path.of(cacheDir));
+        }
+
+        @Bean
+        PageSelector pageSelector(PageRanking pageRanking,
+                @Value("${fundeli5.pipeline.page-budget:25}") int budget) {
+            return new PageSelector(pageRanking, budget);
         }
 
         @Bean
