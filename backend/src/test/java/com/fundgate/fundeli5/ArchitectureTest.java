@@ -44,11 +44,30 @@ class ArchitectureTest {
             .should().callConstructorWhere(target(owner(simpleName("GatedEmail"))))
             .allowEmptyShould(true);
 
-    /** 3. ADR 0004: the LLM-facing modules see Portfolio Ids only. */
+    /**
+     * 3. ADR 0004: the LLM-facing modules see Portfolio Ids only. They take a GatedEmail (the Gate's
+     * proof) and read its text, never the reference map.
+     */
     @ArchTest
     static final ArchRule llmFacingModulesNeverSeePortfolioReferences = noClasses()
             .that().resideInAnyPackage("..requestparser..", "..replydrafter..")
-            .should().dependOnClassesThat(simpleName("PortfolioReference").or(simpleName("GatedEmail")))
+            .should().dependOnClassesThat(simpleName("PortfolioReference"))
+            .allowEmptyShould(true);
+
+    /** ADR 0004: the LLM-facing modules never read the reference map of a GatedEmail. */
+    @ArchTest
+    static final ArchRule llmFacingModulesNeverReadTheReferenceMap = noClasses()
+            .that().resideInAnyPackage("..requestparser..", "..replydrafter..")
+            .should().callMethodWhere(target(owner(simpleName("GatedEmail"))).and(
+                    describe("references()", c -> c.getName().equals("references"))))
+            .allowEmptyShould(true);
+
+    /** ADR 0004: the online modules reach a model through the gated entry only, never the string-based egress. */
+    @ArchTest
+    static final ArchRule onlyTheOfflineSideCallsTheRawEgress = noClasses()
+            .that().resideOutsideOfPackages("..llm..", ROOT)
+            .should().dependOnClassesThat(describe("the raw LlmEgress",
+                    c -> c.getName().equals("com.fundgate.fundeli5.llm.LlmEgress")))
             .allowEmptyShould(true);
 
     /** 4. Spring lives in the root wiring package and the web layer only. */

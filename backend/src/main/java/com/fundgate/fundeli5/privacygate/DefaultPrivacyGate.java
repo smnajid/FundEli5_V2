@@ -25,6 +25,9 @@ public class DefaultPrivacyGate implements PrivacyGate {
     private static final Pattern PORTFOLIO_ID = Pattern.compile(
             "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}");
 
+    /** What a gated email carries: Portfolio Ids and the free text the detector cleared of persons. */
+    private static final List<String> FIELDS_SENT = List.of("portfolioId", "freeText");
+
     private static final System.Logger LOG = System.getLogger(DefaultPrivacyGate.class.getName());
 
     private final ClientProfiles clientProfiles;
@@ -69,7 +72,7 @@ public class DefaultPrivacyGate implements PrivacyGate {
         if (!persons.isEmpty()) {
             return new GateOutcome.Refused("The email names a person.", namesIn(pseudonymised, persons));
         }
-        return new GateOutcome.Passed(new GatedEmail(pseudonymised, references));
+        return new GateOutcome.Passed(new GatedEmail(pseudonymised, references, FIELDS_SENT));
     }
 
     /** The text of each span that no other span contains, for the dealer's screen. */

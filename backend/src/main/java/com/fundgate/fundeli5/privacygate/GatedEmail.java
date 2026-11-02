@@ -2,17 +2,40 @@ package com.fundgate.fundeli5.privacygate;
 
 import com.fundgate.fundeli5.clientprofiles.PortfolioId;
 import com.fundgate.fundeli5.clientprofiles.PortfolioReference;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
- * The Privacy Gate's output: pseudonymised text, and the local map to swap the ids back. Only the
- * Privacy Gate constructs one. The map never leaves the dealer app.
+ * The Privacy Gate's output: pseudonymised text, and the local map to swap the ids back. The
+ * constructor is package-private, so only the Privacy Gate can build one: holding a GatedEmail is
+ * the proof that the Gate has passed the text. The map never leaves the dealer app.
  */
-public record GatedEmail(String text, Map<PortfolioId, PortfolioReference> references) {
+public final class GatedEmail {
 
-    public GatedEmail {
-        java.util.Objects.requireNonNull(text);
-        references = Map.copyOf(references);
+    private final String text;
+    private final Map<PortfolioId, PortfolioReference> references;
+
+    private final List<String> fieldsSent;
+
+    GatedEmail(String text, Map<PortfolioId, PortfolioReference> references, List<String> fieldsSent) {
+        this.fieldsSent = List.copyOf(fieldsSent);
+        this.text = Objects.requireNonNull(text);
+        this.references = Map.copyOf(references);
+    }
+
+    public String text() {
+        return text;
+    }
+
+    public Map<PortfolioId, PortfolioReference> references() {
+        return references;
+    }
+
+    /** The client fields this text carries to a model, for the Check Record: Portfolio Ids, and the Requester's free text
+     * (cleared by the Gate for persons only, ADR 0009). */
+    public List<String> fieldsSent() {
+        return fieldsSent;
     }
 
     /** Masked, like a reference: the map is client-identifying. */
