@@ -130,6 +130,13 @@ record DraftAnswer(String fundName, List<Rule> rules) {
             blocking.putNull("notedReason");
             return blocking;
         }
+        if (condition != null && "target_market".equals(string(condition, "kind"))
+                && condition.get("value") != null && condition.get("value").isNumber()) {
+            // a model writes the SRI or the holding period as a number; the card keeps the value as text
+            ObjectNode asText = (ObjectNode) condition.deepCopy();
+            asText.put("value", condition.get("value").asText());
+            return asText;
+        }
         return condition;
     }
 }
