@@ -48,63 +48,26 @@ interface FormRow {
   selector: 'app-dealer-screen',
   imports: [FormsModule, NgTemplateOutlet],
   styles: `
-    .check[data-verdict='ELIGIBLE'] strong {
-      color: #1a7f37;
-    }
-    .check[data-verdict='NOT_ELIGIBLE'] strong {
-      color: #cf222e;
-    }
-    .check[data-verdict='NEEDS_REVIEW'] strong {
-      color: #9a6700;
-    }
-    .refusal {
-      border: 2px solid #cf222e;
-      background: #ffebe9;
-      padding: 0.5rem 1rem;
-    }
-    .reply textarea {
-      width: 100%;
-      min-height: 16rem;
-      font-size: 1.1rem;
-    }
-    .drawer {
-      position: fixed;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      width: min(40rem, 90vw);
-      overflow: auto;
-      background: #fff;
-      border-left: 1px solid #999;
-      padding: 1rem;
-      box-shadow: -4px 0 12px #0003;
-    }
-    .drawer pre {
-      white-space: pre-wrap;
-      background: #f6f8fa;
-      padding: 0.5rem;
-    }
-    table.request td,
-    table.request th {
-      padding: 0.15rem 0.5rem;
-      text-align: left;
+    :host {
+      display: grid;
+      gap: var(--s-3);
     }
   `,
   template: `
-    <h1>Dealer screen</h1>
+    <h1 class="sr-only">Dealer screen</h1>
 
     @if (folded()) {
-      <details class="request">
+      <details class="request card">
         <summary>
           Request from the pasted email ·
-          <span class="privacy-note">{{ result()?.screenNote }}</span>
+          <span class="privacy-note">✓ {{ result()?.screenNote }}</span>
         </summary>
         <pre class="email">{{ email() }}</pre>
         <ng-container *ngTemplateOutlet="form" />
-        <button type="button" class="another" (click)="another()">Answer another email</button>
+        <button type="button" class="another link" (click)="another()">Answer another email</button>
       </details>
     } @else {
-      <section>
+      <section class="card">
         <label for="email">Requester's email</label>
         <textarea
           id="email"
@@ -112,17 +75,19 @@ interface FormRow {
           [ngModel]="email()"
           (ngModelChange)="email.set($event)"
         ></textarea>
-        <button type="button" [disabled]="busy()" (click)="answerIt()">Answer it</button>
+        <button type="button" class="answer-it" [disabled]="busy()" (click)="answerIt()">
+          Answer it
+        </button>
       </section>
     }
 
     @if (error(); as message) {
-      <p role="alert">{{ message }}</p>
+      <p role="alert" class="card refusal">{{ message }}</p>
     }
 
     @if (result(); as r) {
       @if (r.refusal; as refusal) {
-        <section class="refusal">
+        <section class="refusal card">
           <h2>No AI used for this email</h2>
           <p>{{ refusal.reason }}</p>
           @if (refusal.namesFound?.length) {
@@ -130,34 +95,29 @@ interface FormRow {
           }
         </section>
       } @else if (!folded()) {
-        <p class="privacy-note">{{ r.screenNote }}</p>
+        <p class="privacy-note card">✓ {{ r.screenNote }}</p>
       }
       @if (!folded() && rows().length) {
-        <section class="manual">
+        <section class="manual card">
           <h2>Enter the Subscription Request by hand</h2>
           <ng-container *ngTemplateOutlet="form" />
         </section>
       }
 
       @for (check of r.checks ?? []; track $index) {
-        <section class="check" [attr.data-verdict]="check.verdict">
+        <section class="check card" [attr.data-verdict]="check.verdict">
           <p>
             <code>{{ check.portfolioReference }}</code>
             <strong>{{ phrase(check) }}</strong>
             {{ check.shareClassName }}.
-            {{ decidingExplanation(check) }}
+            <span class="reason">{{ decidingExplanation(check) }}</span>
           </p>
           <span class="verdict">{{ label(check) }}</span>
-          <ul>
-            @for (o of check.outcomes ?? []; track $index) {
-              <li>{{ o.explanation }}</li>
-            }
-          </ul>
         </section>
       }
 
       @if (r.unclear?.length) {
-        <section class="unclear">
+        <section class="unclear card">
           <h2>Could not read</h2>
           <ul>
             @for (u of r.unclear; track $index) {
@@ -167,26 +127,46 @@ interface FormRow {
         </section>
       }
 
-      @if (r.reply !== undefined && r.reply !== null) {
-        <section class="reply">
-          <h2>
-            {{ r.aiUsed ? 'Reply (drafted by AI, review before sending)' : 'Reply (template)' }}
-          </h2>
-          <textarea
-            aria-label="Reply"
-            [ngModel]="reply()"
-            (ngModelChange)="editReply($event)"
-          ></textarea>
-          <button type="button" class="copy" (click)="copyReply()">Copy reply</button>
-          @if (copied()) {
-            <span role="status">Copied</span>
+      <div class="answer">
+        @if (r.reply !== undefined && r.reply !== null) {
+          <section class="reply card">
+            <div class="reply-head">
+              <h2 class="ai-label">
+                {{
+                  r.aiUsed
+                    ? '✦ Drafted by AI, edit before sending'
+                    : 'Reply template, edit before sending'
+                }}
+              </h2>
+              <button type="button" class="link edit" (click)="replyBox.focus()">Edit</button>
+              <button type="button" class="copy primary" (click)="copyReply()">Copy reply</button>
+            </div>
+            <textarea
+              #replyBox
+              aria-label="Reply"
+              [ngModel]="reply()"
+              (ngModelChange)="editReply($event)"
+            ></textarea>
+            @if (copied()) {
+              <span role="status">Copied</span>
+            }
+          </section>
+        }
+        <aside class="rail" aria-label="Evidence">
+          <!-- room for the evidence rail (ticket: Citations on outcomes) -->
+          @if (records().length) {
+            <button type="button" class="saw" (click)="drawer.set(true)">
+              What the AI saw (Check Record)
+            </button>
           }
-        </section>
-      }
+        </aside>
+      </div>
 
       @if (r.checks?.length) {
-        <details class="justification">
-          <summary>Full Justification</summary>
+        <details class="justification card">
+          <summary>
+            Full Justification <span class="muted">· every rule of every check</span>
+          </summary>
           @for (check of r.checks; track $index) {
             <h3>
               <code>{{ check.portfolioReference }}</code> · {{ check.shareClassName }} ·
@@ -203,22 +183,19 @@ interface FormRow {
         </details>
       }
 
-      <p class="check-records">
-        @if (records().length) {
+      @if (records().length) {
+        <p class="check-records muted">
           Check Record:
           @for (rec of records(); track rec.id) {
             <code>{{ rec.id }}</code>
           }
-        }
-        @if (records().length) {
-          <button type="button" class="saw" (click)="drawer.set(true)">What the AI saw</button>
-        }
-      </p>
+        </p>
+      }
     }
 
     @if (drawer()) {
       <aside class="drawer" aria-label="Check Record">
-        <button type="button" class="close" (click)="drawer.set(false)">Close</button>
+        <button type="button" class="close link" (click)="drawer.set(false)">Close</button>
         <h2>What the AI saw</h2>
         @for (rec of records(); track rec.id) {
           <article class="record">

@@ -6,11 +6,15 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   selector: 'app-root',
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
   template: `
-    <nav>
+    <nav class="topbar" aria-label="Screens">
+      <span class="brand">FundEli5</span>
       <a routerLink="/dealer-screen" routerLinkActive="active">Dealer</a>
       <a routerLink="/validation-screen" routerLinkActive="active">Validation</a>
+      <span class="role">Fund Dealer</span>
     </nav>
-    <router-outlet />
+    <main class="page">
+      <router-outlet />
+    </main>
   `,
 })
 export class App {}

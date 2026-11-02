@@ -1,1 +1,358 @@
-/* You can add global styles to this file, and also import other style files */
+/* FundEli5 design tokens and shared look: navy bar, white cards on a light ground,
+   red/green/amber Verdict stripes, monospace Portfolio Ids. Components use these, not copies. */
+:root {
+  /* colour */
+  --c-navy: #244a73;
+  --c-navy-dark: #1b3a5c;
+  --c-ground: #f4f6f8;
+  --c-card: #ffffff;
+  --c-border: #dde3ea;
+  --c-text: #1c2733;
+  --c-muted: #566475; /* 5.9:1 on white */
+  --c-ai: #5b2fc9; /* AI label */
+  --c-fail: #b42318;
+  --c-fail-bg: #fdecea;
+  --c-pass: #1a7f37;
+  --c-pass-bg: #e6f4ea;
+  --c-review: #8a5a00;
+  --c-review-bg: #fff4d6;
+  --c-focus: #0b63ce;
+  /* type scale */
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.125rem;
+  --fs-xl: 1.25rem;
+  /* spacing */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --radius: 8px;
+  --page-width: 1180px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--c-ground);
+  color: var(--c-text);
+  font: var(--fs-md) / 1.5 var(--font);
+}
+
+code,
+pre {
+  font-family: var(--mono);
+}
+
+:focus-visible {
+  outline: 3px solid var(--c-focus);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* top bar */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  padding: 0 var(--s-5);
+  min-height: 2.75rem;
+  background: var(--c-navy);
+  color: #fff;
+  font-size: var(--fs-sm);
+}
+.topbar .brand {
+  font-weight: 700;
+  font-size: var(--fs-md);
+}
+.topbar a {
+  color: #e3ecf6;
+  text-decoration: none;
+  padding: var(--s-2) 0;
+  border-bottom: 2px solid transparent;
+}
+.topbar a:hover,
+.topbar a.active {
+  color: #fff;
+  border-bottom-color: #fff;
+}
+.topbar .role {
+  margin-left: auto;
+  font-size: var(--fs-xs);
+}
+
+.page {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: var(--s-4);
+  display: grid;
+  gap: var(--s-3);
+}
+
+/* cards */
+.card {
+  background: var(--c-card);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: var(--s-3) var(--s-4);
+}
+.card h2 {
+  margin: 0 0 var(--s-2);
+  font-size: var(--fs-md);
+}
+.muted {
+  color: var(--c-muted);
+}
+
+/* controls */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+button {
+  cursor: pointer;
+  border: 1px solid var(--c-border);
+  background: var(--c-card);
+  border-radius: 6px;
+  padding: var(--s-2) var(--s-3);
+}
+button:hover:not(:disabled) {
+  border-color: var(--c-navy);
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+button.primary,
+.answer-it {
+  background: var(--c-navy);
+  border-color: var(--c-navy);
+  color: #fff;
+  font-weight: 600;
+}
+button.primary:hover:not(:disabled) {
+  background: var(--c-navy-dark);
+}
+button.link {
+  border: 0;
+  background: none;
+  color: var(--c-navy);
+  padding: var(--s-1) var(--s-2);
+}
+input,
+select,
+textarea {
+  border: 1px solid #aeb8c4;
+  border-radius: 6px;
+  padding: var(--s-2);
+  background: #fff;
+  max-width: 100%;
+}
+textarea {
+  width: 100%;
+}
+label {
+  font-weight: 600;
+  font-size: var(--fs-sm);
+}
+
+/* Verdict sentences: a stripe coloured by Verdict */
+.check {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s-1) var(--s-2);
+  border-left: 5px solid var(--c-muted);
+  font-size: var(--fs-lg);
+}
+.check p {
+  margin: 0;
+  flex: 1 1 18rem;
+}
+.check code {
+  font-size: var(--fs-md);
+  font-weight: 600;
+}
+.check .reason {
+  color: var(--c-muted);
+}
+.check[data-verdict='ELIGIBLE'] {
+  border-left-color: var(--c-pass);
+}
+.check[data-verdict='NOT_ELIGIBLE'] {
+  border-left-color: var(--c-fail);
+}
+.check[data-verdict='NEEDS_REVIEW'] {
+  border-left-color: var(--c-review);
+}
+.verdict {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0 var(--s-2);
+  background: var(--c-ground);
+  color: var(--c-muted);
+}
+.check[data-verdict='ELIGIBLE'] .verdict {
+  background: var(--c-pass-bg);
+  color: var(--c-pass);
+}
+.check[data-verdict='NOT_ELIGIBLE'] .verdict {
+  background: var(--c-fail-bg);
+  color: var(--c-fail);
+}
+.check[data-verdict='NEEDS_REVIEW'] .verdict {
+  background: var(--c-review-bg);
+  color: var(--c-review);
+}
+
+/* Privacy Gate refusal */
+.refusal {
+  border: 2px solid var(--c-fail);
+  background: var(--c-fail-bg);
+}
+.privacy-note {
+  color: var(--c-pass);
+  font-size: var(--fs-sm);
+}
+
+/* reply and evidence rail */
+.answer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 20rem;
+  gap: var(--s-4);
+  align-items: start;
+}
+.reply-head {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin-bottom: var(--s-2);
+}
+.ai-label {
+  margin-right: auto;
+  color: var(--c-ai);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.reply textarea {
+  min-height: 16rem;
+  border-color: transparent;
+  font-size: var(--fs-md);
+  line-height: 1.7;
+  resize: vertical;
+}
+.reply textarea:hover {
+  border-color: var(--c-border);
+}
+.rail {
+  display: grid;
+  gap: var(--s-3);
+}
+.rail h2 {
+  margin: 0;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+.rail .saw {
+  width: 100%;
+  background: var(--c-card);
+}
+
+details.card > summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+details.card > summary .muted {
+  font-weight: 400;
+}
+
+/* request form */
+table.request {
+  border-collapse: collapse;
+  display: block;
+  overflow-x: auto;
+}
+table.request td,
+table.request th {
+  padding: var(--s-1) var(--s-2);
+  text-align: left;
+  vertical-align: top;
+}
+table.request th {
+  font-size: var(--fs-xs);
+  color: var(--c-muted);
+}
+.recheck {
+  margin-top: var(--s-2);
+}
+
+/* "What the AI saw" drawer */
+.drawer {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(40rem, 100vw);
+  overflow: auto;
+  background: var(--c-card);
+  border-left: 1px solid var(--c-border);
+  padding: var(--s-4);
+  box-shadow: -4px 0 16px #0003;
+  z-index: 10;
+}
+.drawer pre {
+  white-space: pre-wrap;
+  background: var(--c-ground);
+  border-radius: 6px;
+  padding: var(--s-2);
+  font-size: var(--fs-sm);
+}
+
+pre.email {
+  white-space: pre-wrap;
+  background: var(--c-ground);
+  border-radius: 6px;
+  padding: var(--s-3);
+}
+
+/* about 400 px wide: one column, rail under the reply, tighter bar */
+@media (max-width: 800px) {
+  .answer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .topbar {
+    padding: 0 var(--s-3);
+    gap: var(--s-3);
+    flex-wrap: wrap;
+  }
+  .page {
+    padding: var(--s-3) var(--s-2);
+  }
+  .check {
+    font-size: var(--fs-md);
+  }
+}
