@@ -4,7 +4,6 @@ import com.fundgate.fundeli5.answering.AnswerService;
 import com.fundgate.fundeli5.checkrecord.CheckRecords;
 import com.fundgate.fundeli5.checkrecord.memory.InMemoryCheckRecords;
 import com.fundgate.fundeli5.clientprofiles.ClientProfiles;
-import com.fundgate.fundeli5.llm.GatedEgress;
 import com.fundgate.fundeli5.llm.GatedLlmEgress;
 import com.fundgate.fundeli5.llm.LlmEgress;
 import com.fundgate.fundeli5.privacygate.PrivacyGate;
@@ -57,7 +56,7 @@ public class AnsweringConfiguration {
 
     @Bean
     GatedLlmEgress gatedLlmEgress(LlmEgress egress) {
-        return new GatedEgress(egress);
+        return GatedLlmEgress.over(egress);
     }
 
     @Bean

@@ -54,11 +54,18 @@ class ArchitectureTest {
             .should().dependOnClassesThat(simpleName("PortfolioReference"))
             .allowEmptyShould(true);
 
+    /** ADR 0004: the LLM-facing modules never read the reference map of a GatedEmail. */
+    @ArchTest
+    static final ArchRule llmFacingModulesNeverReadTheReferenceMap = noClasses()
+            .that().resideInAnyPackage("..requestparser..", "..replydrafter..")
+            .should().callMethodWhere(target(owner(simpleName("GatedEmail"))).and(
+                    describe("references()", c -> c.getName().equals("references"))))
+            .allowEmptyShould(true);
+
     /** ADR 0004: the online modules reach a model through the gated entry only, never the string-based egress. */
     @ArchTest
     static final ArchRule onlyTheOfflineSideCallsTheRawEgress = noClasses()
-            .that().resideInAnyPackage("..requestparser..", "..replydrafter..", "..answering..", "..privacygate..",
-                    "..ruleengine..", "..checkrecord..")
+            .that().resideOutsideOfPackages("..llm..", ROOT)
             .should().dependOnClassesThat(describe("the raw LlmEgress",
                     c -> c.getName().equals("com.fundgate.fundeli5.llm.LlmEgress")))
             .allowEmptyShould(true);

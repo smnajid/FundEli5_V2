@@ -208,9 +208,11 @@ public class AnswerSteps {
 
     @Then("every client fact sent is on the allow-list")
     public void everyClientFactSentIsOnTheAllowList() {
-        // The Gate stub sends no client facts at all; the real allow-list arrives with the real Gate.
+        // The Request Parser sends the pseudonymised email: Portfolio Ids and the Requester's free text, no profile fact.
         for (JsonNode call : lastCheckRecord().path("llmCalls")) {
-            assertThat(call.path("fieldsSent")).isEmpty();
+            for (JsonNode field : call.path("fieldsSent")) {
+                assertThat(field.asString()).isIn("portfolioId", "freeText");
+            }
         }
     }
 
@@ -220,7 +222,8 @@ public class AnswerSteps {
         assertThat(record.path("llmCalls")).isNotEmpty();
         assertThat(record.path("llmCalls").get(0).path("gatedPrompt").asString())
                 .isEqualTo(spy().sent().get(0).prompt());
-        assertThat(record.path("llmCalls").get(0).path("fieldsSent")).isEmpty();
+        assertThat(record.path("llmCalls").get(0).path("fieldsSent").toString())
+                .isEqualTo("[\"portfolioId\",\"freeText\"]");
     }
 
     @Then("these Eligibility Checks run:")

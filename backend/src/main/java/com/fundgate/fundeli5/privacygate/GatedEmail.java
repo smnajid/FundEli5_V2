@@ -16,7 +16,10 @@ public final class GatedEmail {
     private final String text;
     private final Map<PortfolioId, PortfolioReference> references;
 
-    GatedEmail(String text, Map<PortfolioId, PortfolioReference> references) {
+    private final List<String> fieldsSent;
+
+    GatedEmail(String text, Map<PortfolioId, PortfolioReference> references, List<String> fieldsSent) {
+        this.fieldsSent = List.copyOf(fieldsSent);
         this.text = Objects.requireNonNull(text);
         this.references = Map.copyOf(references);
     }
@@ -29,9 +32,10 @@ public final class GatedEmail {
         return references;
     }
 
-    /** The client fields this text carries to a model, for the Check Record: Portfolio Ids only. */
+    /** The client fields this text carries to a model, for the Check Record: Portfolio Ids, and the Requester's free text
+     * (cleared by the Gate for persons only, ADR 0009). */
     public List<String> fieldsSent() {
-        return List.of("portfolioId");
+        return fieldsSent;
     }
 
     /** Masked, like a reference: the map is client-identifying. */

@@ -8,4 +8,9 @@ package com.fundgate.fundeli5.llm;
 public interface GatedLlmEgress {
 
     LlmResponse complete(GatedLlmRequest request);
+
+    /** The online entry on top of an egress adapter (replay, Claude plan, ..). */
+    static GatedLlmEgress over(LlmEgress adapter) {
+        return new GatedEgress(adapter);
+    }
 }

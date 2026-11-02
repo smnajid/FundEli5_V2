@@ -1,11 +1,11 @@
 package com.fundgate.fundeli5.llm;
 
 /** The online entry on top of an egress adapter (replay, Claude plan, ..). */
-public class GatedEgress implements GatedLlmEgress {
+class GatedEgress implements GatedLlmEgress {
 
     private final LlmEgress adapter;
 
-    public GatedEgress(LlmEgress adapter) {
+    GatedEgress(LlmEgress adapter) {
         this.adapter = adapter;
     }
 

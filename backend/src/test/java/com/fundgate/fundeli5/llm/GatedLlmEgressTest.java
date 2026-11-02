@@ -14,6 +14,9 @@ class GatedLlmEgressTest {
     @Test
     void theOnlineEgressTakesGatedRequestsOnly() {
         for (Method m : GatedLlmEgress.class.getDeclaredMethods()) {
+            if (Modifier.isStatic(m.getModifiers())) {
+                continue;
+            }
             assertThat(m.getParameterTypes()).containsExactly(GatedLlmRequest.class);
         }
         assertThat(GatedLlmRequest.class.getRecordComponents()[2].getType()).isEqualTo(GatedEmail.class);
@@ -34,7 +37,7 @@ class GatedLlmEgressTest {
                 text -> java.util.List.of());
         var email = ((com.fundgate.fundeli5.privacygate.GateOutcome.Passed) gate.gate("Can LOC90000101 hold X?")).email();
         var seen = new java.util.ArrayList<LlmRequest>();
-        new GatedEgress(r -> {
+        GatedLlmEgress.over(r -> {
             seen.add(r);
             return new LlmResponse("ok");
         }).complete(new GatedLlmRequest("m", "s", email));
