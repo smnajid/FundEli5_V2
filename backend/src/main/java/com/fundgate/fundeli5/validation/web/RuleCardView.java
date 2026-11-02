@@ -2,6 +2,7 @@ package com.fundgate.fundeli5.validation.web;
 
 import com.fundgate.fundeli5.rulecard.Condition;
 import com.fundgate.fundeli5.rulecard.Rule;
+import com.fundgate.fundeli5.rulecard.json.RuleCardJson;
 import com.fundgate.fundeli5.rulecard.RuleCard;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
@@ -73,28 +74,9 @@ record RuleCardView(String fundId, String fundName, List<String> shareClasses, i
                         .toList());
     }
 
+    /** The condition through its JSON, so the web layer names no concrete Condition (ArchUnit 6a). */
     static ConditionView condition(Condition condition) {
-        if (condition == null) {
-            return null;
-        }
-        String kind = lower(condition.kind());
-        return switch (condition) {
-            case Condition.InvestorCategory c -> new ConditionView(kind,
-                    c.allowed().stream().map(RuleCardView::lower).sorted().toList(), c.excluded(), null, null, null, null,
-                    null, null, null, null, null, null);
-            case Condition.UsPersonExclusion c -> new ConditionView(kind, null, null, lower(c.definition()),
-                    c.excludesUsCitizens(), null, null, null, null, null, null, null, null);
-            case Condition.MinimumInitialSubscription c -> new ConditionView(kind, null, null, null, null, c.amount(),
-                    c.currency().code(), null, null, null, null, null, null);
-            case Condition.MandateOnlyClass c -> new ConditionView(kind, null, null, null, null, null, null, c.manager(),
-                    null, null, null, null, null);
-            case Condition.KidRequiredForRetail c -> new ConditionView(kind, null, null, null, null, null, null, null,
-                    c.kidAvailable(), null, null, null, null);
-            case Condition.TargetMarket c -> new ConditionView(kind, null, null, null, null, null, null, null, null,
-                    lower(c.dimension()), c.value(), null, null);
-            case Condition.UnmodelledRestriction c -> new ConditionView(kind, null, null, null, null, null, null, null,
-                    null, null, null, lower(c.status()), c.notedReason());
-        };
+        return condition == null ? null : MAPPER.treeToValue(RuleCardJson.writeCondition(condition), ConditionView.class);
     }
 
     /** The condition JSON of the Rule Card schema, without the fields this kind does not use. */

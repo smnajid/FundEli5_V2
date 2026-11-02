@@ -9,7 +9,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import {
   ConditionView,
   DraftSummary,
@@ -341,6 +341,8 @@ type Status = 'open' | 'accepted' | 'corrected' | 'contradiction';
 export class ValidationScreen {
   private readonly api = inject(ValidationControllerService);
   private readonly destroyRef = inject(DestroyRef);
+  /** The one request in flight: a new call cancels it, so a late answer never lands on another card. */
+  private inFlight?: Subscription;
 
   protected readonly drafts = signal<DraftSummary[]>([]);
   protected readonly selectedDraft = signal('');
@@ -408,7 +410,11 @@ export class ValidationScreen {
     this.selectedDraft.set(value);
     this.validatedCard.set(null);
     this.review.set(null);
-    if (!value) return;
+    this.inFlight?.unsubscribe();
+    if (!value) {
+      this.busy.set(false);
+      return;
+    }
     const at = value.lastIndexOf('|');
     this.run(this.api.review(value.slice(0, at), Number(value.slice(at + 1))), true);
   }
@@ -429,6 +435,13 @@ export class ValidationScreen {
     const kind = this.rule()?.condition?.kind;
     if (!kind) return;
     const e = this.edit();
+    if (
+      this.fields().includes('amount') &&
+      (String(e.amount ?? '').trim() === '' || Number.isNaN(Number(e.amount)))
+    ) {
+      this.error.set('The amount must be a number.');
+      return;
+    }
     const condition: ConditionView = { kind };
     for (const f of this.fields()) {
       const v = e[f];
@@ -508,7 +521,8 @@ export class ValidationScreen {
     this.busy.set(true);
     this.error.set(null);
     const previous = this.index();
-    call.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    this.inFlight?.unsubscribe();
+    this.inFlight = call.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (r) => {
         this.busy.set(false);
         this.review.set(r);

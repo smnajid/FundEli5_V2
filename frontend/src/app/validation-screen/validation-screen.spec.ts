@@ -222,4 +222,25 @@ describe('ValidationScreen', () => {
       'in force for Eligibility Checks',
     );
   });
+
+  it('refuses a blank amount and shows a failed request', async () => {
+    const correctRule = vi.fn();
+    const fixture = setup({ correctRule });
+    const el = await open(fixture);
+    (el.querySelectorAll('button.rule')[1] as HTMLButtonElement).click();
+    fixture.detectChanges();
+    const amount = el.querySelector('#f-amount') as HTMLInputElement;
+    amount.value = '';
+    amount.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    button(el, 'correct').click();
+    fixture.detectChanges();
+    expect(correctRule).not.toHaveBeenCalled();
+    expect(el.querySelector('[role=alert]')?.textContent).toContain('amount must be a number');
+  });
+
+  it('says when no Draft card waits', () => {
+    const fixture = setup({ drafts: () => of([]) });
+    expect((fixture.nativeElement as HTMLElement).querySelector('.no-drafts')).not.toBeNull();
+  });
 });
