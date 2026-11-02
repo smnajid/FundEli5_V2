@@ -162,6 +162,11 @@ public final class TargetMarketPlugin implements RuleKindPlugin<Condition.Target
     }
 
     @Override
+    public boolean binds(Facts facts) {
+        return !"LOC".equals(facts.profile().legalEntity());
+    }
+
+    @Override
     public boolean accumulates() {
         return true;
     }

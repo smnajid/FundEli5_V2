@@ -151,11 +151,13 @@ public class RuleCatalogEngine implements RuleEngine {
         List<RuleOutcome> found = new ArrayList<>();
         if (rule.contradiction()) {
             warnings.add("The documents contradict each other on: " + rule.summary());
-            found.add(new RuleOutcome(plugin.kind(), RuleOutcome.Result.REVIEW,
+            found.add(new RuleOutcome(plugin.kind(),
+                    plugin.binds(facts) ? RuleOutcome.Result.REVIEW : RuleOutcome.Result.PASS,
                     "The documents contradict each other on: " + rule.summary(), rule.citations()));
         }
         if (rule.citations().isEmpty()) {
-            found.add(new RuleOutcome(plugin.kind(), RuleOutcome.Result.REVIEW,
+            found.add(new RuleOutcome(plugin.kind(),
+                    plugin.binds(facts) ? RuleOutcome.Result.REVIEW : RuleOutcome.Result.PASS,
                     "The rule carries no Citation, so it cannot decide: " + rule.summary(), List.of()));
             return found;
         }
