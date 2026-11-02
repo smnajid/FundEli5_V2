@@ -80,7 +80,7 @@ class FourPromisesTest {
             return new LlmResponse(modelAnswer);
         });
         return new AnswerService(new DefaultPrivacyGate(profiles, new FixturePersonalDataDetector()),
-                new ReplayRequestParser(egress), new MatchingShareClassCatalog(shareClasses), engine(),
+                new ReplayRequestParser(com.fundgate.fundeli5.llm.GatedLlmEgress.over(egress)), new MatchingShareClassCatalog(shareClasses), engine(),
                 new TemplateReplyDrafter(), records, profiles, Clock.systemUTC(), "test", cards, "test");
     }
 
