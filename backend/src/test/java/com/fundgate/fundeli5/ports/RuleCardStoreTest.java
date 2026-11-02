@@ -29,14 +29,14 @@ class RuleCardStoreTest {
     void aSavedCardSupersedesTheReadOnlyCardOfTheSameVersionAndNeverTouchesTheReadOnlyFolder(@TempDir Path work) {
         Path drafts = FixturePortsTest.FIXTURES.resolve("draft-rule-cards");
         FolderRuleCardStore store = new FolderRuleCardStore(List.of(drafts), work);
-        RuleCard draft = store.all().get(0);
+        RuleCard draft = store.all().stream().filter(c -> c.fundName().startsWith("Nordea 1")).findFirst().orElseThrow();
         assertThat(draft.status()).isEqualTo(RuleCard.Status.DRAFT);
 
         store.save(new RuleCard(draft.fundId(), draft.fundName(), draft.shareClasses(), draft.version(),
                 RuleCard.Status.VALIDATED, draft.rules(), draft.sources(), draft.drafting(),
                 new RuleCard.Validation("Validator", java.time.Instant.parse("2026-11-02T10:00:00Z"))));
 
-        assertThat(store.all()).hasSize(1).first()
+        assertThat(store.all()).hasSize(4).filteredOn(c -> c.fundName().equals(draft.fundName())).singleElement()
                 .satisfies(c -> assertThat(c.status()).isEqualTo(RuleCard.Status.VALIDATED));
         assertThat(RuleCardJson.read(drafts.resolve("nordea1-global-climate-and-environment-v1-draft.json")).status())
                 .isEqualTo(RuleCard.Status.DRAFT);
