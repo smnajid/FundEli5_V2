@@ -75,10 +75,10 @@ class FourPromisesTest {
     }
 
     AnswerService service() {
-        var egress = (com.fundgate.fundeli5.llm.LlmEgress) request -> {
+        var egress = com.fundgate.fundeli5.llm.GatedLlmEgress.over((com.fundgate.fundeli5.llm.LlmEgress) request -> {
             sentToModel.add(request);
             return new LlmResponse(modelAnswer);
-        };
+        });
         return new AnswerService(new DefaultPrivacyGate(profiles, new FixturePersonalDataDetector()),
                 new ReplayRequestParser(egress), new MatchingShareClassCatalog(shareClasses), engine(),
                 new TemplateReplyDrafter(), records, profiles, Clock.systemUTC(), "test", cards, "test");
