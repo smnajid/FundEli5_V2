@@ -5,6 +5,6 @@ public enum Language {
     EN, FR;
 
     public String code() {
-        return name().toLowerCase();
+        return name().toLowerCase(java.util.Locale.ROOT);
     }
 }

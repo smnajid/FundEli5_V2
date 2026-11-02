@@ -18,7 +18,7 @@ public final class ExplanationRenderer {
     }
 
     /**
-     * @param alternatives names of Share Classes the portfolio can buy instead, in the order to suggest them
+     * @param alternatives names of Share Classes the portfolio is Eligible for instead (the caller checked them with the engine), in the order to suggest them
      */
     public Explanation render(Verdict verdict, Justification justification, Language language,
             List<String> alternatives) {
@@ -39,7 +39,7 @@ public final class ExplanationRenderer {
         if (citations.isEmpty()) {
             return "";
         }
-        return citations.stream().map(c -> c.document() + ", p. " + c.page())
+        return citations.stream().distinct().map(c -> c.document() + ", p. " + c.page() + (c.quoteFoundOnPage() ? "" : ", quote not verified"))
                 .collect(Collectors.joining("; ", " [", "]"));
     }
 }
