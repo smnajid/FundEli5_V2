@@ -15,7 +15,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "fundeli5.llm.endpoint=replay")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {"fundeli5.llm.endpoint=replay", "fundeli5.privacygate.detector=fixture"})
 class ScreensServingTest {
 
     @TempDir

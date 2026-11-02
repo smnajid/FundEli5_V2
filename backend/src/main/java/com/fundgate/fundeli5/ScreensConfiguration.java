@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-/** Dealer app: the Angular routes load the single-page app, so a reload of a screen's URL works. */
+/** Dealer app: the Angular routes load the single-page app, so a reload of a screen's URL works. Keep in sync with frontend/src/app/app.routes.ts. */
 @Configuration
 @Profile("!" + Runtimes.PIPELINE)
 class ScreensConfiguration implements WebMvcConfigurer {
