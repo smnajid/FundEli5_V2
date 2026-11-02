@@ -34,7 +34,11 @@ public class FolderRuleCardStore implements RuleCardStore {
     public synchronized List<RuleCard> all() {
         List<RuleCard> cards = new ArrayList<>();
         for (Path folder : readOnly) {
-            cards.addAll(read(folder));
+            for (RuleCard card : read(folder)) {
+                if (cards.stream().noneMatch(c -> sameCard(c, card))) {
+                    cards.add(card);
+                }
+            }
         }
         for (RuleCard own : read(work)) {
             cards.removeIf(c -> sameCard(c, own));
@@ -49,10 +53,19 @@ public class FolderRuleCardStore implements RuleCardStore {
             Files.createDirectories(work);
             String name = card.fundName().toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]+", "-") + "-v" + card.version()
                     + ".json";
+            name = name.replace(".json", "-" + Integer.toHexString(card.fundName().hashCode()) + ".json");
             Path target = work.resolve(name);
+            if (Files.exists(target) && card.status() == RuleCard.Status.DRAFT
+                    && RuleCardJson.read(target).status() == RuleCard.Status.VALIDATED) {
+                throw new IllegalStateException("A Validated card is never replaced by a Draft");
+            }
             Path temp = Files.createTempFile(work, "card", ".tmp");
             Files.writeString(temp, MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(RuleCardJson.write(card)));
-            Files.move(temp, target, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            try {
+                Files.move(temp, target, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            } finally {
+                Files.deleteIfExists(temp);
+            }
         } catch (IOException e) {
             throw new UncheckedIOException("Cannot save Rule Card " + card.fundName() + " v" + card.version(), e);
         }

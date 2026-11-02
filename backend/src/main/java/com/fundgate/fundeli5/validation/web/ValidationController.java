@@ -61,6 +61,9 @@ class ValidationController {
     /** Replaces a rule's condition; {@code condition} is the condition JSON of the Rule Card schema. */
     @PostMapping("/correct")
     ReviewView correct(@RequestBody CorrectBody b) {
+        if (b.condition() == null) {
+            throw new IllegalArgumentException("condition is required");
+        }
         return view(validation.correct(b.fundName(), b.version(), b.rule(), RuleCardJson.condition(b.condition()),
                 b.validator()));
     }
@@ -68,6 +71,9 @@ class ValidationController {
     /** Marks an Unmodelled Restriction {@code blocking} or {@code noted} (the reason is required for noted). */
     @PostMapping("/mark")
     ReviewView mark(@RequestBody MarkBody b) {
+        if (b.status() == null) {
+            throw new IllegalArgumentException("status is required");
+        }
         Condition.RestrictionStatus status = Condition.RestrictionStatus.valueOf(b.status().toUpperCase(java.util.Locale.ROOT));
         return view(validation.mark(b.fundName(), b.version(), b.rule(), status, b.reason(), b.validator()));
     }
@@ -97,9 +103,14 @@ class ValidationController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
-    @ExceptionHandler({IllegalStateException.class, IllegalArgumentException.class})
+    @ExceptionHandler(IllegalStateException.class)
     ResponseEntity<String> refused(RuntimeException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    ResponseEntity<String> badRequest(RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
     record DraftSummary(String fundName, int version, List<String> shareClasses) {

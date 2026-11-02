@@ -25,6 +25,10 @@ public class InMemoryRuleCards implements RuleCards, RuleCardStore {
 
     @Override
     public synchronized void save(RuleCard card) {
+        if (card.status() == RuleCard.Status.DRAFT && cards.stream().anyMatch(c -> c.fundName().equals(card.fundName())
+                && c.version() == card.version() && c.status() == RuleCard.Status.VALIDATED)) {
+            throw new IllegalStateException("A Validated card is never replaced by a Draft");
+        }
         cards.removeIf(c -> c.fundName().equals(card.fundName()) && c.version() == card.version());
         cards.add(card);
     }

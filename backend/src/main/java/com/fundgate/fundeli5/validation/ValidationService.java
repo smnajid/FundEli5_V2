@@ -54,7 +54,8 @@ public class ValidationService {
     }
 
     /** Settles a contradiction by following one document: its rule stays, the others are dropped. */
-    public Review followDocument(String fundName, int version, Isin shareClass, String kind, String document, String by) {
+    public synchronized Review followDocument(String fundName, int version, Isin shareClass, String kind, String document, String by) {
+        requireValidator(by);
         RuleCard card = draft(fundName, version);
         List<Rule> kept = new ArrayList<>();
         boolean found = false;
@@ -62,7 +63,8 @@ public class ValidationService {
             if (!inContradiction(rule, shareClass, kind)) {
                 kept.add(rule);
             } else if (document.equals(documentOf(rule))) {
-                kept.add(rule.chosenOverContradiction(document, by, clock.instant()));
+                kept.add(rule.chosenOverContradiction(document + " (dropped: " + dropped(card, shareClass, kind, document)
+                        + ")", by, clock.instant()));
                 found = true;
             }
         }
@@ -72,22 +74,25 @@ public class ValidationService {
         return save(card, kept);
     }
 
-    public Review accept(String fundName, int version, int rule, String by) {
+    public synchronized Review accept(String fundName, int version, int rule, String by) {
+        requireValidator(by);
         return replace(fundName, version, rule, r -> r.accepted(by, clock.instant()));
     }
 
-    public Review correct(String fundName, int version, int rule, Condition corrected, String by) {
+    public synchronized Review correct(String fundName, int version, int rule, Condition corrected, String by) {
+        requireValidator(by);
         return replace(fundName, version, rule, r -> r.corrected(corrected, by, clock.instant()));
     }
 
     /** Marks an Unmodelled Restriction Blocking, or Noted with the reason it sets no condition on the client. */
-    public Review mark(String fundName, int version, int rule, Condition.RestrictionStatus status, String reason,
+    public synchronized Review mark(String fundName, int version, int rule, Condition.RestrictionStatus status, String reason,
             String by) {
+        requireValidator(by);
         return replace(fundName, version, rule, r -> r.markedUnmodelled(status, reason, by, clock.instant()));
     }
 
     /** Validates the card once every contradiction is settled and every rule reviewed. */
-    public RuleCard validate(String fundName, int version, String by) {
+    public synchronized RuleCard validate(String fundName, int version, String by) {
         Review review = review(fundName, version);
         if (!review.canValidate()) {
             throw new CannotValidate(review.blockers());
@@ -101,6 +106,18 @@ public class ValidationService {
                 new RuleCard.Validation(by, clock.instant()));
         store.save(validated);
         return validated;
+    }
+
+    private static String dropped(RuleCard card, Isin shareClass, String kind, String document) {
+        return card.rules().stream().filter(r -> inContradiction(r, shareClass, kind))
+                .filter(r -> !document.equals(documentOf(r))).map(r -> documentOf(r) + ": " + r.summary())
+                .collect(java.util.stream.Collectors.joining("; "));
+    }
+
+    private static void requireValidator(String by) {
+        if (by == null || by.isBlank()) {
+            throw new IllegalArgumentException("The validator is not named");
+        }
     }
 
     private Review replace(String fundName, int version, int index, java.util.function.UnaryOperator<Rule> change) {

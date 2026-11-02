@@ -36,7 +36,7 @@ public record Review(RuleCard card, List<Contradiction> contradictions, List<Int
             blockers.add("only a Draft card can be validated");
         }
         contradictions.forEach(c -> blockers.add(
-                "contradiction on " + c.kind() + " of " + c.shareClass().value() + ": choose a document"));
+                "contradiction on " + c.kind() + " of " + (c.shareClass() == null ? "the fund" : c.shareClass().value()) + ": choose a document"));
         unreviewedRules.forEach(i -> blockers.add("rule " + i + " is not reviewed"));
         return blockers;
     }
