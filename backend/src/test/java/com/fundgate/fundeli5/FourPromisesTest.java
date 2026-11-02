@@ -15,7 +15,6 @@ import com.fundgate.fundeli5.eligibility.Verdict;
 import com.fundgate.fundeli5.fundregistrations.fixture.FixtureFundRegistrations;
 import com.fundgate.fundeli5.fxrates.fixture.FixtureFxRates;
 import com.fundgate.fundeli5.llm.LlmRequest;
-import com.fundgate.fundeli5.llm.GatedLlmEgress;
 import com.fundgate.fundeli5.llm.LlmResponse;
 import com.fundgate.fundeli5.privacygate.DefaultPrivacyGate;
 import com.fundgate.fundeli5.privacygate.fixture.FixturePersonalDataDetector;
@@ -81,7 +80,7 @@ class FourPromisesTest {
             return new LlmResponse(modelAnswer);
         });
         return new AnswerService(new DefaultPrivacyGate(profiles, new FixturePersonalDataDetector()),
-                new ReplayRequestParser(GatedLlmEgress.over(egress)), new MatchingShareClassCatalog(shareClasses), engine(),
+                new ReplayRequestParser(egress), new MatchingShareClassCatalog(shareClasses), engine(),
                 new TemplateReplyDrafter(), records, profiles, Clock.systemUTC(), "test", cards, "test");
     }
 
