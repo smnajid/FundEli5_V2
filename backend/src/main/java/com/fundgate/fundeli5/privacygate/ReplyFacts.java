@@ -8,14 +8,13 @@ import java.util.Objects;
 /**
  * What a reply call may carry, structured so that the Gate decides what text reaches the model: per check a
  * Portfolio Id, the Share Class name, the Verdict and the desk's own explanation sentences (templates and
- * Citations), the classes to suggest, and the Requester Questions the dealer accepted.
+ * Citations), and the classes to suggest. Dealer free text (Requester Questions) is not carried: a reply that asks them is the template.
  */
-public record ReplyFacts(String language, List<Line> lines, List<String> requesterQuestions) {
+public record ReplyFacts(String language, List<Line> lines) {
 
     public ReplyFacts {
         Objects.requireNonNull(language);
         lines = List.copyOf(lines);
-        requesterQuestions = List.copyOf(requesterQuestions);
     }
 
     public record Line(PortfolioId portfolio, String shareClassName, Verdict verdict, List<String> explanation,

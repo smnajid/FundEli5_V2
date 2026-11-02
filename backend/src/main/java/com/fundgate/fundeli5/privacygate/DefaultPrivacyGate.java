@@ -98,23 +98,14 @@ public class DefaultPrivacyGate implements PrivacyGate {
                 text.append("  Eligible instead: ").append(String.join(", ", line.alternatives())).append('\n');
             }
         }
-        if (!facts.requesterQuestions().isEmpty()) {
-            text.append("\nAsk the Requester:\n");
-            facts.requesterQuestions().forEach(q -> text.append("- ").append(q).append('\n'));
-        }
         String prompt = text.toString();
         if (LOOKS_LIKE_REFERENCE.matcher(PORTFOLIO_ID.matcher(prompt).replaceAll("")).find()) {
             throw new IllegalArgumentException("The reply prompt would carry something shaped like a Portfolio Reference.");
         }
-        // Requester Questions are the dealer's free text: the detector clears them like an email, and a detector
-        // that cannot answer refuses (the caller then uses the template).
+        // The detector clears the prompt like an email; one that cannot answer refuses (the caller then uses the template).
         if (detector.detect(prompt).stream().anyMatch(DetectedSpan::isPerson)) {
             throw new IllegalArgumentException("The reply prompt names a person.");
         }
-        List<String> fields = new java.util.ArrayList<>(REPLY_FIELDS_SENT);
-        if (!facts.requesterQuestions().isEmpty()) {
-            fields.add("requesterQuestions");
-        }
-        return new GatedPrompt(prompt, fields);
+        return new GatedPrompt(prompt, REPLY_FIELDS_SENT);
     }
 }

@@ -27,7 +27,7 @@ public class GatedReplyDrafter implements ReplyDrafter {
             Write in the language named on the first line. Give every portfolio its Verdict (Eligible, Not Eligible
             or Needs Review; in French Éligible, Non éligible or À examiner), the reasons you are given, and keep
             each bracketed citation such as [Prospectus, p. 12] unchanged. Recommend the classes listed after
-            "Eligible instead". Ask the questions listed after "Ask the Requester". Add nothing else: no other
+            "Eligible instead". Add nothing else: no other
             facts, no promise. Answer with the reply text only, greeting and sign-off included.""";
 
     private static final System.Logger LOG = System.getLogger(GatedReplyDrafter.class.getName());
@@ -47,6 +47,11 @@ public class GatedReplyDrafter implements ReplyDrafter {
 
     @Override
     public Reply draft(Language language, List<ReplyLine> lines, List<String> requesterQuestions) {
+        if (!requesterQuestions.isEmpty()) {
+            // Accepted Requester Questions are the dealer's free text: they are listed verbatim by the template, never sent.
+            return fallback.draft(language, lines, requesterQuestions);
+        }
+        Reply.ModelCall sent = null;
         try {
             List<ReplyFacts.Line> facts = new ArrayList<>();
             for (ReplyLine line : lines) {
@@ -57,17 +62,19 @@ public class GatedReplyDrafter implements ReplyDrafter {
                 facts.add(new ReplyFacts.Line(line.portfolio(), line.shareClassName(), line.verdict(), sentences,
                         line.verdict() == com.fundgate.fundeli5.eligibility.Verdict.ELIGIBLE ? List.of() : line.alternatives()));
             }
-            var prompt = gate.gateReply(new ReplyFacts(language.code(), facts, requesterQuestions));
+            var prompt = gate.gateReply(new ReplyFacts(language.code(), facts));
+            // From here the prompt may have left: whatever happens next, the Check Record shows the call.
+            sent = new Reply.ModelCall(MODEL, prompt.text(), prompt.fieldsSent(), null);
             String reply = egress.complete(new GatedLlmRequest(MODEL, SYSTEM, prompt)).text();
             var call = new Reply.ModelCall(MODEL, prompt.text(), prompt.fieldsSent(), reply);
             if (reply == null || reply.isBlank() || !namesEveryPortfolio(reply, lines)) {
                 LOG.log(System.Logger.Level.WARNING, "The model's reply was unusable; using the template.");
-                return fallback.draft(language, lines, requesterQuestions);
+                return new Reply(fallback.draft(language, lines, requesterQuestions).text(), call);
             }
             return new Reply(reply.strip(), call);
         } catch (RuntimeException e) {
             LOG.log(System.Logger.Level.WARNING, "No model reply (" + e.getClass().getSimpleName() + "); using the template.");
-            return fallback.draft(language, lines, requesterQuestions);
+            return new Reply(fallback.draft(language, lines, requesterQuestions).text(), sent);
         }
     }
 

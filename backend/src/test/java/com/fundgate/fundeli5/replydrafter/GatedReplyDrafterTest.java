@@ -73,7 +73,7 @@ class GatedReplyDrafterTest {
     @Test
     void theGateRefusesAPromptThatWouldCarryAReference() {
         var facts = new ReplyFacts("en", List.of(new ReplyFacts.Line(ID, "BI-EUR", Verdict.ELIGIBLE,
-                List.of("Ask LOC90000101"), List.of())), List.of());
+                List.of("Ask LOC90000101"), List.of())));
 
         assertThatThrownBy(() -> gate.gateReply(facts)).isInstanceOf(IllegalArgumentException.class);
     }
