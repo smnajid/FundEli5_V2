@@ -81,6 +81,11 @@ public class AnsweringConfiguration {
     /** One plug-in per rule kind, in the order their outcomes are shown; each later ticket adds its kinds here. */
     @Bean
     RuleCatalog ruleCatalog() {
+        return standardCatalog();
+    }
+
+    /** The catalog both runtimes use: the dealer app evaluates with it, the pipeline drafts with its lines. */
+    static RuleCatalog standardCatalog() {
         return new RuleCatalog(List.of(new InvestorCategoryPlugin(), new UsPersonExclusionPlugin(),
                 new MinimumInitialSubscriptionPlugin(), new MandateOnlyClassPlugin(), new KidRequiredForRetailPlugin(),
                 new UnmodelledRestrictionPlugin(), new TargetMarketPlugin()));

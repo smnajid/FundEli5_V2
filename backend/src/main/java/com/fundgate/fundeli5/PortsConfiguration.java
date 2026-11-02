@@ -16,6 +16,8 @@ import com.fundgate.fundeli5.shareclasses.fixture.FixtureShareClasses;
 import com.fundgate.fundeli5.privacygate.PersonalDataDetector;
 import com.fundgate.fundeli5.privacygate.fixture.FixturePersonalDataDetector;
 import com.fundgate.fundeli5.privacygate.presidio.PresidioPersonalDataDetector;
+import com.fundgate.fundeli5.rulecardpipeline.CardDrafter;
+import com.fundgate.fundeli5.rulecardpipeline.DraftCardWriter;
 import com.fundgate.fundeli5.rulecardpipeline.PageRanking;
 import com.fundgate.fundeli5.rulecardpipeline.PageSelector;
 import com.fundgate.fundeli5.rulecardpipeline.SourceReader;
@@ -24,6 +26,7 @@ import com.fundgate.fundeli5.rulecardpipeline.jev.JevClient;
 import com.fundgate.fundeli5.rulecardpipeline.jev.JevPageRanking;
 import com.fundgate.fundeli5.rulecardpipeline.pdf.PdfBoxPdfText;
 import java.nio.file.Path;
+import java.time.Clock;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
@@ -143,8 +146,20 @@ public class PortsConfiguration {
         }
 
         @Bean
-        PipelineRunner pipelineRunner(SourceReader sourceReader) {
-            return new PipelineRunner(sourceReader);
+        CardDrafter cardDrafter(PageSelector pageSelector, LlmEgress llmEgress,
+                @Value("${fundeli5.pipeline.model:claude-opus-5-5}") String model,
+                @Value("${fundeli5.llm.endpoint:replay}") String endpoint) {
+            return new CardDrafter(pageSelector, llmEgress, AnsweringConfiguration.standardCatalog(), model, endpoint, Clock.systemUTC());
+        }
+
+        @Bean
+        DraftCardWriter draftCardWriter(@Value("${fundeli5.pipeline.out}") String out) {
+            return new DraftCardWriter(Path.of(out));
+        }
+
+        @Bean
+        PipelineRunner pipelineRunner(SourceReader sourceReader, CardDrafter cardDrafter, DraftCardWriter writer) {
+            return new PipelineRunner(sourceReader, cardDrafter, writer);
         }
     }
 }

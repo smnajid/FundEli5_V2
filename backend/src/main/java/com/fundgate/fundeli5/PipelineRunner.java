@@ -1,6 +1,8 @@
 package com.fundgate.fundeli5;
 
 import com.fundgate.fundeli5.bankdata.Isin;
+import com.fundgate.fundeli5.rulecardpipeline.CardDrafter;
+import com.fundgate.fundeli5.rulecardpipeline.DraftCardWriter;
 import com.fundgate.fundeli5.rulecardpipeline.SourceReader;
 import com.fundgate.fundeli5.rulecardpipeline.SourceReading;
 import org.slf4j.Logger;
@@ -10,16 +12,20 @@ import org.springframework.boot.ApplicationRunner;
 
 /**
  * Command-line entry of the Rule Card pipeline: {@code --isin=<ISIN>} (repeatable) names a Share Class of
- * each fund to read. For now it reads and reports the documents; drafting follows in later steps.
+ * each fund to draft. Reads the fund's documents, drafts a Draft Rule Card and writes it to the output folder.
  */
 class PipelineRunner implements ApplicationRunner {
 
     private static final Logger log = LoggerFactory.getLogger(PipelineRunner.class);
 
     private final SourceReader reader;
+    private final CardDrafter drafter;
+    private final DraftCardWriter writer;
 
-    PipelineRunner(SourceReader reader) {
+    PipelineRunner(SourceReader reader, CardDrafter drafter, DraftCardWriter writer) {
         this.reader = reader;
+        this.drafter = drafter;
+        this.writer = writer;
     }
 
     @Override
@@ -35,7 +41,11 @@ class PipelineRunner implements ApplicationRunner {
             reading.refusals().forEach(r -> log.warn("{}", r.getMessage()));
             if (!reading.canDraft()) {
                 log.warn("No Rule Card can be drafted for {}", isin);
+                continue;
             }
+            CardDrafter.Drafted drafted = drafter.draft(reading);
+            log.info("Draft written to {} ({} rules); possibly missed: {}", writer.write(drafted.card()),
+                    drafted.card().rules().size(), drafted.possiblyMissed());
         }
     }
 }
