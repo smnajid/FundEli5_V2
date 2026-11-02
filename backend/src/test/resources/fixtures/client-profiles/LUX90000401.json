@@ -1,0 +1,66 @@
+{
+  "portfolioRef": "LUX90000401",
+  "portfolioId": "96533db2-921e-4fb0-841d-02bd723e6aef",
+  "legalEntity": "LUX",
+  "retrievedAt": "2026-11-02T08:00:00Z",
+  "client": {
+    "residenceCountry": "LU",
+    "nationalities": [
+      "LU"
+    ],
+    "taxResidences": [
+      "LU"
+    ],
+    "birthCountry": "LU",
+    "usPerson": {
+      "fatcaStatus": "non_us_person",
+      "usPermanentResident": false
+    },
+    "knowledgeAndExperience": [
+      {
+        "productType": {
+          "code": "FUNDS",
+          "label": "Investment funds"
+        },
+        "level": {
+          "code": "EXPERT",
+          "label": "Expert"
+        }
+      },
+      {
+        "productType": {
+          "code": "PRIVATE_EQUITY",
+          "label": "Private equity"
+        },
+        "level": {
+          "code": "EXPERT",
+          "label": "Expert"
+        }
+      }
+    ]
+  },
+  "classification": {
+    "regime": "mifid",
+    "category": "professional",
+    "classifiedOn": "2025-01-15",
+    "declarations": []
+  },
+  "portfolio": {
+    "referenceCurrency": "EUR",
+    "mandate": {
+      "type": "advisory"
+    },
+    "investmentProfile": {
+      "riskProfile": {
+        "code": "5",
+        "label": "Dynamic"
+      },
+      "abilityToBearLosses": {
+        "code": "FULL_LOSS",
+        "label": "Full loss"
+      },
+      "horizonYears": 12,
+      "assessedOn": "2026-03-10"
+    }
+  }
+}

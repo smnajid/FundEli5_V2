@@ -1,0 +1,50 @@
+{
+  "portfolioRef": "SIN90001301",
+  "portfolioId": "a747b548-854d-4b8f-8f9e-93b7d529b183",
+  "legalEntity": "SIN",
+  "retrievedAt": "2026-11-02T08:00:00Z",
+  "client": {
+    "residenceCountry": "SG",
+    "nationalities": [
+      "SG"
+    ],
+    "taxResidences": [
+      "SG"
+    ],
+    "birthCountry": "SG",
+    "usPerson": {
+      "fatcaStatus": "non_us_person",
+      "usPermanentResident": false
+    },
+    "knowledgeAndExperience": [
+      {
+        "productType": {
+          "code": "FUNDS",
+          "label": "Investment funds"
+        },
+        "level": {
+          "code": "INFORMED",
+          "label": "Informed"
+        }
+      }
+    ]
+  },
+  "portfolio": {
+    "referenceCurrency": "USD",
+    "mandate": {
+      "type": "advisory"
+    },
+    "investmentProfile": {
+      "riskProfile": {
+        "code": "3",
+        "label": "Balanced"
+      },
+      "abilityToBearLosses": {
+        "code": "FULL_LOSS",
+        "label": "Full loss"
+      },
+      "horizonYears": 5,
+      "assessedOn": "2026-03-10"
+    }
+  }
+}

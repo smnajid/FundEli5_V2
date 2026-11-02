@@ -85,8 +85,9 @@ public class AnswerService {
         for (ParsedRequest request : parsed.requests()) {
             PortfolioReference reference = email.references().get(request.portfolio());
             List<ShareClass> classes = catalog.resolve(request.shareClassMention());
-            if (reference == null || classes.isEmpty() || request.amount() == null || request.currency() == null) {
-                // A Subscription Request needs an amount; a request without one is flagged, never guessed.
+            if (reference == null || classes.isEmpty() || (request.amount() == null) != (request.currency() == null)) {
+                // An amount without its currency is flagged, never guessed. No amount at all is a check
+                // the minimum rule sends to Review ("amount to follow").
                 unclear.add("Request unclear: " + request.shareClassMention());
                 continue;
             }

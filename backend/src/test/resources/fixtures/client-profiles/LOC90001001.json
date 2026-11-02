@@ -1,0 +1,60 @@
+{
+  "portfolioRef": "LOC90001001",
+  "portfolioId": "d2c266fb-346f-41ee-b671-5a0c9fd78d9c",
+  "legalEntity": "LOC",
+  "retrievedAt": "2026-11-02T08:00:00Z",
+  "client": {
+    "residenceCountry": "CH",
+    "nationalities": [
+      "CH"
+    ],
+    "taxResidences": [
+      "CH"
+    ],
+    "birthCountry": "CH",
+    "usPerson": {
+      "fatcaStatus": "non_us_person",
+      "usPermanentResident": false
+    },
+    "knowledgeAndExperience": [
+      {
+        "productType": {
+          "code": "FUNDS",
+          "label": "Investment funds"
+        },
+        "level": {
+          "code": "BASIC",
+          "label": "Basic"
+        }
+      }
+    ]
+  },
+  "classification": {
+    "regime": "finsa",
+    "category": "retail",
+    "classifiedOn": "2025-01-15",
+    "declarations": []
+  },
+  "portfolio": {
+    "referenceCurrency": "CHF",
+    "mandate": {
+      "type": "discretionary",
+      "startDate": "2019-06-01",
+      "manager": {
+        "kind": "bank"
+      }
+    },
+    "investmentProfile": {
+      "riskProfile": {
+        "code": "3",
+        "label": "Balanced"
+      },
+      "abilityToBearLosses": {
+        "code": "FULL_LOSS",
+        "label": "Full loss"
+      },
+      "horizonYears": 7,
+      "assessedOn": "2026-03-10"
+    }
+  }
+}

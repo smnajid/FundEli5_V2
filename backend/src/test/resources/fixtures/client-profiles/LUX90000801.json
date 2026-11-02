@@ -1,0 +1,56 @@
+{
+  "portfolioRef": "LUX90000801",
+  "portfolioId": "2e6395e1-c41d-44c2-bbce-5f5754345fb2",
+  "legalEntity": "LUX",
+  "retrievedAt": "2026-11-02T08:00:00Z",
+  "client": {
+    "residenceCountry": "LU",
+    "nationalities": [
+      "LU"
+    ],
+    "taxResidences": [
+      "LU"
+    ],
+    "birthCountry": "LU",
+    "usPerson": {
+      "fatcaStatus": "non_us_person",
+      "usPermanentResident": false
+    },
+    "knowledgeAndExperience": [
+      {
+        "productType": {
+          "code": "FUNDS",
+          "label": "Investment funds"
+        },
+        "level": {
+          "code": "BASIC",
+          "label": "Basic"
+        }
+      }
+    ]
+  },
+  "classification": {
+    "regime": "mifid",
+    "category": "retail",
+    "classifiedOn": "2025-01-15",
+    "declarations": []
+  },
+  "portfolio": {
+    "referenceCurrency": "EUR",
+    "mandate": {
+      "type": "advisory"
+    },
+    "investmentProfile": {
+      "riskProfile": {
+        "code": "2",
+        "label": "Income"
+      },
+      "abilityToBearLosses": {
+        "code": "LIMITED_LOSS",
+        "label": "Limited loss"
+      },
+      "horizonYears": 5,
+      "assessedOn": "2026-03-10"
+    }
+  }
+}

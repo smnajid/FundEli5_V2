@@ -38,4 +38,9 @@ public interface RuleKindPlugin<C extends Condition> {
      * False: the worst finding decides, and a class-level rule overrides the fund-level one.
      */
     boolean accumulates();
+
+    /** False when this kind only warns for the check (the Target Market in Switzerland): its Reviews do not bind. */
+    default boolean binds(Facts facts) {
+        return true;
+    }
 }

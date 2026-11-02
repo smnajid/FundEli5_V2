@@ -58,16 +58,18 @@ class AnswerController {
     /** The request form filled by hand: still checked, answered from a template, no model call. */
     @PostMapping("/answers/by-hand")
     AnswerView answerByHand(@RequestBody HandRequestBody body) {
-        if (body.portfolioReference() == null || body.shareClassIsin() == null || body.currency() == null
-                || body.amount() == null || body.amount().signum() <= 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Portfolio, share class, currency and a positive amount are required");
+        if (body.portfolioReference() == null || body.shareClassIsin() == null || (body.currency() == null) != (body.amount() == null)
+                || (body.amount() != null && body.amount().signum() <= 0)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Portfolio and share class are required; an amount needs its currency, and must be positive");
         }
         try {
             ShareClass shareClass = shareClasses.all().stream()
                     .filter(c -> c.isin().value().equals(body.shareClassIsin())).findFirst()
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Unknown Share Class"));
             var request = new SubscriptionRequest(new PortfolioReference(body.portfolioReference()),
-                    shareClass.isin(), body.amount(), new Currency(body.currency()), body.clientInitiated());
+                    shareClass.isin(), body.amount(),
+                    body.currency() == null ? null : new Currency(body.currency()), body.clientInitiated());
             return view(answers.answerByHand(request, shareClass.shareClassName()));
         } catch (PortfolioNotFound e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unknown Portfolio Reference");
@@ -88,7 +90,7 @@ class AnswerController {
                 a.aiUsed(),
                 a.aiUsed() ? "the LLM saw Portfolio Ids only" : "no AI was used for this email",
                 a.checks().stream().map(c -> new CheckView(c.portfolio().value(), c.shareClass().value(),
-                        c.shareClassName(), c.amount(), c.currency().code(), c.clientInitiated(), c.verdict(),
+                        c.shareClassName(), c.amount(), c.currency() == null ? null : c.currency().code(), c.clientInitiated(), c.verdict(),
                         c.justification().outcomes().stream().map(o -> new OutcomeView(o.kind().name(),
                                 o.result().name(), o.explanation())).toList())).toList(),
                 a.unclear(), EDITABLE_FIELDS, a.reply());
@@ -96,7 +98,8 @@ class AnswerController {
 
     private CheckRecordView view(CheckRecord r) {
         return new CheckRecordView(r.id(), r.checkedAt(), r.request().portfolio().value(),
-                r.request().shareClass().value(), r.request().amount(), r.request().currency().code(),
+                r.request().shareClass().value(), r.request().amount(),
+                r.request().currency() == null ? null : r.request().currency().code(),
                 r.ruleCardVersion(), r.scaleMappingVersion(), r.engineVersion(), clientFieldsRead(r.clientProfile()),
                 r.verdict(), r.justification().outcomes().stream().map(o -> new OutcomeView(o.kind().name(),
                         o.result().name(), o.explanation())).toList(),

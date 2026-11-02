@@ -36,6 +36,10 @@ public final class MinimumInitialSubscriptionPlugin implements RuleKindPlugin<Co
         if (condition.amount().signum() == 0) {
             return Optional.of(Finding.pass("The class has no minimum initial subscription."));
         }
+        if (request.amount() == null) {
+            return Optional.of(Finding.review("The request names no amount: amount to follow, so the minimum of "
+                    + minimum + " cannot be checked."));
+        }
         Optional<BigDecimal> converted = Money.convert(request.amount(), request.currency(), condition.currency(),
                 lookups.fxRates());
         if (converted.isEmpty()) {

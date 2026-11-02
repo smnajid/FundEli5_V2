@@ -12,6 +12,7 @@ import com.fundgate.fundeli5.rulecard.RuleCard;
 import com.fundgate.fundeli5.rulecard.RuleCards;
 import com.fundgate.fundeli5.ruleengine.plugin.Facts;
 import com.fundgate.fundeli5.ruleengine.plugin.Finding;
+import com.fundgate.fundeli5.ruleengine.plugin.FundRegistrationRule;
 import com.fundgate.fundeli5.ruleengine.plugin.FrameOutcomes;
 import com.fundgate.fundeli5.ruleengine.plugin.Lookups;
 import com.fundgate.fundeli5.ruleengine.plugin.RuleKindPlugin;
@@ -38,6 +39,7 @@ public class RuleCatalogEngine implements RuleEngine {
     private final Lookups lookups;
     private final RuleCatalog catalog;
     private final EditionLookup editions;
+    private final FundRegistrationRule registration = new FundRegistrationRule();
 
     public RuleCatalogEngine(RuleCards ruleCards, ClientProfiles clientProfiles, ShareClasses shareClasses,
             Lookups lookups, RuleCatalog catalog, EditionLookup editions) {
@@ -90,6 +92,7 @@ public class RuleCatalogEngine implements RuleEngine {
         if (outcomes.isEmpty()) {
             outcomes.add(FrameOutcomes.noRuleApplies());
         }
+        outcomes.add(registration.evaluate(facts, lookups));
         staleWarning(card).ifPresent(warnings::add);
         return new EngineResult(combine(outcomes), new Justification(outcomes, warnings));
     }
@@ -148,15 +151,20 @@ public class RuleCatalogEngine implements RuleEngine {
         List<RuleOutcome> found = new ArrayList<>();
         if (rule.contradiction()) {
             warnings.add("The documents contradict each other on: " + rule.summary());
-            found.add(new RuleOutcome(plugin.kind(), RuleOutcome.Result.REVIEW,
+            found.add(new RuleOutcome(plugin.kind(),
+                    plugin.binds(facts) ? RuleOutcome.Result.REVIEW : RuleOutcome.Result.PASS,
                     "The documents contradict each other on: " + rule.summary(), rule.citations()));
         }
         if (rule.citations().isEmpty()) {
-            found.add(new RuleOutcome(plugin.kind(), RuleOutcome.Result.REVIEW,
+            found.add(new RuleOutcome(plugin.kind(),
+                    plugin.binds(facts) ? RuleOutcome.Result.REVIEW : RuleOutcome.Result.PASS,
                     "The rule carries no Citation, so it cannot decide: " + rule.summary(), List.of()));
             return found;
         }
-        evaluate(plugin, rule, facts).ifPresent(found::add);
+        Optional<Finding> finding = findingOf(plugin, rule, facts);
+        finding.filter(Finding::warning).ifPresent(f -> warnings.add(f.explanation()));
+        finding.map(f -> new RuleOutcome(plugin.kind(), f.result(), f.explanation(), rule.citations()))
+                .ifPresent(found::add);
         return found;
     }
 
@@ -169,9 +177,8 @@ public class RuleCatalogEngine implements RuleEngine {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private Optional<RuleOutcome> evaluate(RuleKindPlugin plugin, Rule rule, Facts facts) {
-        Optional<Finding> finding = plugin.evaluate(plugin.asDrafted(rule.condition()), facts, lookups);
-        return finding.map(f -> new RuleOutcome(plugin.kind(), f.result(), f.explanation(), rule.citations()));
+    private Optional<Finding> findingOf(RuleKindPlugin plugin, Rule rule, Facts facts) {
+        return plugin.evaluate(plugin.asDrafted(rule.condition()), facts, lookups);
     }
 
     /** A Stale card still decides; it only warns that a newer edition of a source is listed. */

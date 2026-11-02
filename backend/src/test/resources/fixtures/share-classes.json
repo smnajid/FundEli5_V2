@@ -1,0 +1,189 @@
+[
+  {
+    "isin": "LU0348926287",
+    "fundId": null,
+    "fundName": "Nordea 1 – Global Climate and Environment Fund",
+    "umbrellaName": "Nordea 1, SICAV",
+    "shareClassName": "BP-EUR",
+    "currency": "EUR",
+    "domicile": "LU",
+    "fundType": "ucits",
+    "productType": {
+      "code": "FUNDS",
+      "label": "Investment funds"
+    },
+    "valor": null,
+    "internalCode": null,
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  },
+  {
+    "isin": "LU0348927095",
+    "fundId": null,
+    "fundName": "Nordea 1 – Global Climate and Environment Fund",
+    "umbrellaName": "Nordea 1, SICAV",
+    "shareClassName": "BI-EUR",
+    "currency": "EUR",
+    "domicile": "LU",
+    "fundType": "ucits",
+    "productType": {
+      "code": "FUNDS",
+      "label": "Investment funds"
+    },
+    "valor": null,
+    "internalCode": null,
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  },
+  {
+    "isin": "LU2607415275",
+    "fundId": null,
+    "fundName": "Nordea SIF – Global Private Equity Fund",
+    "umbrellaName": "Nordea SIF",
+    "shareClassName": "BW-SEK",
+    "currency": "SEK",
+    "domicile": "LU",
+    "fundType": "sif",
+    "productType": {
+      "code": "PRIVATE_EQUITY",
+      "label": "Private equity"
+    },
+    "valor": null,
+    "internalCode": null,
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  },
+  {
+    "isin": "CH0112537516",
+    "fundId": null,
+    "fundName": "BNP PARIBAS (CH) Bonds CHF",
+    "umbrellaName": null,
+    "shareClassName": "A",
+    "currency": "CHF",
+    "domicile": "CH",
+    "fundType": null,
+    "productType": {
+      "code": "FUNDS",
+      "label": "Investment funds"
+    },
+    "valor": null,
+    "internalCode": null,
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  },
+  {
+    "isin": "CH0114292532",
+    "fundId": null,
+    "fundName": "BNP PARIBAS (CH) Bonds CHF",
+    "umbrellaName": null,
+    "shareClassName": "A AC",
+    "currency": "CHF",
+    "domicile": "CH",
+    "fundType": null,
+    "productType": {
+      "code": "FUNDS",
+      "label": "Investment funds"
+    },
+    "valor": null,
+    "internalCode": null,
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  },
+  {
+    "isin": "CH0112537557",
+    "fundId": null,
+    "fundName": "BNP PARIBAS (CH) Bonds CHF",
+    "umbrellaName": null,
+    "shareClassName": "I",
+    "currency": "CHF",
+    "domicile": "CH",
+    "fundType": null,
+    "productType": {
+      "code": "FUNDS",
+      "label": "Investment funds"
+    },
+    "valor": null,
+    "internalCode": null,
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  },
+  {
+    "isin": "XXSLICAP0001",
+    "fundId": null,
+    "fundName": "Bond Swiss Francs Domestic",
+    "umbrellaName": "Swiss Life iFunds (CH)",
+    "shareClassName": "I Cap",
+    "currency": "CHF",
+    "domicile": "CH",
+    "fundType": null,
+    "productType": {
+      "code": "FUNDS",
+      "label": "Investment funds"
+    },
+    "valor": null,
+    "internalCode": null,
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  },
+  {
+    "isin": "XXSLAMCAP001",
+    "fundId": null,
+    "fundName": "Bond Swiss Francs Domestic",
+    "umbrellaName": "Swiss Life iFunds (CH)",
+    "shareClassName": "AM Cap",
+    "currency": "CHF",
+    "domicile": "CH",
+    "fundType": null,
+    "productType": {
+      "code": "FUNDS",
+      "label": "Investment funds"
+    },
+    "valor": null,
+    "internalCode": null,
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  },
+  {
+    "isin": "XXSLIA100001",
+    "fundId": null,
+    "fundName": "Bond Swiss Francs Domestic",
+    "umbrellaName": "Swiss Life iFunds (CH)",
+    "shareClassName": "I-A 1",
+    "currency": "CHF",
+    "domicile": "CH",
+    "fundType": null,
+    "productType": {
+      "code": "FUNDS",
+      "label": "Investment funds"
+    },
+    "valor": null,
+    "internalCode": null,
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  },
+  {
+    "isin": "XXNOTCOV0001",
+    "fundId": null,
+    "fundName": "Placeholder fund without a Rule Card A",
+    "umbrellaName": null,
+    "shareClassName": "A",
+    "currency": "EUR",
+    "domicile": "LU",
+    "fundType": "ucits",
+    "productType": {
+      "code": "FUNDS",
+      "label": "Investment funds"
+    },
+    "valor": null,
+    "internalCode": null,
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  },
+  {
+    "isin": "XXNOTCOV0002",
+    "fundId": null,
+    "fundName": "Placeholder fund without a Rule Card B",
+    "umbrellaName": null,
+    "shareClassName": "I",
+    "currency": "CHF",
+    "domicile": "CH",
+    "fundType": null,
+    "productType": {
+      "code": "FUNDS",
+      "label": "Investment funds"
+    },
+    "valor": null,
+    "internalCode": null,
+    "retrievedAt": "2026-11-02T08:00:00Z"
+  }
+]
