@@ -1,0 +1,10 @@
+{
+  "request" : {
+    "model" : "claude-sonnet-5-5",
+    "system" : "You write the reply of a bank's fund dealing desk to a colleague who asked whether portfolios may\nsubscribe to funds. Portfolios appear as UUIDs: write each UUID exactly as given, never invent one.\nWrite in the language named on the first line. Give every portfolio its Verdict (Eligible, Not Eligible\nor Needs Review; in French Éligible, Non éligible or À examiner), the reasons you are given, and keep\neach bracketed citation such as [Prospectus, p. 12] unchanged. Recommend the classes listed after\n\"Eligible instead\". Add nothing else: no other\nfacts, no promise. Answer with the reply text only, greeting and sign-off included.",
+    "prompt" : "Language: en\n\nPortfolio 9ae403db-1754-4033-9f06-a99edf92a574 on BI-EUR: NOT_ELIGIBLE\n  The Verdict is Not Eligible: the portfolio may not subscribe.\n  The deciding rule is the investor category: this class is only for investors of a category the portfolio does not belong to. [nordea1-prospectus-2026-06, p. 123; nordea1-prospectus-2026-06, p. 5]\n  Eligible instead: BP-EUR\nPortfolio 216c5cc3-990a-4bec-adb7-212cbea7f259 on BI-EUR: ELIGIBLE\n  The Verdict is Eligible: the portfolio may subscribe.\n"
+  },
+  "response" : {
+    "text" : "Hello,\n\nHere are the results for your two portfolios on BI-EUR:\n\n**Portfolio 9ae403db-1754-4033-9f06-a99edf92a574 on BI-EUR: Not Eligible**\nThe portfolio may not subscribe. The deciding rule is the investor category: this class is only for investors of a category the portfolio does not belong to. [nordea1-prospectus-2026-06, p. 123; nordea1-prospectus-2026-06, p. 5]\nEligible instead: BP-EUR\n\n**Portfolio 216c5cc3-990a-4bec-adb7-212cbea7f259 on BI-EUR: Eligible**\nThe portfolio may subscribe.\n\nBest regards,\nFund Dealing Desk"
+  }
+}

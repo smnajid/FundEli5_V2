@@ -83,4 +83,29 @@ public class DefaultPrivacyGate implements PrivacyGate {
                         && (o.start() < s.start() || o.end() > s.end())))
                 .map(s -> text.substring(s.start(), s.end())).distinct().toList();
     }
+
+    /** ruleExplanation is the desk's fixed wording per rule kind and outcome plus Citations: no client value in it. */
+    private static final List<String> REPLY_FIELDS_SENT = List.of("portfolioId", "verdict", "ruleExplanation", "shareClassName", "alternatives", "language");
+
+    @Override
+    public GatedPrompt gateReply(ReplyFacts facts) {
+        StringBuilder text = new StringBuilder("Language: ").append(facts.language()).append("\n\n");
+        for (ReplyFacts.Line line : facts.lines()) {
+            text.append("Portfolio ").append(line.portfolio()).append(" on ").append(line.shareClassName())
+                    .append(": ").append(line.verdict().name()).append('\n');
+            line.explanation().forEach(sentence -> text.append("  ").append(sentence).append('\n'));
+            if (!line.alternatives().isEmpty()) {
+                text.append("  Eligible instead: ").append(String.join(", ", line.alternatives())).append('\n');
+            }
+        }
+        String prompt = text.toString();
+        if (LOOKS_LIKE_REFERENCE.matcher(PORTFOLIO_ID.matcher(prompt).replaceAll("")).find()) {
+            throw new IllegalArgumentException("The reply prompt would carry something shaped like a Portfolio Reference.");
+        }
+        // The detector clears the prompt like an email; one that cannot answer refuses (the caller then uses the template).
+        if (detector.detect(prompt).stream().anyMatch(DetectedSpan::isPerson)) {
+            throw new IllegalArgumentException("The reply prompt names a person.");
+        }
+        return new GatedPrompt(prompt, REPLY_FIELDS_SENT);
+    }
 }

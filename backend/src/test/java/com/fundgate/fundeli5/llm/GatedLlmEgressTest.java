@@ -19,12 +19,14 @@ class GatedLlmEgressTest {
             }
             assertThat(m.getParameterTypes()).containsExactly(GatedLlmRequest.class);
         }
-        assertThat(GatedLlmRequest.class.getRecordComponents()[2].getType()).isEqualTo(GatedEmail.class);
+        assertThat(GatedLlmRequest.class.getRecordComponents()[2].getType()).isEqualTo(com.fundgate.fundeli5.privacygate.GatedText.class);
     }
 
     @Test
     void aGatedEmailCannotBeBuiltOutsideThePrivacyGate() {
-        for (Constructor<?> c : GatedEmail.class.getDeclaredConstructors()) {
+        for (Constructor<?> c : java.util.stream.Stream.concat(
+                java.util.Arrays.stream(GatedEmail.class.getDeclaredConstructors()),
+                java.util.Arrays.stream(com.fundgate.fundeli5.privacygate.GatedPrompt.class.getDeclaredConstructors())).toList()) {
             assertThat(Modifier.isPublic(c.getModifiers()) || Modifier.isProtected(c.getModifiers())).isFalse();
         }
     }

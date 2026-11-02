@@ -44,6 +44,13 @@ class ArchitectureTest {
             .should().callConstructorWhere(target(owner(simpleName("GatedEmail"))))
             .allowEmptyShould(true);
 
+    /** 2b. Only the Privacy Gate builds a prompt from facts (the reply call's gated input). */
+    @ArchTest
+    static final ArchRule onlyPrivacyGateConstructsGatedPrompt = noClasses()
+            .that().resideOutsideOfPackage("..privacygate..")
+            .should().callConstructorWhere(target(owner(simpleName("GatedPrompt"))))
+            .allowEmptyShould(true);
+
     /**
      * 3. ADR 0004: the LLM-facing modules see Portfolio Ids only. They take a GatedEmail (the Gate's
      * proof) and read its text, never the reference map.

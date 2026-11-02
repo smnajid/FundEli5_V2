@@ -11,6 +11,6 @@ class GatedEgress implements GatedLlmEgress {
 
     @Override
     public LlmResponse complete(GatedLlmRequest request) {
-        return adapter.complete(new LlmRequest(request.model(), request.system(), request.email().text()));
+        return adapter.complete(new LlmRequest(request.model(), request.system(), request.prompt().text()));
     }
 }
