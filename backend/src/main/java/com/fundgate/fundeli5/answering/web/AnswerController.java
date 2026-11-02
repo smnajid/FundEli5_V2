@@ -3,6 +3,7 @@ package com.fundgate.fundeli5.answering.web;
 import com.fundgate.fundeli5.Runtimes;
 import com.fundgate.fundeli5.answering.Answer;
 import com.fundgate.fundeli5.answering.AnswerService;
+import com.fundgate.fundeli5.answering.Evidence;
 import com.fundgate.fundeli5.bankdata.Currency;
 import com.fundgate.fundeli5.bankdata.Isin;
 import com.fundgate.fundeli5.checkrecord.CheckRecords;
@@ -92,8 +93,20 @@ class AnswerController {
                 a.checks().stream().map(c -> new CheckView(c.portfolio().value(), c.shareClass().value(),
                         c.shareClassName(), c.amount(), c.currency() == null ? null : c.currency().code(), c.clientInitiated(), c.verdict(),
                         c.justification().outcomes().stream().map(o -> new OutcomeView(o.kind().name(),
-                                o.result().name(), o.explanation())).toList())).toList(),
-                a.unclear(), EDITABLE_FIELDS, a.reply());
+                                o.result().name(), o.explanation(), citations(a, c, o))).toList())).toList(),
+                a.unclear(), EDITABLE_FIELDS, a.reply(),
+                a.evidence().stream().map(e -> new EvidenceView(e.number(), e.kind().name(), e.result().name(),
+                        e.shareClassName(), e.citation().document(), e.citation().page(), e.citation().quote(),
+                        e.citation().quoteFoundOnPage(), e.citedInReply())).toList());
+    }
+
+    /** The numbers of the evidence cards an outcome cites, with the passages. */
+    private static List<CitationView> citations(Answer a, Answer.Check check, com.fundgate.fundeli5.eligibility.RuleOutcome outcome) {
+        return outcome.citations().stream().map(c -> new CitationView(
+                a.evidence().stream().filter(e -> e.kind() == outcome.kind() && e.result() == outcome.result()
+                        && e.shareClassName().equals(check.shareClassName()) && e.citation().equals(c))
+                        .findFirst().map(Evidence::number).orElse(0),
+                c.document(), c.page(), c.quote(), c.quoteFoundOnPage())).toList();
     }
 
     private CheckRecordView view(CheckRecord r) {
@@ -102,7 +115,7 @@ class AnswerController {
                 r.request().currency() == null ? null : r.request().currency().code(),
                 r.ruleCardVersion(), r.scaleMappingVersion(), r.engineVersion(), clientFieldsRead(r.clientProfile()),
                 r.verdict(), r.justification().outcomes().stream().map(o -> new OutcomeView(o.kind().name(),
-                        o.result().name(), o.explanation())).toList(),
+                        o.result().name(), o.explanation(), List.of())).toList(),
                 r.llmCalls().stream().map(c -> new LlmCallView(c.model(), c.gatedPrompt(), c.fieldsSent(),
                         c.response())).toList(),
                 checkRecords.correctionsOf(r.id()).stream().map(c -> new CorrectionView(c.field(), c.parsedValue(),
@@ -145,7 +158,7 @@ class AnswerController {
     }
 
     record AnswerView(RefusalView refusal, boolean aiUsed, String screenNote, List<CheckView> checks,
-            List<String> unclear, List<String> editableFields, String reply) {
+            List<String> unclear, List<String> editableFields, String reply, List<EvidenceView> evidence) {
     }
 
     record RefusalView(String reason, List<String> namesFound) {
@@ -155,7 +168,16 @@ class AnswerController {
             String currency, boolean clientInitiated, Verdict verdict, List<OutcomeView> outcomes) {
     }
 
-    record OutcomeView(String kind, String result, String explanation) {
+    record OutcomeView(String kind, String result, String explanation, List<CitationView> citations) {
+    }
+
+    /** A passage of a public Fund Document; {@code number} is its card in the evidence rail. */
+    record CitationView(int number, String document, int page, String quote, boolean quoteFoundOnPage) {
+    }
+
+    /** One card of the evidence rail; {@code citedInReply} when a [number] marker of the reply points to it. */
+    record EvidenceView(int number, String kind, String result, String shareClassName, String document, int page,
+            String quote, boolean quoteFoundOnPage, boolean citedInReply) {
     }
 
     record CheckRecordView(UUID id, Instant checkedAt, String portfolioReference, String shareClassIsin,

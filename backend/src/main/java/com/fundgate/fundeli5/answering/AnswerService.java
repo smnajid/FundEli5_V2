@@ -106,8 +106,7 @@ public class AnswerService {
                 ids.add(request.portfolio());
             }
         }
-        return new Answer(null, true, checks, unclear,
-                reply(RequestLanguage.of(email.text()), checks, ids, email.references(), true, pending));
+        return answer(true, checks, unclear, RequestLanguage.of(email.text()), ids, email.references(), pending);
     }
 
     /** The by-hand flow: no model, template reply. */
@@ -115,8 +114,21 @@ public class AnswerService {
         PortfolioId id = clientProfiles.portfolioId(request.portfolio()).orElseThrow(() -> new PortfolioNotFound(request.portfolio()));
         List<CheckRecord> pending = new ArrayList<>();
         Answer.Check check = check(request, shareClassName, List.of(), pending);
-        return new Answer(null, false, List.of(check), List.of(),
-                reply(Language.EN, List.of(check), List.of(id), java.util.Map.of(id, request.portfolio()), false, pending));
+        return answer(false, List.of(check), List.of(), Language.EN, List.of(id),
+                java.util.Map.of(id, request.portfolio()), pending);
+    }
+
+    /** The reply's bracketed passages become numbered markers, each with its card in the evidence rail. */
+    private Answer answer(boolean emailFlow, List<Answer.Check> checks, List<String> unclear, Language language,
+            List<PortfolioId> ids, java.util.Map<PortfolioId, PortfolioReference> references, List<CheckRecord> pending) {
+        String drafted = reply(language, checks, ids, emailFlow, pending);
+        Evidence.Numbering numbering = new Evidence.Numbering(checks);
+        CitationMarkers.Numbered numbered = CitationMarkers.number(drafted, checks, ids, numbering);
+        String reply = numbered.text();
+        for (var entry : references.entrySet()) {
+            reply = reply.replace(entry.getKey().toString(), entry.getValue().value());
+        }
+        return new Answer(null, emailFlow, checks, unclear, reply, numbering.cards(numbered.cited()));
     }
 
     private Answer.Check check(SubscriptionRequest request, String shareClassName, List<CheckRecord.LlmCall> calls,
@@ -136,8 +148,7 @@ public class AnswerService {
      * other classes of the same fund are checked too and the Eligible ones are offered as alternatives: advisory
      * only, they write no Check Record and change no Verdict (ADR 0007).
      */
-    private String reply(Language language, List<Answer.Check> checks, List<PortfolioId> ids,
-            java.util.Map<PortfolioId, PortfolioReference> references, boolean emailFlow,
+    private String reply(Language language, List<Answer.Check> checks, List<PortfolioId> ids, boolean emailFlow,
             List<CheckRecord> pending) {
         List<ReplyLine> lines = new ArrayList<>();
         for (int i = 0; i < checks.size(); i++) {
@@ -155,11 +166,7 @@ public class AnswerService {
                 checkRecords.append(drafted == null || drafted.call() == null ? record : withCall(record, drafted.call()));
             }
         }
-        String reply = drafted.text();
-        for (var entry : references.entrySet()) {
-            reply = reply.replace(entry.getKey().toString(), entry.getValue().value());
-        }
-        return reply;
+        return drafted.text();
     }
 
     private static CheckRecord withCall(CheckRecord r, Reply.ModelCall call) {

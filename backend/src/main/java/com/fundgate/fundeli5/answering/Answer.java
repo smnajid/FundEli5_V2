@@ -12,11 +12,13 @@ import java.util.List;
  * What the Fund Dealer gets back. When the Privacy Gate refused, {@code refusal} is set, no model was
  * called and the dealer fills the request form by hand.
  */
-public record Answer(Refusal refusal, boolean aiUsed, List<Check> checks, List<String> unclear, String reply) {
+public record Answer(Refusal refusal, boolean aiUsed, List<Check> checks, List<String> unclear, String reply,
+        List<Evidence> evidence) {
 
     public Answer {
         checks = List.copyOf(checks);
         unclear = List.copyOf(unclear);
+        evidence = List.copyOf(evidence);
     }
 
     public record Refusal(String reason, List<String> namesFound) {
@@ -28,6 +30,6 @@ public record Answer(Refusal refusal, boolean aiUsed, List<Check> checks, List<S
     }
 
     static Answer refused(String reason, List<String> namesFound) {
-        return new Answer(new Refusal(reason, namesFound), false, List.of(), List.of(), null);
+        return new Answer(new Refusal(reason, namesFound), false, List.of(), List.of(), null, List.of());
     }
 }
