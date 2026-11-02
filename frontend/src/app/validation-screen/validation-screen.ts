@@ -70,56 +70,277 @@ type Status = 'open' | 'accepted' | 'corrected' | 'contradiction';
   selector: 'app-validation-screen',
   imports: [FormsModule],
   styles: `
-    .banner {
-      border: 2px solid #cf222e;
-      background: #ffebe9;
-      padding: 0.5rem 1rem;
+    :host {
+      display: block;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1rem 1.25rem 2rem;
     }
+    h1 {
+      font-size: 1rem;
+      margin: 0 0 0.75rem;
+      color: var(--c-muted);
+      font-weight: 600;
+    }
+    .card {
+      background: var(--c-card);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius);
+    }
+    .picker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    input,
+    select {
+      font: inherit;
+      padding: 0.3rem 0.5rem;
+      border: 1px solid var(--c-border);
+      border-radius: 4px;
+      background: #fff;
+    }
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .header h2 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+    .header p {
+      margin: 0.2rem 0 0;
+      color: var(--c-muted);
+      font-size: 0.8rem;
+    }
+    .header .side {
+      text-align: right;
+    }
+    .header .ready {
+      font-size: 0.95rem;
+      color: var(--c-text);
+    }
+    .header.validated {
+      border-color: var(--c-pass);
+    }
+    .validated-line {
+      color: var(--c-pass);
+    }
+    .validate {
+      margin-top: 0.3rem;
+      padding: 0.45rem 0.9rem;
+      border: 0;
+      border-radius: 4px;
+      background: var(--c-navy);
+      color: #fff;
+    }
+    .validate:disabled {
+      background: #b9c3cf;
+      cursor: not-allowed;
+    }
+    .blockers {
+      margin: 0.4rem 0 0;
+      padding: 0;
+      list-style: none;
+      font-size: 0.75rem;
+      color: var(--c-muted);
+    }
+    .banner,
     .missed {
-      border: 2px solid #9a6700;
-      background: #fff8c5;
-      padding: 0.5rem 1rem;
-      margin-top: 0.5rem;
+      border: 1px solid #f0c36d;
+      background: var(--c-review-bg);
+      border-radius: var(--radius);
+      padding: 0.7rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .contradiction {
+      margin-top: 0.4rem;
+    }
+    .contradiction p {
+      margin: 0 0 0.3rem;
+    }
+    .banner button.jump {
+      padding: 0;
+      border: 0;
+      background: none;
+      font: inherit;
+      color: var(--c-navy);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    button.follow {
+      margin-right: 0.4rem;
+      padding: 0.25rem 0.6rem;
+      border: 1px solid #f0c36d;
+      border-radius: 4px;
+      background: #fff;
     }
     .columns {
       display: grid;
-      grid-template-columns: 1fr 1.4fr 1.2fr;
+      grid-template-columns: minmax(260px, 1fr) minmax(0, 1.5fr) minmax(280px, 1.1fr);
       gap: 1rem;
-      margin-top: 1rem;
+      align-items: start;
+    }
+    h3 {
+      margin: 0;
+      padding: 0.6rem 0.9rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--c-muted);
+    }
+    .rules {
+      overflow: hidden;
     }
     .rules button.rule {
-      display: block;
+      display: grid;
+      grid-template-columns: 1.6rem 1fr auto;
+      grid-template-areas: 'badge kind scope' 'badge value value';
+      gap: 0 0.6rem;
       width: 100%;
       text-align: left;
-      margin-bottom: 0.25rem;
+      padding: 0.55rem 0.7rem;
+      border: 0;
+      border-top: 1px solid var(--c-border);
+      background: var(--c-card);
+      color: inherit;
     }
     .rules button.rule[aria-current='true'] {
-      outline: 2px solid #0969da;
+      background: #e8eff8;
+      box-shadow: inset 3px 0 0 var(--c-navy);
     }
-    .status-open {
-      color: #9a6700;
+    .rule .kind {
+      grid-area: kind;
+      font-weight: 600;
+    }
+    .rule .value {
+      grid-area: value;
+      color: var(--c-muted);
+      font-size: 0.8rem;
+      overflow-wrap: anywhere;
+    }
+    .rule .scope {
+      grid-area: scope;
+      color: var(--c-muted);
+      font-size: 0.75rem;
+    }
+    .status {
+      grid-area: badge;
+      align-self: center;
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 4px;
+      display: grid;
+      place-items: center;
+      font-size: 0.75rem;
+      background: #eceff2;
+      color: var(--c-muted);
     }
     .status-accepted,
     .status-corrected {
-      color: #1a7f37;
+      background: #dcf3e3;
+      color: var(--c-pass);
     }
     .status-contradiction {
-      color: #cf222e;
+      background: var(--c-review);
+      color: #fff;
       font-weight: bold;
     }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .tabs button {
+      padding: 0.45rem 0.8rem;
+      border: 1px solid var(--c-border);
+      border-radius: 4px;
+      background: #fff;
+    }
+    .tabs button[aria-selected='true'] {
+      background: var(--c-navy);
+      border-color: var(--c-navy);
+      color: #fff;
+    }
+    .page {
+      min-height: 280px;
+      padding: 1.5rem 1.75rem;
+    }
+    .page .meta {
+      display: flex;
+      justify-content: space-between;
+      color: var(--c-muted);
+      font-size: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
     .quote {
+      margin: 0;
       white-space: pre-wrap;
-      background: #f6f8fa;
-      padding: 0.5rem;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 1rem;
+      line-height: 1.55;
     }
     .quote mark {
-      background: #ffe066;
+      background: #fff2a8);
+      padding: 0 0.1rem;
     }
     .signal {
-      color: #cf222e;
+      color: var(--c-fail);
     }
-    .header.validated {
-      color: #1a7f37;
+    .decision .body {
+      padding: 0 0.9rem 0.9rem;
+    }
+    .decision .title {
+      font-weight: 600;
+      margin: 0 0 0.5rem;
+    }
+    .decision .summary {
+      line-height: 1.5;
+    }
+    .decision label {
+      display: block;
+      margin-top: 0.6rem;
+      color: var(--c-muted);
+      font-size: 0.8rem;
+    }
+    .decision input:not([type='checkbox']) {
+      width: 100%;
+    }
+    .decision .signals {
+      padding-left: 1.1rem;
+    }
+    .decision .actions button {
+      margin: 0.75rem 0.4rem 0 0;
+      padding: 0.45rem 0.9rem;
+      border: 0;
+      border-radius: 4px;
+      background: var(--c-navy);
+      color: #fff;
+    }
+    .decision .actions button:disabled {
+      background: #b9c3cf;
+    }
+    [role='alert'] {
+      color: var(--c-fail);
+    }
+    @media (max-width: 900px) {
+      .columns {
+        grid-template-columns: 1fr;
+      }
+      .header .side {
+        text-align: left;
+      }
     }
   `,
   template: `
@@ -129,65 +350,80 @@ type Status = 'open' | 'accepted' | 'corrected' | 'contradiction';
       <p role="alert">{{ message }}</p>
     }
 
-    <label for="validator">Validator</label>
-    <input id="validator" [ngModel]="validator()" (ngModelChange)="validator.set($event)" />
+    <div class="picker">
+      <label for="validator">Validator</label>
+      <input id="validator" [ngModel]="validator()" (ngModelChange)="validator.set($event)" />
 
-    <label for="draft">Draft card</label>
-    <select id="draft" [ngModel]="selectedDraft()" (ngModelChange)="pick($event)">
-      <option value="">Pick a Draft card…</option>
-      @for (d of drafts(); track $index) {
-        <option [value]="d.fundName + '|' + d.version">
-          {{ d.fundName }} · Draft v{{ d.version }}
-        </option>
-      }
-    </select>
+      <label for="draft">Draft card</label>
+      <select id="draft" [ngModel]="selectedDraft()" (ngModelChange)="pick($event)">
+        <option value="">Pick a Draft card…</option>
+        @for (d of drafts(); track $index) {
+          <option [value]="d.fundName + '|' + d.version">
+            {{ d.fundName }} · Draft v{{ d.version }}
+          </option>
+        }
+      </select>
+    </div>
     @if (drafts().length === 0 && !card()) {
       <p class="no-drafts">No Draft card is waiting for validation.</p>
     }
 
     @if (card(); as c) {
-      <section class="header" [class.validated]="c.status === 'validated'">
-        <h2>{{ c.fundName }}</h2>
-        <p>
-          {{ c.shareClasses?.join(', ') }}
-          @if (c.status === 'validated') {
-            ·
-            <strong class="validated-line"
-              >Validated v{{ c.version }} by {{ c.validation?.validator }} at
-              {{ c.validation?.validatedAt }} · in force for Eligibility Checks</strong
-            >
-          } @else {
-            · Draft v{{ c.version }} · drafted {{ c.drafting?.draftedAt }} ·
-            <span class="verified">{{
-              quotesVerified()
-                ? 'every quote verified on its page'
-                : 'some quotes are not found on their page'
-            }}</span>
-            · <span class="ready">{{ ready() }} of {{ rules().length }} rules ready</span>
-          }
-        </p>
+      <section class="header card" [class.validated]="c.status === 'validated'">
+        <div class="title">
+          <h2>{{ c.fundName }}</h2>
+          <p>
+            {{ c.shareClasses?.join(', ') }}
+            @if (c.status === 'validated') {
+              ·
+              <strong class="validated-line"
+                >Validated v{{ c.version }} by {{ c.validation?.validator }} at
+                {{ c.validation?.validatedAt }} · in force for Eligibility Checks</strong
+              >
+            } @else {
+              · <strong>Draft v{{ c.version }}</strong> · drafted {{ c.drafting?.draftedAt }} ·
+              <span class="verified">{{
+                quotesVerified()
+                  ? 'every quote verified on its page'
+                  : 'some quotes are not found on their page'
+              }}</span>
+            }
+          </p>
+        </div>
         @if (c.status !== 'validated') {
-          <button
-            type="button"
-            class="validate"
-            [disabled]="!review()?.canValidate || busy()"
-            (click)="validate()"
-          >
-            Validate card
-          </button>
-          @if (!review()?.canValidate) {
-            <ul class="blockers">
-              @for (b of review()?.blockers ?? []; track b) {
-                <li>{{ b }}</li>
-              }
-            </ul>
-          }
+          <div class="side">
+            <span class="ready"
+              ><strong>{{ ready() }}</strong> / {{ rules().length }} rules ready</span
+            ><br />
+            <button
+              type="button"
+              class="validate"
+              [disabled]="!review()?.canValidate || busy()"
+              (click)="validate()"
+            >
+              Validate card
+            </button>
+            @if (!review()?.canValidate) {
+              <ul class="blockers">
+                @for (b of review()?.blockers ?? []; track b) {
+                  <li>{{ b }}</li>
+                }
+              </ul>
+            }
+          </div>
         }
       </section>
 
       @if ((review()?.contradictions ?? []).length > 0) {
-        <section class="banner" role="alert">
-          <strong>{{ review()?.contradictions?.length }} contradiction(s) need a decision.</strong>
+        <section class="banner" aria-label="Contradictions">
+          <strong>{{ review()?.contradictions?.length }} contradiction(s) need a decision:</strong>
+          @for (k of review()?.contradictions ?? []; track $index; let last = $last) {
+            @if (k.options?.[0]; as first) {
+              <button type="button" class="jump" (click)="select(first.rule)">{{ kindLabel(k.kind) }}</button>
+            } @else {
+              {{ kindLabel(k.kind) }}
+            }{{ last ? '.' : ', ' }}
+          }
           @for (k of review()?.contradictions ?? []; track $index) {
             <div class="contradiction">
               <p>
@@ -216,7 +452,7 @@ type Status = 'open' | 'accepted' | 'corrected' | 'contradiction';
       }
 
       <div class="columns">
-        <nav class="rules" aria-label="Rules">
+        <nav class="rules card" aria-label="Rules">
           <h3>Rules</h3>
           @for (r of rules(); track $index) {
             <button
@@ -241,7 +477,7 @@ type Status = 'open' | 'accepted' | 'corrected' | 'contradiction';
             @if ((r.citations ?? []).length === 0) {
               <p class="signal">No supporting quote for this value.</p>
             }
-            <div role="tablist">
+            <div role="tablist" class="tabs">
               @for (cit of r.citations ?? []; track $index) {
                 <button
                   type="button"
@@ -254,8 +490,13 @@ type Status = 'open' | 'accepted' | 'corrected' | 'contradiction';
               }
             </div>
             @if (citation(); as cit) {
-              <p>{{ cit.document }}, page {{ cit.page }}</p>
-              <pre class="quote"><mark>{{ cit.quote }}</mark></pre>
+              <div class="page card">
+                <div class="meta">
+                  <span>{{ cit.document }}</span
+                  ><span>page {{ cit.page }}</span>
+                </div>
+                <pre class="quote"><mark>{{ cit.quote }}</mark></pre>
+              </div>
               @if (!cit.quoteFoundOnPage) {
                 <p class="signal">Quote not found on its page.</p>
               }
@@ -263,75 +504,78 @@ type Status = 'open' | 'accepted' | 'corrected' | 'contradiction';
           }
         </section>
 
-        <section class="decision">
-          <h3>Decision</h3>
+        <section class="decision card">
           @if (rule(); as r) {
-            <p class="summary">{{ r.summary }}</p>
-            <ul class="signals">
-              @for (s of ruleSignals(); track s) {
-                <li class="signal">{{ signalLabel(s) }}</li>
-              }
-              @if (r.contradiction) {
-                <li class="signal">
-                  Contradiction between documents: choose the governing source in the banner.
-                </li>
-              }
-            </ul>
-            @if (c.status !== 'validated') {
-              @if (r.condition?.kind === 'unmodelled_restriction') {
-                <p>
-                  Restriction is {{ r.condition?.status
-                  }}{{ r.condition?.notedReason ? ': ' + r.condition?.notedReason : '' }}
-                </p>
-                <button
-                  type="button"
-                  class="blocking"
-                  [disabled]="busy()"
-                  (click)="mark('blocking')"
-                >
-                  Blocking
-                </button>
-                <label for="reason">Reason it sets no condition on the client</label>
-                <input id="reason" [ngModel]="reason()" (ngModelChange)="reason.set($event)" />
-                <button
-                  type="button"
-                  class="noted"
-                  [disabled]="busy() || !reason().trim()"
-                  (click)="mark('noted')"
-                >
-                  Noted
-                </button>
-              } @else {
-                @for (f of fields(); track f) {
-                  <label [for]="'f-' + f">{{ f }}</label>
-                  @if (isBoolean(f)) {
-                    <input
-                      type="checkbox"
-                      [id]="'f-' + f"
-                      [ngModel]="edit()[f]"
-                      (ngModelChange)="setField(f, $event)"
-                    />
-                  } @else {
-                    <input
-                      [id]="'f-' + f"
-                      [ngModel]="edit()[f]"
-                      (ngModelChange)="setField(f, $event)"
-                    />
-                  }
+            <h3>{{ kindLabel(r.condition?.kind) }} · {{ r.shareClass ?? 'all classes' }}</h3>
+            <div class="body">
+              <p class="title">{{ valueOf(r) }}</p>
+              <p class="summary">{{ r.summary }}</p>
+              <ul class="signals">
+                @for (s of ruleSignals(); track s) {
+                  <li class="signal">{{ signalLabel(s) }}</li>
                 }
-                <div>
-                  @if (changed()) {
-                    <button type="button" class="correct" [disabled]="busy()" (click)="correct()">
-                      Save correction
-                    </button>
-                  } @else {
-                    <button type="button" class="accept" [disabled]="busy()" (click)="accept()">
-                      Accept
-                    </button>
+                @if (r.contradiction) {
+                  <li class="signal">
+                    Contradiction between documents: choose the governing source in the banner.
+                  </li>
+                }
+              </ul>
+              @if (c.status !== 'validated') {
+                @if (r.condition?.kind === 'unmodelled_restriction') {
+                  <p>
+                    Restriction is {{ r.condition?.status
+                    }}{{ r.condition?.notedReason ? ': ' + r.condition?.notedReason : '' }}
+                  </p>
+                  <button
+                    type="button"
+                    class="blocking"
+                    [disabled]="busy()"
+                    (click)="mark('blocking')"
+                  >
+                    Blocking
+                  </button>
+                  <label for="reason">Reason it sets no condition on the client</label>
+                  <input id="reason" [ngModel]="reason()" (ngModelChange)="reason.set($event)" />
+                  <button
+                    type="button"
+                    class="noted"
+                    [disabled]="busy() || !reason().trim()"
+                    (click)="mark('noted')"
+                  >
+                    Noted
+                  </button>
+                } @else {
+                  @for (f of fields(); track f) {
+                    <label [for]="'f-' + f">{{ f }}</label>
+                    @if (isBoolean(f)) {
+                      <input
+                        type="checkbox"
+                        [id]="'f-' + f"
+                        [ngModel]="edit()[f]"
+                        (ngModelChange)="setField(f, $event)"
+                      />
+                    } @else {
+                      <input
+                        [id]="'f-' + f"
+                        [ngModel]="edit()[f]"
+                        (ngModelChange)="setField(f, $event)"
+                      />
+                    }
                   }
-                </div>
+                  <div class="actions">
+                    @if (changed()) {
+                      <button type="button" class="correct" [disabled]="busy()" (click)="correct()">
+                        Save correction
+                      </button>
+                    } @else {
+                      <button type="button" class="accept" [disabled]="busy()" (click)="accept()">
+                        Accept
+                      </button>
+                    }
+                  </div>
+                }
               }
-            }
+            </div>
           }
         </section>
       </div>

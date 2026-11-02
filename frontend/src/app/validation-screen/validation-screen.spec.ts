@@ -109,7 +109,7 @@ describe('ValidationScreen', () => {
     );
     expect(el.querySelector('.banner')?.textContent).toContain('kid says "all investors"');
     expect(button(el, 'validate').disabled).toBe(true);
-    expect(el.querySelector('.ready')?.textContent).toContain('0 of 3 rules ready');
+    expect(el.querySelector('.ready')?.textContent).toContain('0 / 3 rules ready');
   });
 
   it('shows the cited quote highlighted and the checks the code ran', async () => {
