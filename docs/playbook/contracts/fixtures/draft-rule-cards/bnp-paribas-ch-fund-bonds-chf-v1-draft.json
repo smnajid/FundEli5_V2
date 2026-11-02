@@ -1,0 +1,656 @@
+{
+  "fundId" : null,
+  "fundName" : "BNP PARIBAS (CH) Fund – Bonds CHF",
+  "shareClasses" : [ "CH0112537516", "CH0114292532", "CH0112537557" ],
+  "version" : 1,
+  "status" : "draft",
+  "rules" : [ {
+    "scope" : "fund",
+    "shareClass" : null,
+    "condition" : {
+      "kind" : "us_person_exclusion",
+      "definition" : "reg_s",
+      "excludesUsCitizens" : true
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-prospectus-2026-06-29",
+      "page" : 16,
+      "quote" : "Units of the subfunds may not be offered, sold or delivered to investors who are U.S. Persons within the meaning of Regulation S of the U.S. Securities Act of 1933, in particular investors with U.S. citizenship or investors who are resident or domiciled in the United States.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "No class may be sold to US Persons as defined in Regulation S, and the text names US citizens and US residents or domiciliaries.",
+    "confidence" : 0.97,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.411041005Z",
+      "condition" : {
+        "kind" : "us_person_exclusion",
+        "definition" : "reg_s",
+        "excludesUsCitizens" : true
+      }
+    } ]
+  }, {
+    "scope" : "fund",
+    "shareClass" : null,
+    "condition" : {
+      "kind" : "unmodelled_restriction",
+      "status" : "blocking",
+      "notedReason" : null
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-prospectus-2026-06-29",
+      "page" : 16,
+      "quote" : "Units in the subfund may be neither offered nor sold to persons who would like to engage in transactions within the framework of a US employee benefit plan.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Investors dealing within a US employee benefit plan are excluded from every class.",
+    "confidence" : 0.93,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.413839320Z",
+      "condition" : {
+        "kind" : "unmodelled_restriction",
+        "status" : "blocking",
+        "notedReason" : null
+      }
+    } ]
+  }, {
+    "scope" : "fund",
+    "shareClass" : null,
+    "condition" : {
+      "kind" : "unmodelled_restriction",
+      "status" : "blocking",
+      "notedReason" : null
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-prospectus-2026-06-29",
+      "page" : 16,
+      "quote" : "No issue or redemption of units of the subfunds shall take place abroad; in particular, units of the subfunds may not be offered, sold or delivered within the United States.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Units are issued only in Switzerland and may not be offered, sold or delivered in the United States.",
+    "confidence" : 0.85,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.414578724Z",
+      "condition" : {
+        "kind" : "unmodelled_restriction",
+        "status" : "blocking",
+        "notedReason" : null
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "CH0112537516",
+    "condition" : {
+      "kind" : "investor_category",
+      "allowed" : [ "all" ],
+      "excluded" : [ ]
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-prospectus-2026-06-29",
+      "page" : 5,
+      "quote" : "Class “A” and class “A AC” units may be held by all investors",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "bnp-ch-bonds-chf-prospectus-2026-06-29",
+      "page" : 19,
+      "quote" : "Class “A” and class “A AC” units may be held by all investors.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Class A (distribution) is open to all investors.",
+    "confidence" : 0.97,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.420143753Z",
+      "condition" : {
+        "kind" : "investor_category",
+        "allowed" : [ "all" ],
+        "excluded" : [ ]
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "CH0112537516",
+    "condition" : {
+      "kind" : "minimum_initial_subscription",
+      "amount" : 0,
+      "currency" : "CHF"
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-prospectus-2026-06-29",
+      "page" : 5,
+      "quote" : "No minimum investment amount applies to the unit classes “A”, “A AC”, “S” and “S AC”.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Class A has no minimum initial investment.",
+    "confidence" : 0.96,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.440003659Z",
+      "condition" : {
+        "kind" : "minimum_initial_subscription",
+        "amount" : 0,
+        "currency" : "CHF"
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "CH0112537516",
+    "condition" : {
+      "kind" : "kid_required_for_retail",
+      "kidAvailable" : true
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-kid-a",
+      "page" : 1,
+      "quote" : "Anteilsklasse: A Distribution CHF (CH0112537516)",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "A KID (Basisinformationsblatt) dated 01/05/2026 is published for class A.",
+    "confidence" : 0.95,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.441089465Z",
+      "condition" : {
+        "kind" : "kid_required_for_retail",
+        "kidAvailable" : true
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "CH0112537516",
+    "condition" : {
+      "kind" : "target_market",
+      "dimension" : "client_type",
+      "value" : "retail"
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-kid-a",
+      "page" : 1,
+      "quote" : "Das Teilvermögen richtet sich an Privatanleger",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "The class A KID targets retail (private) investors.",
+    "confidence" : 0.9,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.445189886Z",
+      "condition" : {
+        "kind" : "target_market",
+        "dimension" : "client_type",
+        "value" : "retail"
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "CH0112537516",
+    "condition" : {
+      "kind" : "target_market",
+      "dimension" : "knowledge_experience",
+      "value" : "basic"
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-kid-a",
+      "page" : 1,
+      "quote" : "die kein finanzielles Know-how und keine Kenntnisse besitzen, um den Fonds zu verstehen",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "The class A KID targets investors with no financial knowledge or experience, mapped to basic.",
+    "confidence" : 0.85,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.446048591Z",
+      "condition" : {
+        "kind" : "target_market",
+        "dimension" : "knowledge_experience",
+        "value" : "basic"
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "CH0112537516",
+    "condition" : {
+      "kind" : "target_market",
+      "dimension" : "loss_bearing",
+      "value" : "full_loss"
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-kid-a",
+      "page" : 1,
+      "quote" : "Totalverlust des investierten Kapitals ertragen können",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Class A investors must be able to bear a total loss of the capital invested.",
+    "confidence" : 0.92,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.448981506Z",
+      "condition" : {
+        "kind" : "target_market",
+        "dimension" : "loss_bearing",
+        "value" : "full_loss"
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "CH0112537516",
+    "condition" : {
+      "kind" : "target_market",
+      "dimension" : "risk_sri",
+      "value" : "2"
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-kid-a",
+      "page" : 1,
+      "quote" : "Wir haben dieses Produkt auf einer Skala von 1 bis 7 in die Risikoklasse 2 eingestuft, wobei 2 einer niedrigen Risikoklasse entspricht.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Class A has a summary risk indicator of 2 out of 7.",
+    "confidence" : 0.96,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.449840211Z",
+      "condition" : {
+        "kind" : "target_market",
+        "dimension" : "risk_sri",
+        "value" : "2"
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "CH0112537516",
+    "condition" : {
+      "kind" : "target_market",
+      "dimension" : "horizon_years",
+      "value" : "3"
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-kid-a",
+      "page" : 1,
+      "quote" : "Wir empfehlen, dieses Produkt mindestens 3 Jahre lang zu halten.",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "bnp-ch-bonds-chf-kid-a",
+      "page" : 2,
+      "quote" : "Empfohlene Haltedauer („RHP“): 3 Jahre.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "The recommended holding period for class A is 3 years.",
+    "confidence" : 0.96,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.453812432Z",
+      "condition" : {
+        "kind" : "target_market",
+        "dimension" : "horizon_years",
+        "value" : "3"
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "CH0114292532",
+    "condition" : {
+      "kind" : "investor_category",
+      "allowed" : [ "all" ],
+      "excluded" : [ ]
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-prospectus-2026-06-29",
+      "page" : 5,
+      "quote" : "Class “A” and class “A AC” units may be held by all investors",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "bnp-ch-bonds-chf-prospectus-2026-06-29",
+      "page" : 19,
+      "quote" : "Class “A” and class “A AC” units may be held by all investors.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Class A AC (accumulation) is open to all investors.",
+    "confidence" : 0.97,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.459915864Z",
+      "condition" : {
+        "kind" : "investor_category",
+        "allowed" : [ "all" ],
+        "excluded" : [ ]
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "CH0114292532",
+    "condition" : {
+      "kind" : "minimum_initial_subscription",
+      "amount" : 0,
+      "currency" : "CHF"
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-prospectus-2026-06-29",
+      "page" : 5,
+      "quote" : "No minimum investment amount applies to the unit classes “A”, “A AC”, “S” and “S AC”.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Class A AC has no minimum initial investment.",
+    "confidence" : 0.96,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.463471983Z",
+      "condition" : {
+        "kind" : "minimum_initial_subscription",
+        "amount" : 0,
+        "currency" : "CHF"
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "CH0114292532",
+    "condition" : {
+      "kind" : "kid_required_for_retail",
+      "kidAvailable" : false
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-prospectus-2026-06-29",
+      "page" : 4,
+      "quote" : "This prospectus with integrated fund contract, Key Information Document and the most recent annual or semi-annual report (if published after the latest an- nual report) serve as the basis for all subscriptions of units in the subfunds.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "None of the supplied documents is a KID for CH0114292532 (only classes A and I have one), so no target market is extracted; confirm whether a KID exists before any retail subscription.",
+    "confidence" : 0.45,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.464306488Z",
+      "condition" : {
+        "kind" : "kid_required_for_retail",
+        "kidAvailable" : false
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "CH0112537557",
+    "condition" : {
+      "kind" : "investor_category",
+      "allowed" : [ "qualified" ],
+      "excluded" : [ ]
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-prospectus-2026-06-29",
+      "page" : 5,
+      "quote" : "Class “I” and class “I AC” units may only be held by qualified investors within the meaning of Art. 10 para 3 and 3ter CISA.",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "bnp-ch-bonds-chf-prospectus-2026-06-29",
+      "page" : 19,
+      "quote" : "Class “I” and class “I AC” units may only be held by qualified investors within the meaning of Art. 10 para 3 and para 3ter CISA in connection with Art. 4 para 3 to 5 and Art. 5 para 1 and 4 FinSA.",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "bnp-ch-bonds-chf-prospectus-2026-06-29",
+      "page" : 5,
+      "quote" : "as well as private clients who have declared their wish to opt out.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Class I is only for qualified investors under Art. 10 para 3 and 3ter CISA, which include opted-out private clients and mandate clients; neither group is carved out.",
+    "confidence" : 0.93,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.472792633Z",
+      "condition" : {
+        "kind" : "investor_category",
+        "allowed" : [ "qualified" ],
+        "excluded" : [ ]
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "CH0112537557",
+    "condition" : {
+      "kind" : "minimum_initial_subscription",
+      "amount" : 1000000,
+      "currency" : "CHF"
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-prospectus-2026-06-29",
+      "page" : 5,
+      "quote" : "A minimum investment amount of CHF 1 million applies to unit classes “I” and “I AC” for initial purchases of shares",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "bnp-ch-bonds-chf-kid-i",
+      "page" : 1,
+      "quote" : "Mindestzeichnungsbetrag bei Erstzeichnung: CHF 1'000'000",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Class I requires a minimum initial investment of CHF 1,000,000, and the prospectus and KID agree.",
+    "confidence" : 0.97,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.479316667Z",
+      "condition" : {
+        "kind" : "minimum_initial_subscription",
+        "amount" : 1000000,
+        "currency" : "CHF"
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "CH0112537557",
+    "condition" : {
+      "kind" : "kid_required_for_retail",
+      "kidAvailable" : true
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-kid-i",
+      "page" : 1,
+      "quote" : "Anteilsklasse: I Distribution CHF (CH0112537557)",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "A KID (Basisinformationsblatt) dated 01/05/2026 is published for class I.",
+    "confidence" : 0.95,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.480225272Z",
+      "condition" : {
+        "kind" : "kid_required_for_retail",
+        "kidAvailable" : true
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "CH0112537557",
+    "condition" : {
+      "kind" : "target_market",
+      "dimension" : "client_type",
+      "value" : "retail"
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-kid-i",
+      "page" : 1,
+      "quote" : "Das Teilvermögen richtet sich an Privatanleger",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "The class I KID targets retail investors, but the qualified-investor restriction still applies, so only private clients who qualify (opt-out or Art. 10 para 3ter mandate) can subscribe.",
+    "confidence" : 0.8,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.481111877Z",
+      "condition" : {
+        "kind" : "target_market",
+        "dimension" : "client_type",
+        "value" : "retail"
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "CH0112537557",
+    "condition" : {
+      "kind" : "target_market",
+      "dimension" : "knowledge_experience",
+      "value" : "informed"
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-kid-i",
+      "page" : 1,
+      "quote" : "die ein gewisses finanzielles Know-how oder Kenntnisse besitzen, um den Fonds zu verstehen",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "The class I KID targets investors with some financial knowledge or experience, mapped to informed.",
+    "confidence" : 0.85,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.484072393Z",
+      "condition" : {
+        "kind" : "target_market",
+        "dimension" : "knowledge_experience",
+        "value" : "informed"
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "CH0112537557",
+    "condition" : {
+      "kind" : "target_market",
+      "dimension" : "loss_bearing",
+      "value" : "full_loss"
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-kid-i",
+      "page" : 1,
+      "quote" : "Totalverlust des investierten Kapitals ertragen können",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Class I investors must be able to bear a total loss of the capital invested.",
+    "confidence" : 0.92,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.484974297Z",
+      "condition" : {
+        "kind" : "target_market",
+        "dimension" : "loss_bearing",
+        "value" : "full_loss"
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "CH0112537557",
+    "condition" : {
+      "kind" : "target_market",
+      "dimension" : "risk_sri",
+      "value" : "2"
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-kid-i",
+      "page" : 1,
+      "quote" : "Wir haben dieses Produkt auf einer Skala von 1 bis 7 in die Risikoklasse 2 eingestuft, wobei 2 einer niedrigen Risikoklasse entspricht.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Class I has a summary risk indicator of 2 out of 7.",
+    "confidence" : 0.96,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.487869513Z",
+      "condition" : {
+        "kind" : "target_market",
+        "dimension" : "risk_sri",
+        "value" : "2"
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "CH0112537557",
+    "condition" : {
+      "kind" : "target_market",
+      "dimension" : "horizon_years",
+      "value" : "3"
+    },
+    "citations" : [ {
+      "document" : "bnp-ch-bonds-chf-kid-i",
+      "page" : 1,
+      "quote" : "Wir empfehlen, dieses Produkt mindestens 3 Jahre lang zu halten.",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "bnp-ch-bonds-chf-kid-i",
+      "page" : 2,
+      "quote" : "Empfohlene Haltedauer („RHP“): 3 Jahre.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "The recommended holding period for class I is 3 years.",
+    "confidence" : 0.96,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:48:24.492365337Z",
+      "condition" : {
+        "kind" : "target_market",
+        "dimension" : "horizon_years",
+        "value" : "3"
+      }
+    } ]
+  } ],
+  "sources" : [ {
+    "documentId" : "bnp-ch-bonds-chf-prospectus-2026-06-29",
+    "contentSha256" : "3d3aabb7f26ca8bc8f423ed13bc9901ca0cd67014976fb1ebc27ae1ab4d74945",
+    "fmdEditionDate" : null,
+    "pdfEditionDate" : "2026-06-29",
+    "confidentiality" : "public"
+  }, {
+    "documentId" : "bnp-ch-bonds-chf-kid-a",
+    "contentSha256" : "97038409ecf863ce3c3655dfe107618b2ed485d7c1a62f7a4897dffcccc5601b",
+    "fmdEditionDate" : null,
+    "pdfEditionDate" : null,
+    "confidentiality" : "public"
+  }, {
+    "documentId" : "bnp-ch-bonds-chf-kid-i",
+    "contentSha256" : "c7ac33445a4de55e977fe7877cbf68a2cbb68678c57ba3d0751ef7b3baf6add8",
+    "fmdEditionDate" : null,
+    "pdfEditionDate" : null,
+    "confidentiality" : "public"
+  } ],
+  "drafting" : {
+    "model" : "claude-opus-5-5",
+    "endpoint" : "claude-plan",
+    "draftedAt" : "2026-11-02T07:48:24.492433537Z"
+  },
+  "validation" : null
+}

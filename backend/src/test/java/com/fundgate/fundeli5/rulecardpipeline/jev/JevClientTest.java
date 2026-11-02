@@ -51,7 +51,7 @@ class JevClientTest {
 
     @Test
     void postsStateModelAndQuestionsWithTheBearerKeyAndParsesTheProbabilities() {
-        reply = "{\"questions\":{\"q\":{\"probabilities\":{\"page 1\":0.7,\"none\":0.3},\"confidence\":0.9}}}";
+        reply = "{\"answers\":{\"q\":{\"probabilities\":{\"page 1\":0.7,\"none\":0.3},\"confidence\":0.9}}}";
         var answers = client("secret").ask("[Page 1] text",
                 Map.of("q", JevQuestion.choice("Which?", List.of("page 1", "none"))));
         assertThat(paths).containsExactly("POST /v1/systemone");
@@ -59,9 +59,16 @@ class JevClientTest {
         assertThat(bodies).singleElement().satisfies(b -> assertThat(b)
                 .contains("\"state\":\"[Page 1] text\"").contains("\"model\":\"jev-latest\"")
                 .contains("\"type\":\"choice\"").contains("\"instructions\":\"Which?\"")
-                .contains("\"criteria\":[\"page 1\",\"none\"]"));
+                .contains("\"criteria\":{\"page 1\":\"page 1\",\"none\":\"none\"}"));
         assertThat(answers.get("q").probability("page 1")).isEqualTo(0.7);
         assertThat(answers.get("q").confidence()).isEqualTo(0.9);
+    }
+
+    @Test
+    void aNoulAnswerIsTheProbabilityOfYes() {
+        reply = "{\"answers\":{\"q\":{\"type\":\"noul\",\"noul\":0.99}}}";
+        var answers = client("k").ask("s", Map.of("q", JevQuestion.yesNo("?")));
+        assertThat(answers.get("q").probability("yes")).isEqualTo(0.99);
     }
 
     @Test
@@ -85,7 +92,7 @@ class JevClientTest {
         assertThatThrownBy(() -> client("k").ask("s", Map.of("q", JevQuestion.yesNo("?"))))
                 .isInstanceOf(JevUnavailable.class).hasMessageContaining("500");
         status = 200;
-        reply = "{\"questions\":{}}";
+        reply = "{\"answers\":{}}";
         assertThatThrownBy(() -> client("k").ask("s", Map.of("q", JevQuestion.yesNo("?"))))
                 .isInstanceOf(JevUnavailable.class).hasMessageContaining("unknown shape");
     }

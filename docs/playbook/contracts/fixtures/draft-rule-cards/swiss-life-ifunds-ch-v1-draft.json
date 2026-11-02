@@ -1,0 +1,369 @@
+{
+  "fundId" : null,
+  "fundName" : "Swiss Life iFunds (CH)",
+  "shareClasses" : [ "XXSLICAP0001", "XXSLAMCAP001", "XXSLIA100001" ],
+  "version" : 1,
+  "status" : "draft",
+  "rules" : [ {
+    "scope" : "fund",
+    "shareClass" : null,
+    "condition" : {
+      "kind" : "investor_category",
+      "allowed" : [ "qualified" ],
+      "excluded" : [ ]
+    },
+    "citations" : [ {
+      "document" : "swiss-life-ifunds-ch-fund-contract-2026-10",
+      "page" : 5,
+      "quote" : "The group of investors of all sub-funds is limited to qualified investors as per Art. 10, cl. 3 and 3ter CISA in conjunction with Art. 4, cl. 3-5 and Art. 5, cl. 1 and 4 FinSA.",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "swiss-life-ifunds-ch-fund-contract-2026-10",
+      "page" : 2,
+      "quote" : "The group of investors is limited to qualified investors in accordance with section 5.1 of this fund contract.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Every sub-fund and class of the umbrella fund is open only to qualified investors under Art. 10 cl. 3 and 3ter CISA.",
+    "confidence" : 0.97,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:49:28.959458633Z",
+      "condition" : {
+        "kind" : "investor_category",
+        "allowed" : [ "qualified" ],
+        "excluded" : [ ]
+      }
+    } ]
+  }, {
+    "scope" : "fund",
+    "shareClass" : null,
+    "condition" : {
+      "kind" : "us_person_exclusion",
+      "definition" : "irc_citizenship",
+      "excludesUsCitizens" : true
+    },
+    "citations" : [ {
+      "document" : "swiss-life-ifunds-ch-fund-contract-2026-10",
+      "page" : 45,
+      "quote" : "Units of sub-funds of this umbrella fund may not be offered, sold or delivered to US persons. US person means: (i) a US citizen (including dual or multiple citizenship);",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "swiss-life-ifunds-ch-fund-contract-2026-10",
+      "page" : 45,
+      "quote" : "This paragraph and terms used herein shall be construed in accordance with the US Internal Revenue Code.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Units may not be offered, sold or delivered to US persons, defined under the US Internal Revenue Code and expressly including US citizens, dual citizens and US residents.",
+    "confidence" : 0.93,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:49:28.966016478Z",
+      "condition" : {
+        "kind" : "us_person_exclusion",
+        "definition" : "irc_citizenship",
+        "excludesUsCitizens" : true
+      }
+    } ]
+  }, {
+    "scope" : "fund",
+    "shareClass" : null,
+    "condition" : {
+      "kind" : "kid_required_for_retail",
+      "kidAvailable" : false
+    },
+    "citations" : [ {
+      "document" : "swiss-life-ifunds-ch-fund-contract-2026-10",
+      "page" : 2,
+      "quote" : "FINMA has exempted this investment fund from the following provisions pursuant to Art. 10, cl. 5 CISA at the request of the fund management company and Custodian Bank:",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "swiss-life-ifunds-ch-fund-contract-2026-10",
+      "page" : 2,
+      "quote" : "c) the obligation to produce a key information document.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "FINMA has exempted the fund from producing a key information document, so no KID exists for any class and no KID target market can be extracted.",
+    "confidence" : 0.9,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:49:28.966950285Z",
+      "condition" : {
+        "kind" : "kid_required_for_retail",
+        "kidAvailable" : false
+      }
+    } ]
+  }, {
+    "scope" : "fund",
+    "shareClass" : null,
+    "condition" : {
+      "kind" : "minimum_initial_subscription",
+      "amount" : 0,
+      "currency" : "CHF"
+    },
+    "citations" : [ {
+      "document" : "swiss-life-ifunds-ch-fund-contract-2026-10",
+      "page" : 44,
+      "quote" : "Detailed information concerning the Swiss security number, ISIN, GIIN, unit of account, initial issue price, minimum investment, deadline for subscriptions and redemptions as well as further information can be found in Table 1 at the end of the appendix.",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "swiss-life-ifunds-ch-fund-contract-2026-10",
+      "page" : 46,
+      "quote" : "I-A 1 Cap  CHF 1000.00 none",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Table 1 gives the minimum investment as 'none' for every unit class of every sub-fund, including I Cap, AM Cap and I-A 1 Cap; CHF 1000.00 is the initial subscription price, not a minimum.",
+    "confidence" : 0.8,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:49:28.971036813Z",
+      "condition" : {
+        "kind" : "minimum_initial_subscription",
+        "amount" : 0,
+        "currency" : "CHF"
+      }
+    } ]
+  }, {
+    "scope" : "fund",
+    "shareClass" : null,
+    "condition" : {
+      "kind" : "unmodelled_restriction",
+      "status" : "blocking",
+      "notedReason" : null
+    },
+    "citations" : [ {
+      "document" : "swiss-life-ifunds-ch-fund-contract-2026-10",
+      "page" : 45,
+      "quote" : "a) Distribution activities have been approved in the following countries: - Switzerland",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "swiss-life-ifunds-ch-fund-contract-2026-10",
+      "page" : 45,
+      "quote" : "The fund management company and the Custodian Bank may prohibit or limit the sale, brokerage or transfer of units to natural persons or legal entities in certain countries and territories.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Distribution is approved only in Switzerland; for clients domiciled elsewhere, local rules and possible country restrictions must be checked.",
+    "confidence" : 0.7,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:49:28.972132220Z",
+      "condition" : {
+        "kind" : "unmodelled_restriction",
+        "status" : "blocking",
+        "notedReason" : null
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "XXSLICAP0001",
+    "condition" : {
+      "kind" : "investor_category",
+      "allowed" : [ "qualified" ],
+      "excluded" : [ ]
+    },
+    "citations" : [ {
+      "document" : "swiss-life-ifunds-ch-fund-contract-2026-10",
+      "page" : 7,
+      "quote" : "Unit class I Cap: the units of this unit class are exclusively open to all qualified investors pursuant to Art. 10, cl. 3 and 3ter CISA. Income is reinvested.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "I Cap (ISIN assumed to match this class) is open to all qualified investors, including Art. 10 cl. 3ter mandate clients, and needs no mandate.",
+    "confidence" : 0.85,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:49:28.977914160Z",
+      "condition" : {
+        "kind" : "investor_category",
+        "allowed" : [ "qualified" ],
+        "excluded" : [ ]
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "XXSLAMCAP001",
+    "condition" : {
+      "kind" : "investor_category",
+      "allowed" : [ "qualified" ],
+      "excluded" : [ "cisa_art_10_3ter_mandate_client", "hnwi_opt_out" ]
+    },
+    "citations" : [ {
+      "document" : "swiss-life-ifunds-ch-fund-contract-2026-10",
+      "page" : 7,
+      "quote" : "Qualified investors pursuant to Art. 10, cl. 3ter CISA and high net worth individuals pursuant to Art. 5, cl. 1 FinSA are excluded.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "AM Cap is limited to Art. 10 cl. 3 CISA qualified investors and excludes Art. 10 cl. 3ter mandate clients and high-net-worth individuals who opted out under Art. 5 cl. 1 FinSA.",
+    "confidence" : 0.88,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:49:28.978559765Z",
+      "condition" : {
+        "kind" : "investor_category",
+        "allowed" : [ "qualified" ],
+        "excluded" : [ "cisa_art_10_3ter_mandate_client", "hnwi_opt_out" ]
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "XXSLAMCAP001",
+    "condition" : {
+      "kind" : "mandate_only_class",
+      "manager" : "Swiss Life Asset Management Ltd, another Swiss Life Group company, or a financial intermediary under Art. 4 cl. 3a/b FinSA with a cooperation agreement with Swiss Life Asset Management Ltd"
+    },
+    "citations" : [ {
+      "document" : "swiss-life-ifunds-ch-fund-contract-2026-10",
+      "page" : 7,
+      "quote" : "the units of this unit class are available exclusively to qualified investors pursuant to Art. 10, cl. 3 CISA who have concluded an asset management mandate or another remunerated financial services contract with Swiss Life Asset Management Ltd or another Swiss Life Group company or with a financial intermediary pursuant to Art. 4, cl. 3a and b FinSA that has an existing cooperation agreement with Swiss Life Asset Management Ltd.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "AM Cap requires an asset management mandate or other paid financial services contract with Swiss Life AM, a Swiss Life Group company, or a cooperating Art. 4 cl. 3a/b FinSA intermediary.",
+    "confidence" : 0.85,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:49:28.979187569Z",
+      "condition" : {
+        "kind" : "mandate_only_class",
+        "manager" : "Swiss Life Asset Management Ltd, another Swiss Life Group company, or a financial intermediary under Art. 4 cl. 3a/b FinSA with a cooperation agreement with Swiss Life Asset Management Ltd"
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "XXSLAMCAP001",
+    "condition" : {
+      "kind" : "unmodelled_restriction",
+      "status" : "blocking",
+      "notedReason" : null
+    },
+    "citations" : [ {
+      "document" : "swiss-life-ifunds-ch-fund-contract-2026-10",
+      "page" : 7,
+      "quote" : "The asset management contract or other remunerated financial services contract with Swiss Life Asset Management Ltd or another Swiss Life Group company requires a supplementary agreement in order to use the AM Cap unit class.",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "swiss-life-ifunds-ch-fund-contract-2026-10",
+      "page" : 7,
+      "quote" : "The “Swiss Life Funds III (CH)” umbrella fund and its sub-funds launched up to 31 December 2025 are not qualified for this unit class. Income is reinvested.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "AM Cap also requires a supplementary agreement to the Swiss Life contract, and excludes Swiss Life Funds III (CH) and its sub-funds launched up to 31 December 2025.",
+    "confidence" : 0.82,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:49:28.984604106Z",
+      "condition" : {
+        "kind" : "unmodelled_restriction",
+        "status" : "blocking",
+        "notedReason" : null
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "XXSLIA100001",
+    "condition" : {
+      "kind" : "investor_category",
+      "allowed" : [ "qualified" ],
+      "excluded" : [ "cisa_art_10_3ter_mandate_client" ]
+    },
+    "citations" : [ {
+      "document" : "swiss-life-ifunds-ch-fund-contract-2026-10",
+      "page" : 8,
+      "quote" : "Qualified investors pursuant to Art. 10, cl. 3ter CISA are excluded.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "I-A 1 / I-A 1 Cap is open to qualified investors under section 5 cl. 1 but excludes Art. 10 cl. 3ter CISA mandate clients.",
+    "confidence" : 0.85,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:49:28.989321039Z",
+      "condition" : {
+        "kind" : "investor_category",
+        "allowed" : [ "qualified" ],
+        "excluded" : [ "cisa_art_10_3ter_mandate_client" ]
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "XXSLIA100001",
+    "condition" : {
+      "kind" : "mandate_only_class",
+      "manager" : "Swiss Life Asset Management Ltd or another Swiss Life Group company"
+    },
+    "citations" : [ {
+      "document" : "swiss-life-ifunds-ch-fund-contract-2026-10",
+      "page" : 8,
+      "quote" : "The units of these unit classes are only available to qualified investors in accordance with section 5, cl. 1 of the fund contract who have concluded an asset management mandate or other financial services contract in return for payment with Swiss Life Asset Management Ltd or with another Swiss Life Group company.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "I-A 1 / I-A 1 Cap requires an asset management mandate or paid financial services contract with Swiss Life Asset Management Ltd or another Swiss Life Group company.",
+    "confidence" : 0.85,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:49:28.990106044Z",
+      "condition" : {
+        "kind" : "mandate_only_class",
+        "manager" : "Swiss Life Asset Management Ltd or another Swiss Life Group company"
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "XXSLIA100001",
+    "condition" : {
+      "kind" : "unmodelled_restriction",
+      "status" : "blocking",
+      "notedReason" : null
+    },
+    "citations" : [ {
+      "document" : "swiss-life-ifunds-ch-fund-contract-2026-10",
+      "page" : 8,
+      "quote" : "The “Swiss Life Funds III (CH)” umbrella fund and its sub-funds launched up to 31 December 2025 are not qualified for this unit class.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Swiss Life Funds III (CH) and its sub-funds launched up to 31 December 2025 may not invest in I-A 1 / I-A 1 Cap.",
+    "confidence" : 0.8,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:49:28.990791149Z",
+      "condition" : {
+        "kind" : "unmodelled_restriction",
+        "status" : "blocking",
+        "notedReason" : null
+      }
+    } ]
+  } ],
+  "sources" : [ {
+    "documentId" : "swiss-life-ifunds-ch-fund-contract-2026-10",
+    "contentSha256" : "2c35fc59f5729e6415f900491eefb000c9fe4ce9283663d6a4891a06f51aa49a",
+    "fmdEditionDate" : null,
+    "pdfEditionDate" : "2026-10",
+    "confidentiality" : "public"
+  } ],
+  "drafting" : {
+    "model" : "claude-opus-5-5",
+    "endpoint" : "claude-plan",
+    "draftedAt" : "2026-11-02T07:49:28.990849449Z"
+  },
+  "validation" : null
+}

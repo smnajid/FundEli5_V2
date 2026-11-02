@@ -38,8 +38,13 @@ class ValidationApiTest {
     @Test
     void aValidatorWalksADraftToValidated() throws Exception {
         JsonNode drafts = get("/api/validation/drafts");
-        assertThat(drafts).hasSize(1);
-        String fund = drafts.get(0).get("fundName").asString();
+        assertThat(drafts).hasSize(4);
+        String fund = null;
+        for (JsonNode d : drafts) {
+            if (d.get("fundName").asString().startsWith("Nordea 1")) {
+                fund = d.get("fundName").asString();
+            }
+        }
 
         JsonNode review = get("/api/validation/review?fundName=" + FUND + "&version=1");
         assertThat(review.get("canValidate").asBoolean()).isFalse();
@@ -60,12 +65,12 @@ class ValidationApiTest {
         HttpResponse<String> validated = post("/api/validation/validate", body(fund, "\"validator\":\"V\""));
         assertThat(validated.statusCode()).isEqualTo(200);
         assertThat(json.readTree(validated.body()).get("status").asString()).isEqualTo("validated");
-        assertThat(get("/api/validation/drafts")).isEmpty();
+        assertThat(get("/api/validation/drafts")).hasSize(3);
     }
 
     @Test
     void theReviewIsTypedAndACorrectionTakesTheSameConditionShape() throws Exception {
-        String fund = get("/api/validation/drafts").get(0).get("fundName").asString();
+        String fund = java.net.URLDecoder.decode(FUND, java.nio.charset.StandardCharsets.UTF_8);
         JsonNode rules = get("/api/validation/review?fundName=" + FUND + "&version=1").get("card").get("rules");
         int minimum = -1;
         for (int i = 0; i < rules.size(); i++) {

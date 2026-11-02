@@ -1,0 +1,313 @@
+{
+  "fundId" : null,
+  "fundName" : "Nordea Specialised Investment Fund, SICAV-FIS – Global Private Equity Fund",
+  "shareClasses" : [ "LU2607415275" ],
+  "version" : 1,
+  "status" : "draft",
+  "rules" : [ {
+    "scope" : "fund",
+    "shareClass" : null,
+    "condition" : {
+      "kind" : "investor_category",
+      "allowed" : [ "well_informed" ],
+      "excluded" : [ ]
+    },
+    "citations" : [ {
+      "document" : "nordea-sif-prospectus-2026-09",
+      "page" : 3,
+      "quote" : "The shares in the SICAV-FIS are exclusively offered to well-informed as defined in article 2 of the SIF Law.",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "nordea-sif-prospectus-2026-09",
+      "page" : 3,
+      "quote" : "Investments in these funds are only suitable for well-informed investors who can afford the risks involved.",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "nordea-sif-prospectus-2026-09",
+      "page" : 5,
+      "quote" : "Well informed investor, as defined in article 2 of the Luxembourg law of 13 February 2007 relating to specialised investment funds, as amended from time to time.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "The SICAV-FIS, including this fund, is offered only to well-informed investors as defined in article 2 of the Luxembourg SIF Law.",
+    "confidence" : 0.97,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:47:08.620093558Z",
+      "condition" : {
+        "kind" : "investor_category",
+        "allowed" : [ "well_informed" ],
+        "excluded" : [ ]
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "LU2607415275",
+    "condition" : {
+      "kind" : "investor_category",
+      "allowed" : [ "well_informed" ],
+      "excluded" : [ ]
+    },
+    "citations" : [ {
+      "document" : "nordea-sif-prospectus-2026-09",
+      "page" : 22,
+      "quote" : "Well-informed investors at the discretion of the AIFM",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "nordea-sif-prospectus-2026-09",
+      "page" : 23,
+      "quote" : "Classes of Accumulating Share Classes are characterised by the prefix “B”.",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "nordea-sif-kid-bw-sek",
+      "page" : 1,
+      "quote" : "Nordea Specialised Investment Fund, SICAV-FIS – Global Private Equity Fund - BW - SEK Share Class",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Core class W, of which BW SEK is the accumulating version, is available to well-informed investors at the discretion of the AIFM.",
+    "confidence" : 0.9,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:47:08.635522033Z",
+      "condition" : {
+        "kind" : "investor_category",
+        "allowed" : [ "well_informed" ],
+        "excluded" : [ ]
+      }
+    } ]
+  }, {
+    "scope" : "fund",
+    "shareClass" : null,
+    "condition" : {
+      "kind" : "us_person_exclusion",
+      "definition" : "mixed",
+      "excludesUsCitizens" : false
+    },
+    "citations" : [ {
+      "document" : "nordea-sif-prospectus-2026-09",
+      "page" : 3,
+      "quote" : "The shares in the SICAV-FIS may not be directly or indirectly offered or sold in the USA. Unless otherwise decided by the board or the AIFM US persons may not subscribe for shares.",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "nordea-sif-prospectus-2026-09",
+      "page" : 3,
+      "quote" : "US persons do not include any “Non-United States person” as used in Rule 4.7 under the U.S. Commodity Exchange Act, as amended. Therefore, US taxpayers, as defined for US federal income tax purposes, may subscribe for shares in the SICAV-FIS as long as they do not qualify as US persons.",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "nordea-sif-prospectus-2026-09",
+      "page" : 5,
+      "quote" : "any other U.S. person defined by US Rule 902 of the Securities Act of 1933",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "US persons may not subscribe unless the board or AIFM decides otherwise; the definition combines a bespoke list, Reg S Rule 902 and a CEA Rule 4.7 carve-out, and US taxpayers who are not US persons may subscribe.",
+    "confidence" : 0.85,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:47:08.645705582Z",
+      "condition" : {
+        "kind" : "us_person_exclusion",
+        "definition" : "mixed",
+        "excludesUsCitizens" : false
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "LU2607415275",
+    "condition" : {
+      "kind" : "minimum_initial_subscription",
+      "amount" : 100000,
+      "currency" : "EUR"
+    },
+    "citations" : [ {
+      "document" : "nordea-sif-prospectus-2026-09",
+      "page" : 22,
+      "quote" : "EUR 100,000 or the equivalent amount in other currencies**",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "nordea-sif-prospectus-2026-09",
+      "page" : 22,
+      "quote" : "For SEK and NOK the conversion rate is calculated as 1 EUR = 10 SEK/NOK.",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "nordea-sif-prospectus-2026-09",
+      "page" : 30,
+      "quote" : "Reduce or waive any stated sales charge, or minimum initial investment amount, for any share class, fund, investor, or request, so long as it is consistent with equal treatment of shareholders",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "The W class minimum initial investment is EUR 100,000 or the equivalent in other currencies, which is SEK 1,000,000 at the stated 1 EUR = 10 SEK rate, and the board or AIFM may waive it.",
+    "confidence" : 0.88,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:47:08.659576648Z",
+      "condition" : {
+        "kind" : "minimum_initial_subscription",
+        "amount" : 100000,
+        "currency" : "EUR"
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "LU2607415275",
+    "condition" : {
+      "kind" : "kid_required_for_retail",
+      "kidAvailable" : true
+    },
+    "citations" : [ {
+      "document" : "nordea-sif-kid-bw-sek",
+      "page" : 1,
+      "quote" : "ISIN: LU2607415275",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "A PRIIPs KID is published for the BW SEK share class.",
+    "confidence" : 0.97,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:47:08.664656073Z",
+      "condition" : {
+        "kind" : "kid_required_for_retail",
+        "kidAvailable" : true
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "LU2607415275",
+    "condition" : {
+      "kind" : "target_market",
+      "dimension" : "knowledge_experience",
+      "value" : "informed"
+    },
+    "citations" : [ {
+      "document" : "nordea-sif-kid-bw-sek",
+      "page" : 1,
+      "quote" : "The fund is intended for well-informed investors as defined in the Luxembourg law of 13 February 2007 on Specialised Investment Funds with knowledge and/or experience of these types of products",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "The KID targets well-informed investors with knowledge and/or experience of these types of products.",
+    "confidence" : 0.65,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:47:08.667639387Z",
+      "condition" : {
+        "kind" : "target_market",
+        "dimension" : "knowledge_experience",
+        "value" : "informed"
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "LU2607415275",
+    "condition" : {
+      "kind" : "target_market",
+      "dimension" : "loss_bearing",
+      "value" : "full_loss"
+    },
+    "citations" : [ {
+      "document" : "nordea-sif-kid-bw-sek",
+      "page" : 1,
+      "quote" : "accept and understand that the value of the fund is directly linked to the value of underlying investments, will fluctuate over time and that the invested amount can be lost entirely",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "Investors must be able to bear the loss of the entire invested amount.",
+    "confidence" : 0.95,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:47:08.672817412Z",
+      "condition" : {
+        "kind" : "target_market",
+        "dimension" : "loss_bearing",
+        "value" : "full_loss"
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "LU2607415275",
+    "condition" : {
+      "kind" : "target_market",
+      "dimension" : "risk_sri",
+      "value" : "6"
+    },
+    "citations" : [ {
+      "document" : "nordea-sif-kid-bw-sek",
+      "page" : 1,
+      "quote" : "We have classified this fund as 6 out of 7, which is the second-highest risk class.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "The summary risk indicator is 6 out of 7.",
+    "confidence" : 0.98,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:47:08.676117528Z",
+      "condition" : {
+        "kind" : "target_market",
+        "dimension" : "risk_sri",
+        "value" : "6"
+      }
+    } ]
+  }, {
+    "scope" : "share_class",
+    "shareClass" : "LU2607415275",
+    "condition" : {
+      "kind" : "target_market",
+      "dimension" : "horizon_years",
+      "value" : "10"
+    },
+    "citations" : [ {
+      "document" : "nordea-sif-kid-bw-sek",
+      "page" : 1,
+      "quote" : "Recommended Holding period: 10 years.",
+      "quoteFoundOnPage" : true
+    }, {
+      "document" : "nordea-sif-kid-bw-sek",
+      "page" : 3,
+      "quote" : "This product is designed for longer term investments; you should be prepared to stay invested for at least 10 years.",
+      "quoteFoundOnPage" : true
+    } ],
+    "summary" : "The recommended holding period is 10 years.",
+    "confidence" : 0.98,
+    "contradiction" : false,
+    "history" : [ {
+      "action" : "drafted",
+      "by" : "pipeline",
+      "at" : "2026-11-02T07:47:08.683652064Z",
+      "condition" : {
+        "kind" : "target_market",
+        "dimension" : "horizon_years",
+        "value" : "10"
+      }
+    } ]
+  } ],
+  "sources" : [ {
+    "documentId" : "nordea-sif-prospectus-2026-09",
+    "contentSha256" : "cbf5196ce92b7e854c81b56b2b172f6235ec1ef2be50aacbeb7b6400b632c367",
+    "fmdEditionDate" : null,
+    "pdfEditionDate" : "2026-09",
+    "confidentiality" : "public"
+  }, {
+    "documentId" : "nordea-sif-kid-bw-sek",
+    "contentSha256" : "1242f0eda802a77d439a89285eea6e602320f971a99600b60ffc2905ba54e324",
+    "fmdEditionDate" : null,
+    "pdfEditionDate" : null,
+    "confidentiality" : "public"
+  } ],
+  "drafting" : {
+    "model" : "claude-opus-5-5",
+    "endpoint" : "claude-plan",
+    "draftedAt" : "2026-11-02T07:47:08.683747765Z"
+  },
+  "validation" : null
+}

@@ -55,7 +55,7 @@ class JevPageRankingTest {
 
     /** Page text "TOPIC" marks the pages that answer that topic. */
     private static String answer(String body) {
-        StringBuilder out = new StringBuilder("{\"questions\":{");
+        StringBuilder out = new StringBuilder("{\"answers\":{");
         boolean first = true;
         for (PageTopic topic : PageTopic.values()) {
             if (!body.contains("\"" + topic.name() + "\":")) {
@@ -65,7 +65,7 @@ class JevPageRankingTest {
                 out.append(',');
             }
             first = false;
-            out.append('"').append(topic.name()).append("\":{\"probabilities\":{");
+            out.append('"').append(topic.name()).append("\":{");
             if (body.contains("\"type\":\"choice\"")) {
                 Matcher m = PAGE.matcher(body.replace("\\n", "\n"));
                 List<String> parts = new ArrayList<>();
@@ -73,12 +73,11 @@ class JevPageRankingTest {
                     parts.add("\"page " + m.group(1) + "\":" + (m.group(2).contains(topic.name()) ? "0.8" : "0.01"));
                 }
                 parts.add("\"none\":0.1");
-                out.append(String.join(",", parts));
+                out.append("\"probabilities\":{").append(String.join(",", parts)).append("},\"confidence\":0.9}");
             } else {
                 String yes = body.contains(topic.name() + " here") ? "0.9" : "0.1";
-                out.append("\"yes\":").append(yes).append(",\"no\":0.5");
+                out.append("\"type\":\"noul\",\"noul\":").append(yes).append('}');
             }
-            out.append("},\"confidence\":0.9}");
         }
         return out.append("}}").toString();
     }
