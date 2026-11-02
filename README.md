@@ -24,6 +24,16 @@ This repo is a rehearsal for the hackathon (Wed 4 – Thu 5 Nov 2026). It starts
 | `docs/agents/prompts/` | The charting prompts: [v2-rebuild-map.md](docs/agents/prompts/v2-rebuild-map.md) for this rehearsal |
 | `docs/exercise/timing-log.md` | Where each ticket's time goes |
 
+## Run the app
+
+```
+./start.sh                      # builds the screens and the backend, prints the URL (default http://localhost:8080/dealer-screen)
+PORT=9090 ./start.sh            # another port
+./pipeline.sh --isin=LU0348926287   # the Rule Card pipeline, a second process (needs TYPESAFE_API_KEY)
+```
+
+`start.sh` runs on fixtures with `fundeli5.llm.endpoint=replay`, so it needs no model access. It needs Java 25 and Node, and uses Presidio when it answers on `http://localhost:5002` (`docker run -p 5002:3000 mcr.microsoft.com/presidio-analyzer`), otherwise the fixture detector. Both screens come from the same origin: `/dealer-screen` and `/validation-screen`; the API is under `/api`.
+
 ## Start
 
 1. Set up the tools: [hackathon-kit.md](docs/agents/hackathon-kit.md) §1–4.
