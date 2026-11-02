@@ -62,11 +62,9 @@ public class CardDrafter {
         }
         String prompt = DraftingPrompt.documents(List.copyOf(shareClasses), reading.sources(), chosen);
         DraftAnswer answer = DraftAnswer.parse(
-                egress.complete(new LlmRequest(model, DraftingPrompt.system(catalog), prompt)).text());
-        if (answer.fundName() == null || answer.fundName().isBlank()) {
-            throw new DraftingFailed("The answer names no fund");
-        }
-        List<Rule> rules = answer.rules().stream().map(r -> checked(r, reading, shareClasses)).toList();
+                egress.complete(new LlmRequest(model, DraftingPrompt.system(catalog), prompt)).text(),
+                a -> a.rules().forEach(r -> checked(r, reading, shareClasses, a)));
+        List<Rule> rules = answer.rules().stream().map(r -> checked(r, reading, shareClasses, answer)).toList();
         List<RuleCard.Source> sources = reading.sources().stream()
                 .map(s -> new RuleCard.Source(s.document().documentId().value(), s.document().contentSha256(),
                         s.document().fmdEditionDate(), s.document().pdfEditionDate(), s.document().confidentiality()))
@@ -76,7 +74,10 @@ public class CardDrafter {
         return new Drafted(card, Set.copyOf(missed));
     }
 
-    private Rule checked(Rule rule, SourceReading reading, Set<Isin> shareClasses) {
+    private Rule checked(Rule rule, SourceReading reading, Set<Isin> shareClasses, DraftAnswer answer) {
+        if (answer.fundName() == null || answer.fundName().isBlank()) {
+            throw new DraftingFailed("The answer names no fund");
+        }
         if (rule.shareClass() != null && !shareClasses.contains(rule.shareClass())) {
             throw new DraftingFailed("A rule names " + rule.shareClass() + ", which is no Share Class of these documents");
         }
@@ -96,6 +97,6 @@ public class CardDrafter {
     @SuppressWarnings({"unchecked", "rawtypes"})
     private Condition correctedByItsKind(Condition condition) {
         return catalog.pluginFor(condition).map(p -> (Condition) ((RuleKindPlugin) p).asDrafted(condition))
-                .orElse(condition);
+                .orElseThrow(() -> new DraftingFailed("No plug-in in the catalog for " + condition.getClass().getSimpleName()));
     }
 }

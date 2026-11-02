@@ -29,13 +29,20 @@ public class DraftCardWriter {
             throw new DraftingFailed("A Rule Card with 0 rules is an error, not a draft");
         }
         String slug = card.fundName().toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]+", "-").replaceAll("^-|-$", "");
+        if (slug.isEmpty()) {
+            throw new DraftingFailed("The card's fund name gives no file name");
+        }
         Path target = out.resolve(slug + "-v" + card.version() + "-draft.json");
         try {
             Files.createDirectories(out);
             Path temp = Files.createTempFile(out, slug, ".tmp");
-            Files.writeString(temp, MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(RuleCardJson.write(card)));
-            return Files.move(temp, target, java.nio.file.StandardCopyOption.REPLACE_EXISTING,
-                    java.nio.file.StandardCopyOption.ATOMIC_MOVE);
+            try {
+                Files.writeString(temp, MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(RuleCardJson.write(card)));
+                return Files.move(temp, target, java.nio.file.StandardCopyOption.REPLACE_EXISTING,
+                        java.nio.file.StandardCopyOption.ATOMIC_MOVE);
+            } finally {
+                Files.deleteIfExists(temp);
+            }
         } catch (IOException e) {
             throw new UncheckedIOException("Cannot write " + target, e);
         }

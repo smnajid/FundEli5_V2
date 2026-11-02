@@ -33,7 +33,7 @@ record DraftAnswer(String fundName, List<Rule> rules) {
         rules = List.copyOf(rules);
     }
 
-    static DraftAnswer parse(String text) {
+    static DraftAnswer parse(String text, java.util.function.Consumer<DraftAnswer> accept) {
         List<String> problems = new ArrayList<>();
         int generations = 0;
         for (int start = text.indexOf('{'); start >= 0; start = text.indexOf('{', start + 1)) {
@@ -44,6 +44,9 @@ record DraftAnswer(String fundName, List<Rule> rules) {
             generations++;
             try {
                 DraftAnswer answer = read(node);
+                if (!answer.rules().isEmpty()) {
+                    accept.accept(answer);
+                }
                 if (answer.rules().isEmpty()) {
                     problems.add("generation " + generations + ": 0 rules");
                     continue;
