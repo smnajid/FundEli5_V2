@@ -12,6 +12,7 @@ import com.fundgate.fundeli5.privacygate.GateOutcome;
 import com.fundgate.fundeli5.privacygate.GatedEmail;
 import com.fundgate.fundeli5.privacygate.PrivacyGate;
 import com.fundgate.fundeli5.replydrafter.ReplyDrafter;
+import com.fundgate.fundeli5.replydrafter.Reply;
 import com.fundgate.fundeli5.replydrafter.ReplyLine;
 import com.fundgate.fundeli5.requestparser.ParseResult;
 import com.fundgate.fundeli5.rulecard.RuleCard;
@@ -89,6 +90,7 @@ public class AnswerService {
         List<Answer.Check> checks = new ArrayList<>();
         List<PortfolioId> ids = new ArrayList<>();
         List<String> unclear = new ArrayList<>();
+        List<CheckRecord> pending = new ArrayList<>();
         for (ParsedRequest request : parsed.requests()) {
             PortfolioReference reference = email.references().get(request.portfolio());
             List<ShareClass> classes = catalog.resolve(request.shareClassMention());
@@ -100,27 +102,29 @@ public class AnswerService {
             }
             for (ShareClass shareClass : classes) {
                 checks.add(check(new SubscriptionRequest(reference, shareClass.isin(), request.amount(),
-                        request.currency(), request.clientInitiated()), shareClass.shareClassName(), List.of(call)));
+                        request.currency(), request.clientInitiated()), shareClass.shareClassName(), List.of(call), pending));
                 ids.add(request.portfolio());
             }
         }
         return new Answer(null, true, checks, unclear,
-                reply(RequestLanguage.of(email.text()), checks, ids, email.references(), true));
+                reply(RequestLanguage.of(email.text()), checks, ids, email.references(), true, pending));
     }
 
     /** The by-hand flow: no model, template reply. */
     public Answer answerByHand(SubscriptionRequest request, String shareClassName) {
         PortfolioId id = clientProfiles.portfolioId(request.portfolio()).orElseThrow(() -> new PortfolioNotFound(request.portfolio()));
-        Answer.Check check = check(request, shareClassName, List.of());
+        List<CheckRecord> pending = new ArrayList<>();
+        Answer.Check check = check(request, shareClassName, List.of(), pending);
         return new Answer(null, false, List.of(check), List.of(),
-                reply(Language.EN, List.of(check), List.of(id), java.util.Map.of(id, request.portfolio()), false));
+                reply(Language.EN, List.of(check), List.of(id), java.util.Map.of(id, request.portfolio()), false, pending));
     }
 
-    private Answer.Check check(SubscriptionRequest request, String shareClassName, List<CheckRecord.LlmCall> calls) {
+    private Answer.Check check(SubscriptionRequest request, String shareClassName, List<CheckRecord.LlmCall> calls,
+            List<CheckRecord> pending) {
         EngineResult result = engine.check(request);
         Integer cardVersion = ruleCards.forShareClass(request.shareClass()).map(RuleCard::version).orElse(null);
         ClientProfile profile = clientProfiles.clientProfile(request.portfolio());
-        checkRecords.append(new CheckRecord(UUID.randomUUID(), clock.instant(), request, cardVersion,
+        pending.add(new CheckRecord(UUID.randomUUID(), clock.instant(), request, cardVersion,
                 scaleMappingVersion, engineVersion, profile, result.verdict(), result.justification(), calls,
                 List.of()));
         return new Answer.Check(request.portfolio(), request.shareClass(), shareClassName, request.amount(),
@@ -133,7 +137,8 @@ public class AnswerService {
      * only, they write no Check Record and change no Verdict (ADR 0007).
      */
     private String reply(Language language, List<Answer.Check> checks, List<PortfolioId> ids,
-            java.util.Map<PortfolioId, PortfolioReference> references, boolean emailFlow) {
+            java.util.Map<PortfolioId, PortfolioReference> references, boolean emailFlow,
+            List<CheckRecord> pending) {
         List<ReplyLine> lines = new ArrayList<>();
         for (int i = 0; i < checks.size(); i++) {
             Answer.Check c = checks.get(i);
@@ -141,11 +146,27 @@ public class AnswerService {
             lines.add(new ReplyLine(ids.get(i), c.shareClass(), c.shareClassName(), c.verdict(), c.justification(),
                     alternatives));
         }
-        String reply = (emailFlow ? drafter : templateDrafter).draft(language, lines, List.of());
+        Reply drafted = null;
+        try {
+            drafted = (emailFlow ? drafter : templateDrafter).draft(language, lines, List.of());
+        } finally {
+            // One Check Record per check, written once the reply is known so that it shows the reply's model call too.
+            for (CheckRecord record : pending) {
+                checkRecords.append(drafted == null || drafted.call() == null ? record : withCall(record, drafted.call()));
+            }
+        }
+        String reply = drafted.text();
         for (var entry : references.entrySet()) {
             reply = reply.replace(entry.getKey().toString(), entry.getValue().value());
         }
         return reply;
+    }
+
+    private static CheckRecord withCall(CheckRecord r, Reply.ModelCall call) {
+        List<CheckRecord.LlmCall> calls = new ArrayList<>(r.llmCalls());
+        calls.add(new CheckRecord.LlmCall(call.model(), call.gatedPrompt(), call.fieldsSent(), call.response()));
+        return new CheckRecord(r.id(), r.checkedAt(), r.request(), r.ruleCardVersion(), r.scaleMappingVersion(),
+                r.engineVersion(), r.clientProfile(), r.verdict(), r.justification(), calls, r.suggestionDecisions());
     }
 
     private List<String> alternatives(Answer.Check check, List<Answer.Check> checked) {

@@ -84,6 +84,7 @@ public class DefaultPrivacyGate implements PrivacyGate {
                 .map(s -> text.substring(s.start(), s.end())).distinct().toList();
     }
 
+    /** ruleExplanation is the desk's fixed wording per rule kind and outcome plus Citations: no client value in it. */
     private static final List<String> REPLY_FIELDS_SENT = List.of("portfolioId", "verdict", "ruleExplanation");
 
     @Override
@@ -105,6 +106,15 @@ public class DefaultPrivacyGate implements PrivacyGate {
         if (LOOKS_LIKE_REFERENCE.matcher(PORTFOLIO_ID.matcher(prompt).replaceAll("")).find()) {
             throw new IllegalArgumentException("The reply prompt would carry something shaped like a Portfolio Reference.");
         }
-        return new GatedPrompt(prompt, REPLY_FIELDS_SENT);
+        // Requester Questions are the dealer's free text: the detector clears them like an email, and a detector
+        // that cannot answer refuses (the caller then uses the template).
+        if (detector.detect(prompt).stream().anyMatch(DetectedSpan::isPerson)) {
+            throw new IllegalArgumentException("The reply prompt names a person.");
+        }
+        List<String> fields = new java.util.ArrayList<>(REPLY_FIELDS_SENT);
+        if (!facts.requesterQuestions().isEmpty()) {
+            fields.add("requesterQuestions");
+        }
+        return new GatedPrompt(prompt, fields);
     }
 }

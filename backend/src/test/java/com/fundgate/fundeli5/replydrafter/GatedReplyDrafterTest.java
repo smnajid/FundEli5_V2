@@ -47,7 +47,7 @@ class GatedReplyDrafterTest {
 
     @Test
     void usesTheModelsReplyAndSendsTheIdAndTheVerdictOnly() {
-        String reply = drafter(r -> "Hello, " + ID + " is Eligible.").draft(Language.EN, List.of(LINE), List.of());
+        String reply = drafter(r -> "Hello, " + ID + " is Eligible.").draft(Language.EN, List.of(LINE), List.of()).text();
 
         assertThat(reply).isEqualTo("Hello, " + ID + " is Eligible.");
         assertThat(sent).hasSize(1);
@@ -58,14 +58,14 @@ class GatedReplyDrafterTest {
     void fallsBackToTheTemplateWhenTheModelIsUnreachable() {
         String reply = drafter(r -> {
             throw new IllegalStateException("unreachable");
-        }).draft(Language.FR, List.of(LINE), List.of("Quel est le montant ?"));
+        }).draft(Language.FR, List.of(LINE), List.of("Quel est le montant ?")).text();
 
         assertThat(reply).startsWith("Bonjour,").contains(ID.toString(), "Éligible", "Quel est le montant ?");
     }
 
     @Test
     void fallsBackWhenTheModelDropsAPortfolio() {
-        String reply = drafter(r -> "Hello, all is well.").draft(Language.EN, List.of(LINE), List.of());
+        String reply = drafter(r -> "Hello, all is well.").draft(Language.EN, List.of(LINE), List.of()).text();
 
         assertThat(reply).startsWith("Hello,\n\n- " + ID).contains("Eligible. The portfolio may subscribe.");
     }

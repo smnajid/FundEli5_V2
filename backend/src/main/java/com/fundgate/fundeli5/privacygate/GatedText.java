@@ -1,7 +1,7 @@
 package com.fundgate.fundeli5.privacygate;
 
 /** Text the Privacy Gate has passed: the proof a model call may carry it (ADR 0004). Only the Gate builds one. */
-public interface GatedText {
+public sealed interface GatedText permits GatedEmail, GatedPrompt {
 
     String text();
 

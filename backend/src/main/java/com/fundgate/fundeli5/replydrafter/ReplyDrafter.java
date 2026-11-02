@@ -11,5 +11,5 @@ public interface ReplyDrafter {
      * @param lines one per Eligibility Check
      * @param requesterQuestions the Requester Questions the dealer accepted, to ask in the reply
      */
-    String draft(Language language, List<ReplyLine> lines, List<String> requesterQuestions);
+    Reply draft(Language language, List<ReplyLine> lines, List<String> requesterQuestions);
 }

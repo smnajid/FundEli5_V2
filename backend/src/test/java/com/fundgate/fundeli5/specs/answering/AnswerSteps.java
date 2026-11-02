@@ -212,7 +212,7 @@ public class AnswerSteps {
         // The Request Parser sends the pseudonymised email: Portfolio Ids and the Requester's free text, no profile fact.
         for (JsonNode call : lastCheckRecord().path("llmCalls")) {
             for (JsonNode field : call.path("fieldsSent")) {
-                assertThat(field.asString()).isIn("portfolioId", "freeText");
+                assertThat(field.asString()).isIn("portfolioId", "freeText", "verdict", "ruleExplanation", "requesterQuestions");
             }
         }
     }

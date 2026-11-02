@@ -4,6 +4,7 @@ import com.fundgate.fundeli5.eligibility.Verdict;
 import com.fundgate.fundeli5.explanation.Explanation;
 import com.fundgate.fundeli5.explanation.ExplanationRenderer;
 import com.fundgate.fundeli5.explanation.Language;
+import com.fundgate.fundeli5.replydrafter.Reply;
 import com.fundgate.fundeli5.replydrafter.ReplyDrafter;
 import com.fundgate.fundeli5.replydrafter.ReplyLine;
 import java.util.List;
@@ -21,7 +22,7 @@ public class TemplateReplyDrafter implements ReplyDrafter {
     }
 
     @Override
-    public String draft(Language language, List<ReplyLine> lines, List<String> requesterQuestions) {
+    public Reply draft(Language language, List<ReplyLine> lines, List<String> requesterQuestions) {
         boolean fr = language == Language.FR;
         StringBuilder reply = new StringBuilder(fr ? "Bonjour,\n\n" : "Hello,\n\n");
         for (ReplyLine line : lines) {
@@ -37,8 +38,8 @@ public class TemplateReplyDrafter implements ReplyDrafter {
             reply.append(fr ? "\nPourriez-vous nous préciser :\n" : "\nCould you tell us:\n");
             requesterQuestions.forEach(q -> reply.append("- ").append(q).append('\n'));
         }
-        return reply.append(fr ? "\nCordialement,\nLe desk de souscription" : "\nBest regards,\nFund dealing desk")
-                .toString();
+        return Reply.fromTemplate(reply.append(fr ? "\nCordialement,\nLe desk de souscription" : "\nBest regards,\nFund dealing desk")
+                .toString());
     }
 
     private static String sentence(Verdict verdict, boolean fr) {

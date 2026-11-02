@@ -6,6 +6,7 @@ import com.fundgate.fundeli5.llm.GatedLlmEgress;
 import com.fundgate.fundeli5.llm.GatedLlmRequest;
 import com.fundgate.fundeli5.privacygate.PrivacyGate;
 import com.fundgate.fundeli5.privacygate.ReplyFacts;
+import com.fundgate.fundeli5.replydrafter.Reply;
 import com.fundgate.fundeli5.replydrafter.ReplyDrafter;
 import com.fundgate.fundeli5.replydrafter.ReplyLine;
 import java.util.ArrayList;
@@ -45,24 +46,25 @@ public class GatedReplyDrafter implements ReplyDrafter {
     }
 
     @Override
-    public String draft(Language language, List<ReplyLine> lines, List<String> requesterQuestions) {
+    public Reply draft(Language language, List<ReplyLine> lines, List<String> requesterQuestions) {
         try {
             List<ReplyFacts.Line> facts = new ArrayList<>();
             for (ReplyLine line : lines) {
                 var explanation = renderer.render(line.verdict(), line.justification(), language, List.of());
                 List<String> sentences = new ArrayList<>();
                 sentences.add(explanation.verdictStatement());
-                sentences.addAll(explanation.sentences());
+                explanation.sentences().stream().filter(x -> !sentences.contains(x)).forEach(sentences::add);
                 facts.add(new ReplyFacts.Line(line.portfolio(), line.shareClassName(), line.verdict(), sentences,
                         line.verdict() == com.fundgate.fundeli5.eligibility.Verdict.ELIGIBLE ? List.of() : line.alternatives()));
             }
             var prompt = gate.gateReply(new ReplyFacts(language.code(), facts, requesterQuestions));
             String reply = egress.complete(new GatedLlmRequest(MODEL, SYSTEM, prompt)).text();
+            var call = new Reply.ModelCall(MODEL, prompt.text(), prompt.fieldsSent(), reply);
             if (reply == null || reply.isBlank() || !namesEveryPortfolio(reply, lines)) {
                 LOG.log(System.Logger.Level.WARNING, "The model's reply was unusable; using the template.");
                 return fallback.draft(language, lines, requesterQuestions);
             }
-            return reply.strip();
+            return new Reply(reply.strip(), call);
         } catch (RuntimeException e) {
             LOG.log(System.Logger.Level.WARNING, "No model reply (" + e.getClass().getSimpleName() + "); using the template.");
             return fallback.draft(language, lines, requesterQuestions);
