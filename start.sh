@@ -6,6 +6,7 @@
 #   docker run -p 5002:3000 mcr.microsoft.com/presidio-analyzer); otherwise the fixture detector runs and says so.
 set -euo pipefail
 cd "$(dirname "$0")"
+ROOT="$PWD"
 PORT="${PORT:-8080}"
 PRESIDIO_URL="${PRESIDIO_URL:-http://localhost:5002}"
 
@@ -26,6 +27,7 @@ echo ">> Dealer screen: http://localhost:$PORT/dealer-screen   (validation: /val
 cd backend
 exec java -jar target/fundeli5-*.jar \
   --server.port="$PORT" \
+  --fundeli5.screens.dir="$ROOT/frontend/dist/frontend/browser" \
   --fundeli5.llm.endpoint=replay \
   --fundeli5.privacygate.detector="$detector" \
   --fundeli5.privacygate.presidio.url="$PRESIDIO_URL"
