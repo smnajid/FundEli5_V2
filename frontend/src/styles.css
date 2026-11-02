@@ -228,8 +228,9 @@ label {
   color: var(--c-review);
 }
 
-/* Privacy Gate refusal */
-.refusal {
+/* Privacy Gate refusal and request errors */
+.refusal,
+.error {
   border: 2px solid var(--c-fail);
   background: var(--c-fail-bg);
 }

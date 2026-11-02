@@ -60,7 +60,9 @@ interface FormRow {
       <details class="request card">
         <summary>
           Request from the pasted email ·
-          <span class="privacy-note">✓ {{ result()?.screenNote }}</span>
+          <span class="privacy-note"
+            ><span aria-hidden="true">✓</span> {{ result()?.screenNote }}</span
+          >
         </summary>
         <pre class="email">{{ email() }}</pre>
         <ng-container *ngTemplateOutlet="form" />
@@ -82,7 +84,7 @@ interface FormRow {
     }
 
     @if (error(); as message) {
-      <p role="alert" class="card refusal">{{ message }}</p>
+      <p role="alert" class="card error">{{ message }}</p>
     }
 
     @if (result(); as r) {
@@ -95,7 +97,7 @@ interface FormRow {
           }
         </section>
       } @else if (!folded()) {
-        <p class="privacy-note card">✓ {{ r.screenNote }}</p>
+        <p class="privacy-note card"><span aria-hidden="true">✓</span> {{ r.screenNote }}</p>
       }
       @if (!folded() && rows().length) {
         <section class="manual card">
@@ -152,14 +154,16 @@ interface FormRow {
             }
           </section>
         }
-        <aside class="rail" aria-label="Evidence">
-          <!-- room for the evidence rail (ticket: Citations on outcomes) -->
-          @if (records().length) {
-            <button type="button" class="saw" (click)="drawer.set(true)">
-              What the AI saw (Check Record)
-            </button>
-          }
-        </aside>
+        @if (records().length) {
+          <aside class="rail" aria-label="Evidence">
+            <!-- room for the evidence rail (ticket: Citations on outcomes) -->
+            @if (records().length) {
+              <button type="button" class="saw" (click)="drawer.set(true)">
+                What the AI saw (Check Record)
+              </button>
+            }
+          </aside>
+        }
       </div>
 
       @if (r.checks?.length) {
