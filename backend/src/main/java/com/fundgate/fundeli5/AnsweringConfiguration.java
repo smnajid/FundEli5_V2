@@ -9,7 +9,10 @@ import com.fundgate.fundeli5.llm.LlmEgress;
 import com.fundgate.fundeli5.privacygate.PrivacyGate;
 import com.fundgate.fundeli5.privacygate.DefaultPrivacyGate;
 import com.fundgate.fundeli5.privacygate.PersonalDataDetector;
+import com.fundgate.fundeli5.explanation.ExplanationRenderer;
+import com.fundgate.fundeli5.explanation.ExplanationTemplates;
 import com.fundgate.fundeli5.replydrafter.ReplyDrafter;
+import com.fundgate.fundeli5.replydrafter.gated.GatedReplyDrafter;
 import com.fundgate.fundeli5.replydrafter.stub.TemplateReplyDrafter;
 import com.fundgate.fundeli5.requestparser.RequestParser;
 import com.fundgate.fundeli5.requestparser.replay.ReplayRequestParser;
@@ -98,8 +101,14 @@ public class AnsweringConfiguration {
     }
 
     @Bean
-    ReplyDrafter replyDrafter() {
-        return new TemplateReplyDrafter();
+    ExplanationRenderer explanationRenderer() {
+        return new ExplanationRenderer(ExplanationTemplates.load());
+    }
+
+    /** The model drafts the reply through the Privacy Gate; the template answers when it cannot. */
+    @Bean
+    ReplyDrafter replyDrafter(PrivacyGate gate, GatedLlmEgress egress, ExplanationRenderer renderer) {
+        return new GatedReplyDrafter(gate, egress, renderer, new TemplateReplyDrafter(renderer));
     }
 
     @Bean
@@ -110,10 +119,10 @@ public class AnsweringConfiguration {
     @Bean
     @Lazy
     AnswerService answerService(PrivacyGate gate, RequestParser parser, ShareClassCatalog catalog, RuleEngine engine,
-            ReplyDrafter drafter, CheckRecords checkRecords, ClientProfiles clientProfiles,
-            RuleCards ruleCards, @Value("${fundeli5.engine.version:dev}") String engineVersion,
+            ReplyDrafter drafter, ExplanationRenderer renderer, CheckRecords checkRecords, ClientProfiles clientProfiles,
+            RuleCards ruleCards, ShareClasses shareClasses, @Value("${fundeli5.engine.version:dev}") String engineVersion,
             @Value("${fundeli5.scalemapping.version:none}") String scaleMappingVersion) {
-        return new AnswerService(gate, parser, catalog, engine, drafter, checkRecords, clientProfiles,
-                Clock.systemUTC(), engineVersion, ruleCards, scaleMappingVersion);
+        return new AnswerService(gate, parser, catalog, engine, drafter, new TemplateReplyDrafter(renderer), checkRecords, clientProfiles,
+                Clock.systemUTC(), engineVersion, ruleCards, scaleMappingVersion, shareClasses);
     }
 }

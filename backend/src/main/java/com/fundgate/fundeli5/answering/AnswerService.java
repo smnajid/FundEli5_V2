@@ -23,6 +23,9 @@ import com.fundgate.fundeli5.ruleengine.EngineResult;
 import com.fundgate.fundeli5.ruleengine.RuleEngine;
 import com.fundgate.fundeli5.shareclasscatalog.ShareClassCatalog;
 import com.fundgate.fundeli5.shareclasses.ShareClass;
+import com.fundgate.fundeli5.shareclasses.ShareClasses;
+import com.fundgate.fundeli5.eligibility.Verdict;
+import com.fundgate.fundeli5.explanation.Language;
 import java.time.Clock;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,27 +44,31 @@ public class AnswerService {
     private final ShareClassCatalog catalog;
     private final RuleEngine engine;
     private final ReplyDrafter drafter;
+    private final ReplyDrafter templateDrafter;
     private final CheckRecords checkRecords;
     private final ClientProfiles clientProfiles;
     private final Clock clock;
     private final String engineVersion;
     private final RuleCards ruleCards;
     private final String scaleMappingVersion;
+    private final ShareClasses shareClasses;
 
     public AnswerService(PrivacyGate gate, RequestParser parser, ShareClassCatalog catalog, RuleEngine engine,
-            ReplyDrafter drafter, CheckRecords checkRecords, ClientProfiles clientProfiles, Clock clock,
-            String engineVersion, RuleCards ruleCards, String scaleMappingVersion) {
+            ReplyDrafter drafter, ReplyDrafter templateDrafter, CheckRecords checkRecords, ClientProfiles clientProfiles, Clock clock,
+            String engineVersion, RuleCards ruleCards, String scaleMappingVersion, ShareClasses shareClasses) {
         this.gate = gate;
         this.parser = parser;
         this.catalog = catalog;
         this.engine = engine;
         this.drafter = drafter;
+        this.templateDrafter = templateDrafter;
         this.checkRecords = checkRecords;
         this.clientProfiles = clientProfiles;
         this.clock = clock;
         this.engineVersion = engineVersion;
         this.ruleCards = ruleCards;
         this.scaleMappingVersion = scaleMappingVersion;
+        this.shareClasses = shareClasses;
     }
 
     /** The email flow. A refused email makes no model call. */
@@ -97,7 +104,8 @@ public class AnswerService {
                 ids.add(request.portfolio());
             }
         }
-        return new Answer(null, true, checks, unclear, reply(checks, ids, email.references()));
+        return new Answer(null, true, checks, unclear,
+                reply(RequestLanguage.of(email.text()), checks, ids, email.references(), true));
     }
 
     /** The by-hand flow: no model, template reply. */
@@ -105,7 +113,7 @@ public class AnswerService {
         PortfolioId id = clientProfiles.portfolioId(request.portfolio()).orElseThrow(() -> new PortfolioNotFound(request.portfolio()));
         Answer.Check check = check(request, shareClassName, List.of());
         return new Answer(null, false, List.of(check), List.of(),
-                reply(List.of(check), List.of(id), java.util.Map.of(id, request.portfolio())));
+                reply(Language.EN, List.of(check), List.of(id), java.util.Map.of(id, request.portfolio()), false));
     }
 
     private Answer.Check check(SubscriptionRequest request, String shareClassName, List<CheckRecord.LlmCall> calls) {
@@ -119,18 +127,53 @@ public class AnswerService {
                 request.currency(), request.clientInitiated(), result.verdict(), result.justification());
     }
 
-    /** The drafter sees ids; the references are swapped back here, locally, after it. */
-    private String reply(List<Answer.Check> checks, List<PortfolioId> ids,
-            java.util.Map<PortfolioId, PortfolioReference> references) {
+    /**
+     * The drafter sees ids; the references are swapped back here, locally, after it. On the email flow, the
+     * other classes of the same fund are checked too and the Eligible ones are offered as alternatives: advisory
+     * only, they write no Check Record and change no Verdict (ADR 0007).
+     */
+    private String reply(Language language, List<Answer.Check> checks, List<PortfolioId> ids,
+            java.util.Map<PortfolioId, PortfolioReference> references, boolean emailFlow) {
         List<ReplyLine> lines = new ArrayList<>();
         for (int i = 0; i < checks.size(); i++) {
             Answer.Check c = checks.get(i);
-            lines.add(new ReplyLine(ids.get(i), c.shareClass(), c.shareClassName(), c.verdict(), c.justification()));
+            List<String> alternatives = emailFlow && c.verdict() != Verdict.ELIGIBLE ? alternatives(c, checks) : List.of();
+            lines.add(new ReplyLine(ids.get(i), c.shareClass(), c.shareClassName(), c.verdict(), c.justification(),
+                    alternatives));
         }
-        String reply = drafter.draft(lines);
+        String reply = (emailFlow ? drafter : templateDrafter).draft(language, lines, List.of());
         for (var entry : references.entrySet()) {
             reply = reply.replace(entry.getKey().toString(), entry.getValue().value());
         }
         return reply;
+    }
+
+    private List<String> alternatives(Answer.Check check, List<Answer.Check> checked) {
+        List<String> names = new ArrayList<>();
+        try {
+            List<ShareClass> all = shareClasses.all();
+            ShareClass asked = all.stream().filter(s -> s.isin().equals(check.shareClass())).findFirst().orElse(null);
+            if (asked == null) {
+                return names;
+            }
+            for (ShareClass sibling : all) {
+                if (!sameFund(asked, sibling) || sibling.isin().equals(check.shareClass())) {
+                    continue;
+                }
+                Verdict verdict = engine.check(new SubscriptionRequest(check.portfolio(), sibling.isin(), check.amount(),
+                        check.currency(), check.clientInitiated())).verdict();
+                if (verdict == Verdict.ELIGIBLE) {
+                    names.add(sibling.shareClassName());
+                }
+            }
+        } catch (RuntimeException e) {
+            LOG.log(System.Logger.Level.WARNING, "Alternatives not checked: " + e.getClass().getSimpleName());
+            return List.of();
+        }
+        return names;
+    }
+
+    private static boolean sameFund(ShareClass a, ShareClass b) {
+        return a.fundId() != null ? a.fundId().equals(b.fundId()) : a.fundName().equals(b.fundName());
     }
 }

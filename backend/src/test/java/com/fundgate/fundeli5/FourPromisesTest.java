@@ -79,9 +79,15 @@ class FourPromisesTest {
             sentToModel.add(request);
             return new LlmResponse(modelAnswer);
         });
-        return new AnswerService(new DefaultPrivacyGate(profiles, new FixturePersonalDataDetector()),
+        var gate = new DefaultPrivacyGate(profiles, new FixturePersonalDataDetector());
+        var renderer = new com.fundgate.fundeli5.explanation.ExplanationRenderer(
+                com.fundgate.fundeli5.explanation.ExplanationTemplates.load());
+        return new AnswerService(gate,
                 new ReplayRequestParser(egress), new MatchingShareClassCatalog(shareClasses), engine(),
-                new TemplateReplyDrafter(), records, profiles, Clock.systemUTC(), "test", cards, "test");
+                new com.fundgate.fundeli5.replydrafter.gated.GatedReplyDrafter(gate, egress, renderer,
+                        new TemplateReplyDrafter(renderer)),
+                new TemplateReplyDrafter(renderer),
+                records, profiles, Clock.systemUTC(), "test", cards, "test", shareClasses);
     }
 
     SubscriptionRequest request(String portfolio, Isin isin, String amount) {

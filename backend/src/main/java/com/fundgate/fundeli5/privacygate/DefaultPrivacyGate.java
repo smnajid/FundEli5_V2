@@ -83,4 +83,28 @@ public class DefaultPrivacyGate implements PrivacyGate {
                         && (o.start() < s.start() || o.end() > s.end())))
                 .map(s -> text.substring(s.start(), s.end())).distinct().toList();
     }
+
+    private static final List<String> REPLY_FIELDS_SENT = List.of("portfolioId", "verdict", "ruleExplanation");
+
+    @Override
+    public GatedPrompt gateReply(ReplyFacts facts) {
+        StringBuilder text = new StringBuilder("Language: ").append(facts.language()).append("\n\n");
+        for (ReplyFacts.Line line : facts.lines()) {
+            text.append("Portfolio ").append(line.portfolio()).append(" on ").append(line.shareClassName())
+                    .append(": ").append(line.verdict().name()).append('\n');
+            line.explanation().forEach(sentence -> text.append("  ").append(sentence).append('\n'));
+            if (!line.alternatives().isEmpty()) {
+                text.append("  Eligible instead: ").append(String.join(", ", line.alternatives())).append('\n');
+            }
+        }
+        if (!facts.requesterQuestions().isEmpty()) {
+            text.append("\nAsk the Requester:\n");
+            facts.requesterQuestions().forEach(q -> text.append("- ").append(q).append('\n'));
+        }
+        String prompt = text.toString();
+        if (LOOKS_LIKE_REFERENCE.matcher(PORTFOLIO_ID.matcher(prompt).replaceAll("")).find()) {
+            throw new IllegalArgumentException("The reply prompt would carry something shaped like a Portfolio Reference.");
+        }
+        return new GatedPrompt(prompt, REPLY_FIELDS_SENT);
+    }
 }

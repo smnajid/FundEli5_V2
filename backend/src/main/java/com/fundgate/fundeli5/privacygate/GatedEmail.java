@@ -11,7 +11,7 @@ import java.util.Objects;
  * constructor is package-private, so only the Privacy Gate can build one: holding a GatedEmail is
  * the proof that the Gate has passed the text. The map never leaves the dealer app.
  */
-public final class GatedEmail {
+public final class GatedEmail implements GatedText {
 
     private final String text;
     private final Map<PortfolioId, PortfolioReference> references;
@@ -24,6 +24,7 @@ public final class GatedEmail {
         this.references = Map.copyOf(references);
     }
 
+    @Override
     public String text() {
         return text;
     }
@@ -34,6 +35,7 @@ public final class GatedEmail {
 
     /** The client fields this text carries to a model, for the Check Record: Portfolio Ids, and the Requester's free text
      * (cleared by the Gate for persons only, ADR 0009). */
+    @Override
     public List<String> fieldsSent() {
         return fieldsSent;
     }

@@ -129,7 +129,7 @@ public class AnswerSteps {
         spy().unreachable(false);
         JsonNode withLlm = postEmail(ANNA);
         spy().unreachable(true);
-        spy().sent();
+        callsWithLlm = spy().sent().size();
         JsonNode first = byHand("LOC90000101", "GCE-BI", 80000, false);
         JsonNode second = byHand("LOC90000102", "GCE-BI", 80000, false);
         verdictsWithLlm = verdicts(withLlm);
@@ -137,6 +137,7 @@ public class AnswerSteps {
     }
 
     private List<String> verdictsWithLlm = List.of();
+    private int callsWithLlm;
 
     @When("^the Fund Dealer enters ([A-Z0-9]+), ([A-Z0-9-]+), EUR ([\\d,]+), not client initiated$")
     public void theDealerEntersTheRequest(String portfolio, String shareClass, String amount) {
@@ -317,7 +318,8 @@ public class AnswerSteps {
 
     @Then("the reply is the template for each Verdict")
     public void theReplyIsTheTemplateForEachVerdict() {
-        assertThat(spy().sent()).as("calls to the unreachable model after the first").hasSizeLessThanOrEqualTo(1);
+        // The parser's call and the reply's call went out with the model reachable; the by-hand answers make none.
+        assertThat(spy().sent()).as("calls to the model after it became unreachable").hasSize(callsWithLlm);
         assertThat(answer.path("aiUsed").asBoolean()).isFalse();
         assertThat(answer.path("reply").asString()).isNotBlank();
     }
