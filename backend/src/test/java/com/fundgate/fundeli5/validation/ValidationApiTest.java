@@ -63,6 +63,26 @@ class ValidationApiTest {
         assertThat(get("/api/validation/drafts")).isEmpty();
     }
 
+    @Test
+    void theReviewIsTypedAndACorrectionTakesTheSameConditionShape() throws Exception {
+        String fund = get("/api/validation/drafts").get(0).get("fundName").asString();
+        JsonNode rules = get("/api/validation/review?fundName=" + FUND + "&version=1").get("card").get("rules");
+        int minimum = -1;
+        for (int i = 0; i < rules.size(); i++) {
+            if (rules.get(i).get("condition").get("kind").asString().equals("minimum_initial_subscription")) {
+                minimum = i;
+            }
+        }
+        assertThat(minimum).isGreaterThanOrEqualTo(0);
+        HttpResponse<String> corrected = post("/api/validation/correct", body(fund, "\"rule\":" + minimum
+                + ",\"condition\":{\"kind\":\"minimum_initial_subscription\",\"amount\":123456,\"currency\":\"EUR\"},"
+                + "\"validator\":\"V\""));
+        assertThat(corrected.statusCode()).isEqualTo(200);
+        JsonNode condition = json.readTree(corrected.body()).get("card").get("rules").get(minimum).get("condition");
+        assertThat(condition.get("amount").asInt()).isEqualTo(123456);
+        assertThat(condition.has("allowed")).isTrue();
+    }
+
     private String body(String fund, String rest) {
         return "{\"fundName\":\"" + fund + "\",\"version\":1," + rest + "}";
     }
