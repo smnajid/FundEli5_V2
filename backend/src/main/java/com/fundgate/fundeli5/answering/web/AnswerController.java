@@ -101,8 +101,8 @@ class AnswerController {
     }
 
     /** The numbers of the evidence cards an outcome cites, with the passages. */
-    private static List<CitationView> citations(Answer a, Answer.Check check, com.fundgate.fundeli5.eligibility.RuleOutcome outcome) {
-        return outcome.citations().stream().map(c -> new CitationView(
+    private static List<OutcomeCitationView> citations(Answer a, Answer.Check check, com.fundgate.fundeli5.eligibility.RuleOutcome outcome) {
+        return outcome.citations().stream().map(c -> new OutcomeCitationView(
                 a.evidence().stream().filter(e -> e.kind() == outcome.kind() && e.result() == outcome.result()
                         && e.shareClassName().equals(check.shareClassName()) && e.citation().equals(c))
                         .findFirst().map(Evidence::number).orElse(0),
@@ -168,11 +168,11 @@ class AnswerController {
             String currency, boolean clientInitiated, Verdict verdict, List<OutcomeView> outcomes) {
     }
 
-    record OutcomeView(String kind, String result, String explanation, List<CitationView> citations) {
+    record OutcomeView(String kind, String result, String explanation, List<OutcomeCitationView> citations) {
     }
 
     /** A passage of a public Fund Document; {@code number} is its card in the evidence rail. */
-    record CitationView(int number, String document, int page, String quote, boolean quoteFoundOnPage) {
+    record OutcomeCitationView(int number, String document, int page, String quote, boolean quoteFoundOnPage) {
     }
 
     /** One card of the evidence rail; {@code citedInReply} when a [number] marker of the reply points to it. */

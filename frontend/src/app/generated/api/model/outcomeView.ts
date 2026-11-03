@@ -7,11 +7,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OutcomeCitationView } from './outcomeCitationView';
 
 
 export interface OutcomeView { 
     kind?: string;
     result?: string;
     explanation?: string;
+    citations?: Array<OutcomeCitationView>;
 }
 

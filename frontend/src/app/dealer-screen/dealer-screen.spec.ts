@@ -84,6 +84,51 @@ const answered: AnswerView = {
 };
 
 describe('DealerScreen', () => {
+  it('shows the evidence rail and links the reply markers to their cards', async () => {
+    const cited: AnswerView = {
+      ...answer,
+      reply: 'Hi Marc, class I is for institutions [1] and BP-EUR is open [2].',
+      evidence: [
+        {
+          number: 1,
+          kind: 'INVESTOR_CATEGORY',
+          result: 'FAIL',
+          shareClassName: 'BI-EUR',
+          document: 'Nordea 1 prospectus',
+          page: 123,
+          quote: 'Institutional investors.',
+          quoteFoundOnPage: true,
+          citedInReply: true,
+        },
+        {
+          number: 2,
+          kind: 'INVESTOR_CATEGORY',
+          result: 'PASS',
+          shareClassName: 'BP-EUR',
+          document: 'Nordea 1 prospectus',
+          page: 5,
+          quote: 'All investors.',
+          quoteFoundOnPage: true,
+          citedInReply: true,
+        },
+      ],
+    };
+    const api = {
+      answer: vi.fn(() => of(cited)),
+      checkRecords: vi.fn(() => of([])),
+    };
+    const el = await paste(setup(api), 'Please buy');
+
+    const cards = el.querySelectorAll('.evidence');
+    expect(cards.length).toBe(2);
+    expect(cards[0].textContent).toContain('Institutional investors.');
+    expect(cards[0].textContent).toContain('Nordea 1 prospectus p.123');
+    expect(cards[0].querySelector('.badge')?.textContent?.trim()).toBe('F');
+    expect(cards[1].querySelector('.badge')?.textContent?.trim()).toBe('P');
+    const links = [...el.querySelectorAll('.markers a')].map((a) => a.getAttribute('href'));
+    expect(links).toEqual(['#evidence-1', '#evidence-2']);
+  });
+
   it('shows verdicts, reply and Check Record ids for a pasted email', async () => {
     const api = {
       answer: vi.fn(() => of(answer)),

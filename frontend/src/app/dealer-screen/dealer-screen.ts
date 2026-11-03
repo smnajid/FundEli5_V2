@@ -1,5 +1,12 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { catchError, forkJoin, map, of, switchMap } from 'rxjs';
@@ -9,6 +16,7 @@ import {
   CheckRecordControllerService,
   CheckRecordView,
   CheckView,
+  EvidenceView,
   HandRequestBody,
 } from '../generated/api';
 
@@ -149,14 +157,46 @@ interface FormRow {
               [ngModel]="reply()"
               (ngModelChange)="editReply($event)"
             ></textarea>
+            @if (citedMarkers().length) {
+              <p class="markers">
+                Citations in the reply:
+                @for (n of citedMarkers(); track n) {
+                  <a class="marker" [href]="'#evidence-' + n" (click)="focusCard($event, n)"
+                    >[{{ n }}]</a
+                  >
+                }
+              </p>
+            }
             @if (copied()) {
               <span role="status">Copied</span>
             }
           </section>
         }
-        @if (records().length) {
+        @if (r.evidence?.length || records().length) {
           <aside class="rail" aria-label="Evidence">
-            <!-- room for the evidence rail (ticket: Citations on outcomes) -->
+            @if (r.evidence?.length) {
+              <h2>Evidence for the reply</h2>
+            }
+            @for (e of r.evidence ?? []; track e.number) {
+              <article class="evidence card" [id]="'evidence-' + e.number" tabindex="-1">
+                <header>
+                  <span class="num">[{{ e.number }}]</span>
+                  <span class="badge" [attr.data-result]="e.result" [title]="resultLabel(e)">{{
+                    resultLetter(e)
+                  }}</span>
+                  <span class="what">{{ kindLabel(e.kind) }} · {{ e.shareClassName }}</span>
+                </header>
+                <blockquote class="quote">
+                  <mark>{{ e.quote }}</mark>
+                </blockquote>
+                <p class="source">
+                  {{ e.document }} p.{{ e.page }}
+                  @if (!e.quoteFoundOnPage) {
+                    <span class="unverified">· quote not verified on the page</span>
+                  }
+                </p>
+              </article>
+            }
             @if (records().length) {
               <button type="button" class="saw" (click)="drawer.set(true)">
                 What the AI saw (Check Record)
@@ -180,6 +220,14 @@ interface FormRow {
               @for (o of check.outcomes ?? []; track $index) {
                 <li>
                   <strong>{{ o.kind }}</strong> {{ o.result }}: {{ o.explanation }}
+                  @for (c of o.citations ?? []; track $index) {
+                    <a
+                      class="marker"
+                      [href]="'#evidence-' + c.number"
+                      (click)="focusCard($event, c.number)"
+                      >[{{ c.number }}]</a
+                    >
+                  }
                 </li>
               }
             </ul>
@@ -328,6 +376,34 @@ export class DealerScreen {
   protected decidingExplanation(check: CheckView): string {
     const o = (check.outcomes ?? []).find((x) => x.result !== 'PASS') ?? check.outcomes?.[0];
     return o?.explanation ?? '';
+  }
+
+  /** The [n] markers still in the (possibly edited) reply that have a card. */
+  protected readonly citedMarkers = computed(() => {
+    const known = new Set((this.result()?.evidence ?? []).map((e) => e.number));
+    const found = [...this.reply().matchAll(/\[(\d+)\]/g)].map((m) => Number(m[1]));
+    return [...new Set(found)].filter((n) => known.has(n)).sort((a, b) => a - b);
+  });
+
+  protected kindLabel(kind: string | undefined): string {
+    const text = (kind ?? '').toLowerCase().replaceAll('_', ' ');
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  }
+
+  protected resultLetter(e: EvidenceView): string {
+    return e.result === 'PASS' ? 'P' : e.result === 'FAIL' ? 'F' : 'R';
+  }
+
+  protected resultLabel(e: EvidenceView): string {
+    return e.result === 'PASS' ? 'Pass' : e.result === 'FAIL' ? 'Fail' : 'Review';
+  }
+
+  /** A marker links to its card: scroll to it and focus it, without leaving the page. */
+  protected focusCard(event: Event, number: number | undefined): void {
+    event.preventDefault();
+    const card = document.getElementById('evidence-' + number);
+    card?.scrollIntoView?.({ block: 'nearest' });
+    card?.focus();
   }
 
   protected edit<K extends keyof FormRow>(index: number, field: K, value: FormRow[K]): void {
