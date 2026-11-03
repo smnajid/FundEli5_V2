@@ -4,6 +4,7 @@ import com.fundgate.fundeli5.rulecard.Condition;
 import com.fundgate.fundeli5.rulecard.Rule;
 import com.fundgate.fundeli5.rulecard.json.RuleCardJson;
 import com.fundgate.fundeli5.rulecard.RuleCard;
+import com.fundgate.fundeli5.rulecard.SourcePages;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,7 +36,8 @@ record RuleCardView(String fundId, String fundName, List<String> shareClasses, i
             String notedReason) {
     }
 
-    record CitationView(String document, int page, String quote, boolean quoteFoundOnPage) {
+    /** {@code pageText} is the cited page as read when the card was drafted; absent when it was not kept. */
+    record CitationView(String document, int page, String quote, boolean quoteFoundOnPage, String pageText) {
     }
 
     record HistoryView(String action, String by, String at, ConditionView condition) {
@@ -51,9 +53,9 @@ record RuleCardView(String fundId, String fundName, List<String> shareClasses, i
     record ValidationStampView(String validator, String validatedAt) {
     }
 
-    static RuleCardView of(RuleCard c) {
+    static RuleCardView of(RuleCard c, SourcePages pages) {
         return new RuleCardView(c.fundId(), c.fundName(), c.shareClasses().stream().map(i -> i.value()).toList(),
-                c.version(), lower(c.status()), c.rules().stream().map(RuleCardView::rule).toList(),
+                c.version(), lower(c.status()), c.rules().stream().map(r -> rule(r, c, pages)).toList(),
                 c.sources().stream().map(s -> new SourceView(s.documentId(), s.contentSha256(),
                         s.fmdEditionDate() == null ? null : s.fmdEditionDate().value(),
                         s.pdfEditionDate() == null ? null : s.pdfEditionDate().value(),
@@ -64,10 +66,11 @@ record RuleCardView(String fundId, String fundName, List<String> shareClasses, i
                         str(c.validation().validatedAt())));
     }
 
-    private static RuleView rule(Rule r) {
+    private static RuleView rule(Rule r, RuleCard card, SourcePages pages) {
         return new RuleView(lower(r.scope()), r.shareClass() == null ? null : r.shareClass().value(),
                 condition(r.condition()),
-                r.citations().stream().map(x -> new CitationView(x.document(), x.page(), x.quote(), x.quoteFoundOnPage()))
+                r.citations().stream().map(x -> new CitationView(x.document(), x.page(), x.quote(), x.quoteFoundOnPage(),
+                        pages.text(card.fundName(), card.version(), x.document(), x.page()).orElse(null)))
                         .toList(),
                 r.summary(), r.confidence(), r.contradiction(),
                 r.history().stream().map(h -> new HistoryView(h.action(), h.by(), str(h.at()), condition(h.condition())))

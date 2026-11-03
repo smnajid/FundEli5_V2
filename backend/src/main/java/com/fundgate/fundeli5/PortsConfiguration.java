@@ -162,8 +162,9 @@ public class PortsConfiguration {
         }
 
         @Bean
-        PipelineRunner pipelineRunner(SourceReader sourceReader, CardDrafter cardDrafter, DraftCardWriter writer) {
-            return new PipelineRunner(sourceReader, cardDrafter, writer);
+        PipelineRunner pipelineRunner(SourceReader sourceReader, CardDrafter cardDrafter, DraftCardWriter writer,
+                @Value("${fundeli5.pipeline.pages}") String pages) {
+            return new PipelineRunner(sourceReader, cardDrafter, writer, Path.of(pages));
         }
     }
 }

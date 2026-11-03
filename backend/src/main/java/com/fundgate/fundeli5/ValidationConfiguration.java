@@ -1,7 +1,9 @@
 package com.fundgate.fundeli5;
 
 import com.fundgate.fundeli5.rulecard.RuleCardStore;
+import com.fundgate.fundeli5.rulecard.SourcePages;
 import com.fundgate.fundeli5.rulecard.folder.FolderRuleCardStore;
+import com.fundgate.fundeli5.rulecard.folder.FolderSourcePages;
 import com.fundgate.fundeli5.validation.ValidationService;
 import java.nio.file.Path;
 import java.time.Clock;
@@ -23,6 +25,12 @@ class ValidationConfiguration {
         List<Path> folders = Arrays.stream(drafts.split(",")).map(String::trim).filter(f -> !f.isEmpty()).map(Path::of)
                 .toList();
         return new FolderRuleCardStore(folders, Path.of(out));
+    }
+
+    @Bean
+    SourcePages validationSourcePages(@Value("${fundeli5.validation.pages}") String pages) {
+        return new FolderSourcePages(Arrays.stream(pages.split(",")).map(String::trim).filter(f -> !f.isEmpty())
+                .map(Path::of).toList());
     }
 
     @Bean

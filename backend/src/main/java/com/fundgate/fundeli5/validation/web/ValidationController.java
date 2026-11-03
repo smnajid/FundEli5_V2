@@ -4,6 +4,7 @@ import com.fundgate.fundeli5.Runtimes;
 import com.fundgate.fundeli5.bankdata.Isin;
 import com.fundgate.fundeli5.rulecard.Condition;
 import com.fundgate.fundeli5.rulecard.RuleCard;
+import com.fundgate.fundeli5.rulecard.SourcePages;
 import com.fundgate.fundeli5.rulecard.json.RuleCardJson;
 import com.fundgate.fundeli5.validation.CannotValidate;
 import com.fundgate.fundeli5.validation.Review;
@@ -31,8 +32,11 @@ class ValidationController {
 
     private final ValidationService validation;
 
-    ValidationController(ValidationService validation) {
+    private final SourcePages pages;
+
+    ValidationController(ValidationService validation, SourcePages pages) {
         this.validation = validation;
+        this.pages = pages;
     }
 
     @GetMapping("/drafts")
@@ -83,11 +87,11 @@ class ValidationController {
     @PostMapping("/validate")
     RuleCardView validate(@RequestBody CardBody b) {
         RuleCard card = validation.validate(b.fundName(), b.version(), b.validator());
-        return RuleCardView.of(card);
+        return RuleCardView.of(card, pages);
     }
 
-    private static ReviewView view(Review r) {
-        return new ReviewView(RuleCardView.of(r.card()), r.contradictions().stream()
+    private ReviewView view(Review r) {
+        return new ReviewView(RuleCardView.of(r.card(), pages), r.contradictions().stream()
                 .map(c -> new ContradictionView(c.shareClass() == null ? null : c.shareClass().value(), c.kind(),
                         c.options().stream().map(o -> new OptionView(o.rule(), o.document(), o.summary())).toList()))
                 .toList(), r.unreviewedRules(),

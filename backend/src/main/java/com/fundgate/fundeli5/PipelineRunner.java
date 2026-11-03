@@ -5,6 +5,12 @@ import com.fundgate.fundeli5.rulecardpipeline.CardDrafter;
 import com.fundgate.fundeli5.rulecardpipeline.DraftCardWriter;
 import com.fundgate.fundeli5.rulecardpipeline.SourceReader;
 import com.fundgate.fundeli5.rulecardpipeline.SourceReading;
+import com.fundgate.fundeli5.citation.Citation;
+import com.fundgate.fundeli5.rulecard.Rule;
+import com.fundgate.fundeli5.rulecard.RuleCard;
+import com.fundgate.fundeli5.rulecard.folder.FolderSourcePages;
+import java.util.Map;
+import java.util.TreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
@@ -21,8 +27,10 @@ class PipelineRunner implements ApplicationRunner {
     private final SourceReader reader;
     private final CardDrafter drafter;
     private final DraftCardWriter writer;
+    private final java.nio.file.Path pagesOut;
 
-    PipelineRunner(SourceReader reader, CardDrafter drafter, DraftCardWriter writer) {
+    PipelineRunner(SourceReader reader, CardDrafter drafter, DraftCardWriter writer, java.nio.file.Path pagesOut) {
+        this.pagesOut = pagesOut;
         this.reader = reader;
         this.drafter = drafter;
         this.writer = writer;
@@ -46,6 +54,21 @@ class PipelineRunner implements ApplicationRunner {
             CardDrafter.Drafted drafted = drafter.draft(reading);
             log.info("Draft written to {} ({} rules); possibly missed: {}", writer.write(drafted.card()),
                     drafted.card().rules().size(), drafted.possiblyMissed());
+            log.info("Cited pages written to {}", writePages(drafted.card(), reading));
         }
+    }
+
+    /** The text of each cited page, kept next to the Draft so the validation screen needs no Fund Document. */
+    private java.nio.file.Path writePages(RuleCard card, SourceReading reading) {
+        Map<String, Map<Integer, String>> cited = new TreeMap<>();
+        for (Rule rule : card.rules()) {
+            for (Citation c : rule.citations()) {
+                reading.sources().stream().filter(s -> s.document().documentId().value().equals(c.document())).findFirst()
+                        .filter(s -> c.page() >= 1 && c.page() <= s.pages().size())
+                        .ifPresent(s -> cited.computeIfAbsent(c.document(), d -> new TreeMap<>())
+                                .put(c.page(), s.pages().get(c.page() - 1)));
+            }
+        }
+        return FolderSourcePages.write(pagesOut, card.fundName(), card.version(), cited);
     }
 }
