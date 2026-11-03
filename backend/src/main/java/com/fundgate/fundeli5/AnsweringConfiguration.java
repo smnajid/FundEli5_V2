@@ -125,9 +125,8 @@ public class AnsweringConfiguration {
     @Lazy
     AnswerService answerService(PrivacyGate gate, RequestParser parser, ShareClassCatalog catalog, RuleEngine engine,
             ReplyDrafter drafter, ExplanationRenderer renderer, CheckRecords checkRecords, ClientProfiles clientProfiles,
-            RuleCards ruleCards, ShareClasses shareClasses, @Value("${fundeli5.engine.version:dev}") String engineVersion,
-            @Value("${fundeli5.scalemapping.version:none}") String scaleMappingVersion) {
+            ShareClasses shareClasses, @Value("${fundeli5.engine.version:dev}") String engineVersion) {
         return new AnswerService(gate, parser, catalog, engine, drafter, new TemplateReplyDrafter(renderer), checkRecords, clientProfiles,
-                Clock.systemUTC(), engineVersion, ruleCards, scaleMappingVersion, shareClasses);
+                Clock.systemUTC(), engineVersion, shareClasses);
     }
 }
