@@ -418,8 +418,8 @@ type Status = 'open' | 'accepted' | 'corrected' | 'contradiction';
         <section class="banner" aria-label="Contradictions">
           <strong>{{ review()?.contradictions?.length }} contradiction(s) need a decision:</strong>
           @for (k of review()?.contradictions ?? []; track $index; let last = $last) {
-            @if (k.options?.[0]; as first) {
-              <button type="button" class="jump" (click)="select(first.rule)">{{ kindLabel(k.kind) }}</button>
+            @if (k.options?.[0]?.rule; as firstRule) {
+              <button type="button" class="jump" (click)="select(firstRule)">{{ kindLabel(k.kind) }}</button>
             } @else {
               {{ kindLabel(k.kind) }}
             }{{ last ? '.' : ', ' }}
