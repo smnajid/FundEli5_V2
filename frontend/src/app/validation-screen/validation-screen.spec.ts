@@ -21,6 +21,7 @@ const card: RuleCardView = {
           page: 123,
           quote: 'institutional investors only',
           quoteFoundOnPage: true,
+          pageText: 'Class I shares are open to\n  institutional   investors only, as defined.',
         },
       ],
       summary: 'Institutional only',
@@ -112,10 +113,20 @@ describe('ValidationScreen', () => {
     expect(el.querySelector('.ready')?.textContent).toContain('0 / 3 rules ready');
   });
 
+  it('shows the cited page text around the highlighted quote', async () => {
+    const el = await open(setup({}));
+    const page = el.querySelector('.page-text');
+    expect(page?.textContent).toContain('Class I shares are open to');
+    expect(page?.textContent).toContain('as defined.');
+    expect(el.querySelector('.page-text mark')?.textContent).toBe('institutional   investors only');
+  });
+
   it('shows the cited quote highlighted and the checks the code ran', async () => {
     const fixture = setup({});
     const el = await open(fixture);
-    expect(el.querySelector('.quote mark')?.textContent).toBe('institutional investors only');
+    expect(el.querySelector('.quote mark')?.textContent?.replace(/\s+/g, ' ')).toBe(
+      'institutional investors only',
+    );
     (el.querySelectorAll('button.rule')[1] as HTMLButtonElement).click();
     fixture.detectChanges();
     expect(el.querySelector('.document')?.textContent).toContain('Quote not found on its page');
