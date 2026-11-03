@@ -296,7 +296,7 @@ type Status = 'open' | 'accepted' | 'corrected' | 'contradiction';
       overflow: auto;
     }
     .quote mark {
-      background: #fff2a8);
+      background: #fff2a8;
       padding: 0 0.1rem;
     }
     .signal {
@@ -428,8 +428,7 @@ type Status = 'open' | 'accepted' | 'corrected' | 'contradiction';
               </button>
             } @else {
               {{ kindLabel(k.kind) }}
-            }
-            {{ last ? '.' : ', ' }}
+            }{{ last ? '.' : ', ' }}
           }
           @for (k of review()?.contradictions ?? []; track $index) {
             <div class="contradiction">

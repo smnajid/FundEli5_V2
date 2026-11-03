@@ -121,6 +121,14 @@ describe('ValidationScreen', () => {
     expect(el.querySelector('.page-text mark')?.textContent).toBe('institutional   investors only');
   });
 
+  it('falls back to the quote and the plain page when the quote is not in the page text', async () => {
+    const fixture = setup({});
+    const el = await open(fixture);
+    (el.querySelectorAll('button.rule')[1] as HTMLButtonElement).click();
+    fixture.detectChanges();
+    expect(el.querySelector('.page-text')).toBeNull();
+  });
+
   it('shows the cited quote highlighted and the checks the code ran', async () => {
     const fixture = setup({});
     const el = await open(fixture);

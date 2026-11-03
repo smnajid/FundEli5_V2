@@ -64,7 +64,13 @@ class PipelineRunner implements ApplicationRunner {
         for (Rule rule : card.rules()) {
             for (Citation c : rule.citations()) {
                 reading.sources().stream().filter(s -> s.document().documentId().value().equals(c.document())).findFirst()
-                        .filter(s -> c.page() >= 1 && c.page() <= s.pages().size())
+                        .filter(s -> {
+                            boolean inRange = c.page() >= 1 && c.page() <= s.pages().size();
+                            if (!inRange) {
+                                log.warn("Page text not kept: {} has no page {}", c.document(), c.page());
+                            }
+                            return inRange;
+                        })
                         .ifPresent(s -> cited.computeIfAbsent(c.document(), d -> new TreeMap<>())
                                 .put(c.page(), s.pages().get(c.page() - 1)));
             }
