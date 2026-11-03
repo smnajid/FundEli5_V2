@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 /** The Rule Card Validator's screen over HTTP. Every route lives under {@code /api/validation}. */
 @RestController
 @Profile("!" + Runtimes.PIPELINE)
-@RequestMapping("/api/validation")
+@RequestMapping(path = "/api/validation", produces = MediaType.APPLICATION_JSON_VALUE)
 class ValidationController {
 
     private final ValidationService validation;
@@ -101,17 +102,17 @@ class ValidationController {
 
     @ExceptionHandler(NoSuchElementException.class)
     ResponseEntity<String> notFound(NoSuchElementException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.TEXT_PLAIN).body(e.getMessage());
     }
 
     @ExceptionHandler(IllegalStateException.class)
     ResponseEntity<String> refused(RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).contentType(MediaType.TEXT_PLAIN).body(e.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     ResponseEntity<String> badRequest(RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN).body(e.getMessage());
     }
 
     record DraftSummary(String fundName, int version, List<String> shareClasses) {
