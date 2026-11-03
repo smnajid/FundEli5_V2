@@ -2,7 +2,7 @@
   "request": {
     "model": "claude-sonnet-5-5",
     "system": "You read an email asking whether portfolios may subscribe to funds. Portfolios appear as UUIDs.\nAnswer with a JSON array only, one object per portfolio and share class asked about:\n{\"portfolioId\": <uuid>, \"shareClass\": <text as written>, \"amount\": <number or null>,\n \"currency\": <ISO code or null>, \"clientInitiated\": <true or false>}.\nUse null for what the email does not say. Never guess.",
-    "prompt": "De : Sophie Lentz (conseillère)\nÀ : Fund dealing desk\nObjet : Souscription Nordea Global Climate - e1d33ef1-fa84-4778-ad55-8a13c0b9fa50\n\nBonjour,\nMa cliente (e1d33ef1-fa84-4778-ad55-8a13c0b9fa50) souhaite investir 20 000 EUR dans Nordea 1 Global Climate and Environment.\nPouvez-vous valider ?\nMerci, Sophie"
+    "prompt": "À : Fund dealing desk\nObjet : Souscription Nordea Global Climate - e1d33ef1-fa84-4778-ad55-8a13c0b9fa50\n\nBonjour,\nMa cliente (e1d33ef1-fa84-4778-ad55-8a13c0b9fa50) souhaite investir 20 000 EUR dans Nordea 1 Global Climate and Environment.\nPouvez-vous valider ?\nMerci,"
   },
   "response": {
     "text": "[{\"portfolioId\": \"e1d33ef1-fa84-4778-ad55-8a13c0b9fa50\", \"shareClass\": \"Nordea 1 Global Climate and Environment\", \"amount\": 20000, \"currency\": \"EUR\", \"clientInitiated\": false}]"

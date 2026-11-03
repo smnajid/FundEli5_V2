@@ -42,3 +42,7 @@ Recorded at the Integrate checkpoint (#27); mohamed decides on each later.
 - A failed Request Parser call writes no Check Record.
 - Presidio languages default to `en,fr,de` (`fundeli5.privacygate.presidio.languages`), decided by mohamed on 2026-11-03. The stock Presidio image knows English only: run `docker/presidio` (spaCy `en_core_web_lg`, `fr_core_news_md`, `de_core_news_md`). The configuration there has not been run yet; with the stock image the Gate refuses every email, because a language Presidio does not support is a detector failure.
 - There is no deterministic rescan of the CRM client names after the Gate's swap.
+
+## Requester signature (2026-11-03)
+
+A real detector names the Requester in the sender line and the sign-off, so before detecting the Gate takes out the sender line of the leading header block (From, De, Von) and a sign-off (a bare closing word such as Thanks, Merci or Mit freundlichen Grüssen, a name after it, and up to six short signature lines). Only text is removed, so nothing new reaches the LLM. It cuts nothing that carries a Portfolio Reference or lowercase request words, and leaves the Subject and body alone, so a client named there still refuses. The three recorded request emails were re-keyed to the stripped text (their answers were not asked again; the sign-off carries no request).

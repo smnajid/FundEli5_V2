@@ -40,8 +40,10 @@ public class DefaultPrivacyGate implements PrivacyGate {
 
     @Override
     public GateOutcome gate(String rawEmail) {
+        // The Requester signs the email and may be named by a real detector; the name leaves the text first (ADR 0009).
+        String email = RequesterSignature.strip(rawEmail);
         Map<PortfolioId, PortfolioReference> references = new LinkedHashMap<>();
-        Matcher matcher = REFERENCE.matcher(rawEmail);
+        Matcher matcher = REFERENCE.matcher(email);
         StringBuilder text = new StringBuilder();
         while (matcher.find()) {
             PortfolioReference reference = new PortfolioReference(matcher.group());
