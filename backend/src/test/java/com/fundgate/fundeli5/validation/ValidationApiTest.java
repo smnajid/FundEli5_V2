@@ -26,6 +26,7 @@ class ValidationApiTest {
     static void work(DynamicPropertyRegistry registry) {
         registry.add("fundeli5.validation.out", () -> out.toString());
         registry.add("fundeli5.validation.drafts", () -> "../docs/playbook/contracts/fixtures/draft-rule-cards");
+        registry.add("fundeli5.validation.pages", () -> "../docs/playbook/contracts/fixtures/draft-rule-card-pages");
     }
 
     @LocalServerPort
@@ -66,6 +67,23 @@ class ValidationApiTest {
         assertThat(validated.statusCode()).isEqualTo(200);
         assertThat(json.readTree(validated.body()).get("status").asString()).isEqualTo("validated");
         assertThat(get("/api/validation/drafts")).hasSize(3);
+    }
+
+    @Test
+    void eachCitationCarriesTheTextOfItsPageAndTheQuoteIsOnIt() throws Exception {
+        JsonNode rules = get("/api/validation/review?fundName=" + FUND + "&version=1").get("card").get("rules");
+        int cited = 0;
+        for (JsonNode rule : rules) {
+            for (JsonNode c : rule.get("citations")) {
+                cited++;
+                String text = c.get("pageText").asString().replaceAll("[\\s\\p{Z}]+", " ");
+                assertThat(text).isNotBlank();
+                if (c.get("quoteFoundOnPage").asBoolean()) {
+                    assertThat(text).contains(c.get("quote").asString().replaceAll("[\\s\\p{Z}]+", " ").substring(0, 20));
+                }
+            }
+        }
+        assertThat(cited).isPositive();
     }
 
     @Test

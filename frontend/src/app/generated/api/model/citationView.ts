@@ -14,5 +14,6 @@ export interface CitationView {
     page?: number;
     quote?: string;
     quoteFoundOnPage?: boolean;
+    pageText?: string;
 }
 

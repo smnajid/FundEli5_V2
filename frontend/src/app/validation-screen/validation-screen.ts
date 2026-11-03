@@ -291,8 +291,12 @@ type Status = 'open' | 'accepted' | 'corrected' | 'contradiction';
       font-size: 1rem;
       line-height: 1.55;
     }
+    .page-text {
+      max-height: 420px;
+      overflow: auto;
+    }
     .quote mark {
-      background: #fff2a8);
+      background: #fff2a8;
       padding: 0 0.1rem;
     }
     .signal {
@@ -419,7 +423,9 @@ type Status = 'open' | 'accepted' | 'corrected' | 'contradiction';
           <strong>{{ review()?.contradictions?.length }} contradiction(s) need a decision:</strong>
           @for (k of review()?.contradictions ?? []; track $index; let last = $last) {
             @if (k.options?.[0]?.rule; as firstRule) {
-              <button type="button" class="jump" (click)="select(firstRule)">{{ kindLabel(k.kind) }}</button>
+              <button type="button" class="jump" (click)="select(firstRule)">
+                {{ kindLabel(k.kind) }}
+              </button>
             } @else {
               {{ kindLabel(k.kind) }}
             }{{ last ? '.' : ', ' }}
@@ -495,7 +501,16 @@ type Status = 'open' | 'accepted' | 'corrected' | 'contradiction';
                   <span>{{ cit.document }}</span
                   ><span>page {{ cit.page }}</span>
                 </div>
-                <pre class="quote"><mark>{{ cit.quote }}</mark></pre>
+                @if (pageParts(); as p) {
+                  <pre
+                    class="quote page-text">{{ p.before }}<mark>{{ p.match }}</mark>{{ p.after }}</pre>
+                } @else {
+                  <pre class="quote"><mark>{{ cit.quote }}</mark></pre>
+                  @if (cit.pageText) {
+                    <p class="signal">The quote is not in the page text below.</p>
+                    <pre class="quote page-text">{{ cit.pageText }}</pre>
+                  }
+                }
               </div>
               @if (!cit.quoteFoundOnPage) {
                 <p class="signal">Quote not found on its page.</p>
@@ -605,6 +620,25 @@ export class ValidationScreen {
   protected readonly rules = computed<RuleView[]>(() => this.card()?.rules ?? []);
   protected readonly rule = computed(() => this.rules()[this.index()] ?? null);
   protected readonly citation = computed(() => this.rule()?.citations?.[this.tab()] ?? null);
+
+  /** The cited page's text cut around the quote (whitespace and line breaks in the page ignored), or null. */
+  protected readonly pageParts = computed(() => {
+    const cit = this.citation();
+    if (!cit?.pageText || !cit.quote) return null;
+    const words = cit.quote
+      .replace(/[\u00ad]/g, '')
+      .split(/[\s\p{Z}]+/u)
+      .filter((w) => w.length > 0)
+      .map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    if (words.length === 0) return null;
+    const at = new RegExp(words.join('[\\s\\p{Z}\\u00ad]+'), 'u').exec(cit.pageText);
+    if (!at) return null;
+    return {
+      before: cit.pageText.slice(0, at.index),
+      match: at[0],
+      after: cit.pageText.slice(at.index + at[0].length),
+    };
+  });
   protected readonly fields = computed(() => {
     const kind = this.rule()?.condition?.kind;
     return kind ? FIELDS[kind] : [];
