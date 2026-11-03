@@ -10,4 +10,3 @@ recognizers:
       - en
       - fr
       - de
-    supported_entity: PERSON
