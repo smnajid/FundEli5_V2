@@ -102,17 +102,17 @@ class ValidationController {
 
     @ExceptionHandler(NoSuchElementException.class)
     ResponseEntity<String> notFound(NoSuchElementException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.TEXT_PLAIN).body(e.getMessage());
     }
 
     @ExceptionHandler(IllegalStateException.class)
     ResponseEntity<String> refused(RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).contentType(MediaType.TEXT_PLAIN).body(e.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     ResponseEntity<String> badRequest(RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_PLAIN).body(e.getMessage());
     }
 
     record DraftSummary(String fundName, int version, List<String> shareClasses) {
