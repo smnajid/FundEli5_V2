@@ -281,6 +281,64 @@ label {
   text-transform: uppercase;
   color: var(--c-muted);
 }
+.evidence {
+  padding: var(--s-3);
+}
+.evidence:focus {
+  outline: 2px solid var(--c-ai);
+}
+.evidence header {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--fs-sm);
+}
+.evidence .num {
+  font-weight: 700;
+}
+.evidence .badge {
+  display: inline-grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.4rem;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  background: var(--c-pass-bg);
+  color: var(--c-pass);
+}
+.evidence .badge[data-result='FAIL'] {
+  background: var(--c-fail-bg);
+  color: var(--c-fail);
+}
+.evidence .badge[data-result='REVIEW'] {
+  background: #fff4d6;
+  color: #8a5a00;
+}
+.evidence .quote {
+  margin: var(--s-2) 0;
+  padding: var(--s-2);
+  background: #f6f7f9;
+  font-size: var(--fs-sm);
+}
+.evidence mark {
+  background: #fff1a8;
+}
+.evidence .source {
+  margin: 0;
+  color: var(--c-muted);
+  font-size: var(--fs-xs);
+}
+.marker {
+  font-size: var(--fs-sm);
+  color: var(--c-ai);
+  margin-right: 0.25rem;
+}
+.markers {
+  margin: var(--s-2) 0 0;
+  color: var(--c-muted);
+  font-size: var(--fs-sm);
+}
 .rail .saw {
   width: 100%;
   background: var(--c-card);

@@ -9,6 +9,7 @@
  */
 import { RefusalView } from './refusalView';
 import { CheckView } from './checkView';
+import { EvidenceView } from './evidenceView';
 
 
 export interface AnswerView { 
@@ -19,5 +20,6 @@ export interface AnswerView {
     unclear?: Array<string>;
     editableFields?: Array<string>;
     reply?: string;
+    evidence?: Array<EvidenceView>;
 }
 
