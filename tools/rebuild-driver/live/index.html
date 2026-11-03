@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FundEli5 V2 live</title>
+<style>
+  :root { --bg:#f6f7f5; --panel:#fff; --fg:#1d2420; --muted:#66706a; --line:#dde2dd; --ok:#1f7a45; --warn:#9a6700; --bad:#b3261e; --run:#245fa8; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#141816; --panel:#1c211e; --fg:#e6ebe7; --muted:#97a19b; --line:#2d352f; --ok:#5dc08a; --warn:#d9a441; --bad:#f07a70; --run:#7fb0ee; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.45 system-ui, sans-serif; padding:16px max(16px, env(safe-area-inset-right)) 32px max(16px, env(safe-area-inset-left)); }
+  main { max-width: 1100px; margin: 0 auto; display:grid; gap:16px; }
+  h1 { margin:0; font-size:22px; font-weight:600; }
+  h2 { margin:0 0 8px; font-size:15px; }
+  .sub { color:var(--muted); margin:4px 0 0; }
+  .tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; }
+  .tile { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:10px 12px; }
+  .tile b { display:block; font-size:24px; font-variant-numeric:tabular-nums; }
+  .tile span { color:var(--muted); font-size:12px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:14px; min-width:0; }
+  .agent { border-top:1px solid var(--line); padding-top:10px; margin-top:10px; }
+  .agent:first-of-type { border-top:0; margin-top:0; padding-top:0; }
+  .head { display:flex; flex-wrap:wrap; gap:8px; align-items:baseline; }
+  .head a { color:inherit; font-weight:600; }
+  .pill { font-size:12px; padding:0 6px; border:1px solid var(--line); border-radius:6px; color:var(--muted); }
+  .pill.run { color:var(--run); border-color:var(--run); }
+  .pill.warn { color:var(--warn); border-color:var(--warn); }
+  .pill.bad { color:var(--bad); border-color:var(--bad); }
+  ul { list-style:none; margin:6px 0 0; padding:0; font-family:ui-monospace, monospace; font-size:12px; }
+  li { padding:1px 0; overflow-wrap:anywhere; }
+  li time { color:var(--muted); margin-right:6px; }
+  li.last { font-weight:600; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  td { padding:3px 6px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .muted { color:var(--muted); }
+  pre { margin:0; font-size:12px; overflow-x:auto; }
+  .cols { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>FundEli5 V2 live</h1>
+    <p class="sub" id="stamp">Loading…</p>
+  </header>
+  <section class="tiles" id="tiles"></section>
+  <section class="card"><h2>Building now</h2><div id="agents"><p class="muted">Nothing is building.</p></div></section>
+  <div class="cols">
+    <section class="card"><h2>Needs you</h2><div id="needs"></div></section>
+    <section class="card"><h2>Ready, waiting for a slot</h2><div id="ready"></div></section>
+    <section class="card"><h2>Blocked</h2><div id="blocked"></div></section>
+  </div>
+  <section class="card"><h2>Driver log</h2><pre id="log"></pre></section>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const hm = (m) => m == null ? '' : m >= 60 ? Math.floor(m / 60) + ' h ' + String(m % 60).padStart(2, '0') + ' min' : m + ' min';
+  const ago = (s) => s == null ? 'no activity yet' : s < 90 ? s + ' s ago' : s < 5400 ? Math.round(s / 60) + ' min ago' : Math.round(s / 3600) + ' h ago';
+  const clock = (iso) => iso ? new Date(iso).toISOString().slice(11, 19) : '';
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  const link = (t) => { const a = el('a', '', '#' + t.number + ' ' + t.title); a.href = t.url; a.target = '_blank'; a.rel = 'noopener'; return a; };
+
+  function list(box, rows, fill, emptyText) {
+    box.replaceChildren();
+    if (!rows.length) { box.append(el('p', 'muted', emptyText)); return; }
+    const table = el('table'); rows.forEach((t) => { const tr = el('tr'); fill(tr, t); table.append(tr); }); box.append(table);
+  }
+
+  function draw(status, activity) {
+    const T = status.tickets, byStatus = (s) => T.filter((t) => t.status === s);
+    $('stamp').textContent = 'Activity ' + clock(activity && activity.at) + ' UTC, tickets ' + clock(status.snapshotAt) + ' UTC. Refreshes every 10 s.';
+    $('tiles').replaceChildren(...[['built', 'Built'], ['in_progress', 'Building'], ['ready', 'Ready'], ['blocked', 'Blocked'], ['needs_you', 'Needs you']].map(([s, label]) => {
+      const d = el('div', 'tile'); d.append(el('b', '', String(byStatus(s).length)), el('span', '', label)); return d;
+    }));
+
+    const act = new Map(((activity && activity.tickets) || []).map((a) => [a.number, a]));
+    const box = $('agents'); box.replaceChildren();
+    const building = byStatus('in_progress');
+    if (!building.length) box.append(el('p', 'muted', 'Nothing is building.'));
+    building.forEach((t) => {
+      const a = act.get(t.number) || { events: [], commits: [], running: [] };
+      const card = el('div', 'agent'), head = el('div', 'head');
+      head.append(link(t), el('span', 'pill', t.phase), el('span', 'pill', t.mode), el('span', 'pill', hm(t.wallMinutes) + ' elapsed'));
+      const stale = a.idleSeconds != null && a.idleSeconds > 600;
+      head.append(el('span', 'pill ' + (stale ? 'warn' : 'run'), 'last action ' + ago(a.idleSeconds)));
+      (a.running || []).forEach((r) => head.append(el('span', 'pill run', r + ' running')));
+      head.append(el('span', 'pill', (a.commits || []).length + ' commit(s), ' + a.uncommittedFiles + ' file(s) uncommitted'));
+      card.append(head);
+      const ul = el('ul');
+      (a.events || []).forEach((e, i, all) => { const li = el('li', i === all.length - 1 ? 'last' : ''); li.append(el('time', '', clock(e.at)), document.createTextNode(e.text)); ul.append(li); });
+      card.append(ul); box.append(card);
+    });
+
+    list($('needs'), byStatus('needs_you'), (tr, t) => { const a = el('td'); a.append(link(t)); tr.append(a, el('td', 'muted', t.note || 'see the STOP comment')); }, 'Nothing is waiting for you.');
+    list($('ready'), byStatus('ready'), (tr, t) => { const a = el('td'); a.append(link(t)); tr.append(a, el('td', 'muted', t.mode)); }, 'No ticket is waiting for a slot.');
+    list($('blocked'), byStatus('blocked'), (tr, t) => { const a = el('td'); a.append(link(t)); tr.append(a, el('td', 'muted', 'waits on ' + t.blockedBy)); }, 'Nothing is blocked.');
+    $('log').textContent = ((activity && activity.driverLog) || []).join('\n');
+  }
+
+  async function tick() {
+    try {
+      const [s, a] = await Promise.all([fetch('status.json', { cache: 'no-store' }).then((r) => r.json()), fetch('activity.json', { cache: 'no-store' }).then((r) => r.json()).catch(() => null)]);
+      draw(s, a);
+    } catch (e) { $('stamp').textContent = 'Cannot reach the VM. Is the tunnel open? ' + e.message; }
+  }
+  tick(); setInterval(tick, 10000);
+</script>
+</body>
+</html>
