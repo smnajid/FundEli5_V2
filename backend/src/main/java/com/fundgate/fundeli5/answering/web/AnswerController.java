@@ -104,7 +104,7 @@ class AnswerController {
     private static List<OutcomeCitationView> citations(Answer a, Answer.Check check, com.fundgate.fundeli5.eligibility.RuleOutcome outcome) {
         return outcome.citations().stream().map(c -> new OutcomeCitationView(
                 a.evidence().stream().filter(e -> e.kind() == outcome.kind() && e.result() == outcome.result()
-                        && e.shareClassName().equals(check.shareClassName()) && e.citation().equals(c))
+                        && e.shareClass().equals(check.shareClass()) && e.citation().equals(c))
                         .findFirst().map(Evidence::number).orElse(0),
                 c.document(), c.page(), c.quote(), c.quoteFoundOnPage())).toList();
     }

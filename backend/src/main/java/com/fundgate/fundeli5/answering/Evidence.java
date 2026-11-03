@@ -13,7 +13,7 @@ import java.util.Map;
  * One numbered card of the evidence rail: a rule outcome of a Share Class and the passage of a public Fund
  * Document it cites. Holds no client data.
  */
-public record Evidence(int number, RuleKind kind, RuleOutcome.Result result, String shareClassName, Citation citation,
+public record Evidence(int number, RuleKind kind, RuleOutcome.Result result, Isin shareClass, String shareClassName, Citation citation,
         boolean citedInReply) {
 
     /** The numbering of one answer: first appearance across the checks gives the next number. */
@@ -33,7 +33,7 @@ public record Evidence(int number, RuleKind kind, RuleOutcome.Result result, Str
                         if (!numbers.containsKey(key)) {
                             numbers.put(key, numbers.size() + 1);
                             cards.add(new Evidence(numbers.size(), outcome.kind(), outcome.result(),
-                                    check.shareClassName(), citation, false));
+                                    check.shareClass(), check.shareClassName(), citation, false));
                         }
                     }
                 }
@@ -61,7 +61,7 @@ public record Evidence(int number, RuleKind kind, RuleOutcome.Result result, Str
         }
 
         List<Evidence> cards(List<Integer> citedInReply) {
-            return cards.stream().map(e -> new Evidence(e.number(), e.kind(), e.result(), e.shareClassName(),
+            return cards.stream().map(e -> new Evidence(e.number(), e.kind(), e.result(), e.shareClass(), e.shareClassName(),
                     e.citation(), citedInReply.contains(e.number()))).toList();
         }
     }

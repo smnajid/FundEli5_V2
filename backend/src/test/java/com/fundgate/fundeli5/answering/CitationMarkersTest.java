@@ -40,7 +40,7 @@ class CitationMarkersTest {
                 + ", BP-EUR: yes [Nordea 1 prospectus, p. 123; Nordea 1 prospectus, p. 123, quote not verified]",
                 List.of(bi, bp), List.of(ID, ID), numbering);
 
-        assertThat(numbered.text()).contains("BI-EUR: no [1]").contains("BP-EUR: yes [2][3]");
+        assertThat(numbered.text()).contains("BI-EUR: no [Nordea 1 prospectus, p. 123][1]").contains("[2][3]");
         assertThat(numbered.cited()).containsExactly(1, 2, 3);
         assertThat(numbering.cards(numbered.cited())).hasSize(3).allMatch(Evidence::citedInReply);
     }

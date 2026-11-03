@@ -8,8 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Turns the reply's bracketed passages ("[Prospectus, p. 12]") into numbered markers ("[1]") that point to the
- * evidence rail. Which check a marker belongs to is read from the nearest preceding mention of its Share Class
+ * Appends numbered markers ("[Prospectus, p. 12][1]") that point to the evidence rail to the reply's bracketed
+ * passages, which stay so the page is readable in the pasted reply. Which check a marker belongs to is read from the nearest preceding mention of its Share Class
  * or Portfolio Id. Pure text work on the reply as drafted, so the model's prompt and its recordings stay as they are.
  */
 final class CitationMarkers {
@@ -44,7 +44,7 @@ final class CitationMarkers {
                 matcher.appendReplacement(out, Matcher.quoteReplacement(matcher.group()));
                 continue;
             }
-            StringBuilder marker = new StringBuilder();
+            StringBuilder marker = new StringBuilder(matcher.group());
             numbers.forEach(n -> marker.append('[').append(n).append(']'));
             numbers.stream().filter(n -> !cited.contains(n)).forEach(cited::add);
             matcher.appendReplacement(out, Matcher.quoteReplacement(marker.toString()));
