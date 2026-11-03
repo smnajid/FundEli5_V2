@@ -55,20 +55,20 @@ public class RuleCatalogEngine implements RuleEngine {
     public EngineResult check(SubscriptionRequest request) {
         Optional<RuleCard> found = ruleCards.forShareClass(request.shareClass());
         if (found.isEmpty()) {
-            return review(FrameOutcomes.fundNotCovered());
+            return review(FrameOutcomes.fundNotCovered(), null, null);
         }
         RuleCard card = found.get();
         ClientProfile profile = clientProfiles.clientProfile(request.portfolio());
         if (profile == null || !COVERED_LEGAL_ENTITIES.contains(profile.legalEntity())) {
-            return review(FrameOutcomes.regimeNotCovered(profile == null ? "unknown" : profile.legalEntity()));
+            return review(FrameOutcomes.regimeNotCovered(profile == null ? "unknown" : profile.legalEntity()), card, profile);
         }
         if (card.status() != RuleCard.Status.VALIDATED || card.validation() == null) {
-            return review(FrameOutcomes.cardNotValidated());
+            return review(FrameOutcomes.cardNotValidated(), card, profile);
         }
         ShareClass shareClass = shareClasses.all().stream()
                 .filter(s -> s.isin().equals(request.shareClass())).findFirst().orElse(null);
         if (shareClass == null) {
-            return review(FrameOutcomes.fundNotCovered());
+            return review(FrameOutcomes.fundNotCovered(), card, profile);
         }
         Facts facts = new Facts(request, profile, shareClass);
 
@@ -94,7 +94,8 @@ public class RuleCatalogEngine implements RuleEngine {
         }
         outcomes.add(registration.evaluate(facts, lookups));
         staleWarning(card).ifPresent(warnings::add);
-        return new EngineResult(combine(outcomes), new Justification(outcomes, warnings));
+        return new EngineResult(combine(outcomes), new Justification(outcomes, warnings), card.version(),
+                lookups.scaleMapping().version(), profile);
     }
 
     /** Any Fail gives Not Eligible, else any Review gives Needs Review, else Eligible. */
@@ -108,8 +109,9 @@ public class RuleCatalogEngine implements RuleEngine {
         return Verdict.ELIGIBLE;
     }
 
-    private static EngineResult review(RuleOutcome outcome) {
-        return new EngineResult(Verdict.NEEDS_REVIEW, new Justification(List.of(outcome)));
+    private EngineResult review(RuleOutcome outcome, RuleCard card, ClientProfile profile) {
+        return new EngineResult(Verdict.NEEDS_REVIEW, new Justification(List.of(outcome)),
+                card == null ? null : card.version(), lookups.scaleMapping().version(), profile);
     }
 
     /** Fund-level rules and the rules of the requested class, grouped by kind in card order. */

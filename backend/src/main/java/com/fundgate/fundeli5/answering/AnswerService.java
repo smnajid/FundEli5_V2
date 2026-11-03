@@ -15,9 +15,6 @@ import com.fundgate.fundeli5.replydrafter.ReplyDrafter;
 import com.fundgate.fundeli5.replydrafter.Reply;
 import com.fundgate.fundeli5.replydrafter.ReplyLine;
 import com.fundgate.fundeli5.requestparser.ParseResult;
-import com.fundgate.fundeli5.rulecard.RuleCard;
-import com.fundgate.fundeli5.rulecard.RuleCards;
-import com.fundgate.fundeli5.clientprofiles.ClientProfile;
 import com.fundgate.fundeli5.requestparser.ParsedRequest;
 import com.fundgate.fundeli5.requestparser.RequestParser;
 import com.fundgate.fundeli5.ruleengine.EngineResult;
@@ -50,13 +47,11 @@ public class AnswerService {
     private final ClientProfiles clientProfiles;
     private final Clock clock;
     private final String engineVersion;
-    private final RuleCards ruleCards;
-    private final String scaleMappingVersion;
     private final ShareClasses shareClasses;
 
     public AnswerService(PrivacyGate gate, RequestParser parser, ShareClassCatalog catalog, RuleEngine engine,
             ReplyDrafter drafter, ReplyDrafter templateDrafter, CheckRecords checkRecords, ClientProfiles clientProfiles, Clock clock,
-            String engineVersion, RuleCards ruleCards, String scaleMappingVersion, ShareClasses shareClasses) {
+            String engineVersion, ShareClasses shareClasses) {
         this.gate = gate;
         this.parser = parser;
         this.catalog = catalog;
@@ -67,8 +62,6 @@ public class AnswerService {
         this.clientProfiles = clientProfiles;
         this.clock = clock;
         this.engineVersion = engineVersion;
-        this.ruleCards = ruleCards;
-        this.scaleMappingVersion = scaleMappingVersion;
         this.shareClasses = shareClasses;
     }
 
@@ -134,10 +127,8 @@ public class AnswerService {
     private Answer.Check check(SubscriptionRequest request, String shareClassName, List<CheckRecord.LlmCall> calls,
             List<CheckRecord> pending) {
         EngineResult result = engine.check(request);
-        Integer cardVersion = ruleCards.forShareClass(request.shareClass()).map(RuleCard::version).orElse(null);
-        ClientProfile profile = clientProfiles.clientProfile(request.portfolio());
-        pending.add(new CheckRecord(UUID.randomUUID(), clock.instant(), request, cardVersion,
-                scaleMappingVersion, engineVersion, profile, result.verdict(), result.justification(), calls,
+        pending.add(new CheckRecord(UUID.randomUUID(), clock.instant(), request, result.ruleCardVersion(),
+                result.scaleMappingVersion(), engineVersion, result.clientProfile(), result.verdict(), result.justification(), calls,
                 List.of()));
         return new Answer.Check(request.portfolio(), request.shareClass(), shareClassName, request.amount(),
                 request.currency(), request.clientInitiated(), result.verdict(), result.justification());

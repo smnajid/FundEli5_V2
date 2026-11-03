@@ -87,7 +87,7 @@ class FourPromisesTest {
                 new com.fundgate.fundeli5.replydrafter.gated.GatedReplyDrafter(gate, egress, renderer,
                         new TemplateReplyDrafter(renderer)),
                 new TemplateReplyDrafter(renderer),
-                records, profiles, Clock.systemUTC(), "test", cards, "test", shareClasses);
+                records, profiles, Clock.systemUTC(), "test", shareClasses);
     }
 
     SubscriptionRequest request(String portfolio, Isin isin, String amount) {

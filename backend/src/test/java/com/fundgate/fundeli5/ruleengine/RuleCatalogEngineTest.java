@@ -114,11 +114,21 @@ class RuleCatalogEngineTest {
         // The Fund Registration outcome is the frame's own; the tests here are about the plug-ins' outcomes.
         return new EngineResult(result.verdict(), new com.fundgate.fundeli5.eligibility.Justification(
                 result.justification().outcomes().stream().filter(o -> o.kind() != RuleKind.FUND_REGISTRATION).toList(),
-                result.justification().warnings()));
+                result.justification().warnings()), result.ruleCardVersion(), result.scaleMappingVersion(),
+                result.clientProfile());
     }
 
     EngineResult check(RuleCard card, String portfolio) {
         return check(card, false, portfolio);
+    }
+
+    @Test
+    void theResultCarriesTheCardVersionProfileAndScaleMappingTheEngineUsed() {
+        RuleCard card = validated(scripted("pass"));
+        EngineResult result = check(card, true, "LOC90000101");
+        assertThat(result.ruleCardVersion()).isEqualTo(card.version());
+        assertThat(result.scaleMappingVersion()).isEqualTo(com.fundgate.fundeli5.ruleengine.plugin.ScaleMapping.demo().version());
+        assertThat(result.clientProfile()).isNotNull();
     }
 
     // ---- Verdict combination
