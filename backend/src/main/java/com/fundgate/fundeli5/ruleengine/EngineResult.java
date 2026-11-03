@@ -22,4 +22,11 @@ public record EngineResult(Verdict verdict, Justification justification, Integer
     public EngineResult(Verdict verdict, Justification justification) {
         this(verdict, justification, null, "none", null);
     }
+
+    /** Never prints the client profile. */
+    @Override
+    public String toString() {
+        return "EngineResult[verdict=" + verdict + ", ruleCardVersion=" + ruleCardVersion
+                + ", scaleMappingVersion=" + scaleMappingVersion + "]";
+    }
 }
